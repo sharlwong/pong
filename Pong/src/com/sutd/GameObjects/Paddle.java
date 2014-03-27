@@ -1,5 +1,6 @@
 package com.sutd.GameObjects;
 
+import com.badlogic.gdx.Gdx;
 import com.sutd.PongHelpers.Assets;
 import com.sutd.PongHelpers.Vector2D;
 
@@ -8,6 +9,7 @@ import com.sutd.PongHelpers.Vector2D;
  */
 public class Paddle {
 	private Vector2D centerPoint;
+	private Vector2D velocity;
 	private boolean playerBottom;
 	private int score = 0;
 
@@ -61,4 +63,43 @@ public class Paddle {
 		if (centerPoint.x > (Assets.WIDTH - (Assets.PADDLE_WIDTH / 2)))
 			centerPoint.x = Assets.WIDTH - (Assets.PADDLE_WIDTH / 2);
 	}
+	
+	/**
+	 * This onClick function will be called by inputHandler
+	 * When user click, inputHandler will parse the x coordinate to this function.
+	 * Intuitively, longer the distance from x to paddle's current position, faster the paddle
+	 * will move to the position user clicked.
+	 * 
+	 */
+
+	public void onClick(int x){
+		float screenWidth = Gdx.graphics.getWidth();
+		velocity.x = x/screenWidth - centerPoint.x;
+	}
+
+	public void update(float delta){
+
+		// process velocity (avoid too large or too slow cases)
+		// parameters may need further modification
+		if (velocity.x > 0.8) {
+			velocity.x = 0.8;
+		}
+		if (velocity.x < -0.8) {
+			velocity.x = -0.8;
+		}
+		if (velocity.x>0&&velocity.x<0.3){
+			velocity.x = 0.3;
+		}
+		if (velocity.x<0&&velocity.x>-0.3){
+			velocity.x = -0.3;
+		}
+
+		//side checking
+		if ((centerPoint.x < (Assets.PADDLE_WIDTH / 2))|| (centerPoint.x > (Assets.WIDTH - (Assets.PADDLE_WIDTH / 2)))){
+			velocity.x = 0;
+		}
+
+		centerPoint.add(velocity.cpy().multiply(delta));
+	}
+	
 }

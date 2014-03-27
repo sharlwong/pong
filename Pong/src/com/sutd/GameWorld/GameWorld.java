@@ -9,6 +9,8 @@ public class GameWorld {
 	Paddle player0 = new Paddle(0);
 	Paddle player1 = new Paddle(1);
 	
+
+	
 	public void update() {
         System.out.println("GameWorld - update");
         rect.x++;
@@ -20,5 +22,19 @@ public class GameWorld {
 	public Rectangle getRect() {
         return rect;
     }
+	
+	/**
+	 * prerequisite: input integer must be either 1 or 0
+	 * @param p
+	 * @return
+	 */
+	public Paddle getPaddle(int p){
+		if (p == 0){
+			return player0;
+		}else{
+			return player1;
+		}
+	}
+	
 
 }
