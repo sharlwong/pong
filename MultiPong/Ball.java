@@ -48,4 +48,17 @@ public class Ball {
 	public Ball paddleReflect(Vector2D newVelocity){
 		return new Ball(getCurrentPosition(),newVelocity, tempCurrentMillis);
 	}
+	
+	public boolean checkWallReflect (){
+		if (getCurrentPosition().x<=0 || getCurrentPosition().x>=1){
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
+	public Ball wallReflect (){
+		private Vector2D newVelocity = new Vector2D(realVelocity.x * (-1), realVelocity.y);
+		return new Ball(getCurrentPosition(),newVelocity, tempCurrentMillis);
+	}
 }
