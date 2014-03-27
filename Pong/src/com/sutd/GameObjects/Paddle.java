@@ -26,6 +26,12 @@ public class Paddle {
 		outVelocity.makeUnitVector().multiply(Assets.BALL_SPEED);
 		return b.paddleReflect(outVelocity);
 	}
+	
+	public void miss(Ball b){
+		if (!collisionCheck(b)){
+			b.stop();
+		}
+	}
 
 	public boolean collisionCheck(Ball b) {
 		Vector2D ballPosition = b.getCurrentPosition();
@@ -100,6 +106,10 @@ public class Paddle {
 		}
 
 		centerPoint.add(velocity.cpy().multiply(delta));
+	}
+	
+	public Vector2D getCenter(){
+		return centerPoint;
 	}
 	
 }

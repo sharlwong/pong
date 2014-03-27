@@ -11,6 +11,8 @@ public class Ball {
 	private Vector2D startPosition;
 	private Vector2D startVelocity;
 	private long tempCurrentMillis;
+	
+	private boolean isMoving;
 
 	public Ball(Vector2D startPosition, Vector2D startVelocity,
 			long realStartTime) {
@@ -18,8 +20,9 @@ public class Ball {
 		this.startVelocity = startVelocity.makeUnitVector().multiply(
 				Assets.BALL_SPEED);
 		this.realStartTimeMillis = realStartTime;
+		this.isMoving = true;
 	}
-
+	
 	public Vector2D getPosition(long currentTimeMillis) {
 		tempCurrentMillis = currentTimeMillis;
 		Vector2D realVelocityReflected = new Vector2D(realVelocity);
@@ -58,18 +61,60 @@ public class Ball {
 	public Ball paddleReflect(Vector2D newVelocity) {
 		return new Ball(getCurrentPosition(), newVelocity, tempCurrentMillis);
 	}
-
-	public boolean checkWallReflect() {
-		if (getCurrentPosition().x <= 0 || getCurrentPosition().x >= 1) {
-			return true;
-		} else {
-			return false;
+	
+	public void stop(){
+		isMoving = false;
+	}
+	
+	public void restart(){
+		isMoving = true;
+	}
+	
+	public boolean isAlive(){
+		return isMoving;
+	}
+	
+	/**
+	 * Based on very rough calculation and estimation
+	 * May need to further modify
+	 * @param paddle
+	 * @return
+	 */
+	
+	public Vector2D newVelocityAfterReflection(Paddle paddle){
+		double x = getCurrentPosition().x;
+		double y = getCurrentPosition().y;
+		double vx = realVelocity.x;
+		double vy = realVelocity.y;
+		Vector2D newVelocity = new Vector2D();
+		double hitPoint = x - paddle.getCenter().x;
+		double hitPointRatio = 2*hitPoint/Assets.DISPLAY_WIDTH;
+		double innerAngle = 15 * hitPointRatio * Math.PI/180;
+		if (x >= 0){
+			if (Math.abs(Math.tan(x/y)) > Math.abs(innerAngle)){
+				newVelocity.x = vx *(-1) * (Math.abs(Math.tan(x/y)) - Math.abs(innerAngle));
+				newVelocity.y = vx *(-1) *(1+Math.abs(Math.tan(x/y)) - Math.abs(innerAngle));
+			}else if (Math.abs(Math.tan(x/y)) > Math.abs(innerAngle)){
+				newVelocity.x = vx *(-1) * (1+Math.abs(Math.tan(x/y)) - Math.abs(innerAngle));
+				newVelocity.y = vx *(-1) *(Math.abs(Math.tan(x/y)) - Math.abs(innerAngle));
+			}else{
+				newVelocity.x = vx *(-1);
+				newVelocity.y = vx *(-1);
+			}
+		}else{
+			if (Math.abs(Math.tan(x/y)) > Math.abs(innerAngle)){
+				newVelocity.x = vx *(-1) * (1+Math.abs(Math.tan(x/y)) - Math.abs(innerAngle));
+				newVelocity.y = vx *(-1) *(Math.abs(Math.tan(x/y)) - Math.abs(innerAngle));
+			}else if (Math.abs(Math.tan(x/y)) > Math.abs(innerAngle)){
+				newVelocity.x = vx *(-1) * (Math.abs(Math.tan(x/y)) - Math.abs(innerAngle));
+				newVelocity.y = vx *(-1) *(1+Math.abs(Math.tan(x/y)) - Math.abs(innerAngle));
+			}else{
+				newVelocity.x = vx *(-1);
+				newVelocity.y = vx *(-1);
+			}
 		}
+		return newVelocity;
 	}
-
-	public Ball wallReflect() {
-		Vector2D newVelocity = new Vector2D(realVelocity.x * (-1),
-				realVelocity.y);
-		return new Ball(getCurrentPosition(), newVelocity, tempCurrentMillis);
-	}
+	
+	
 }
