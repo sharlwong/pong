@@ -5,6 +5,7 @@ package MultiPong;
  */
 public class Paddle {
 	private Vector2D centerPoint;
+	private Vector2D velocity;
 	private boolean playerBottom;
 	private int score = 0;
 
@@ -12,6 +13,7 @@ public class Paddle {
 		//assumes binary player ID number: 0 at bottom, 1 at top
 		centerPoint = new Vector2D(Assets.WIDTH / 2, Assets.HEIGHT * playerNum);
 		this.playerBottom = (playerNum == 0);
+		velocity = new Vector2D(0, 0);
 	}
 
 	public Ball bounce(Ball b) {
@@ -57,5 +59,43 @@ public class Paddle {
 		if (centerPoint.x < (Assets.PADDLE_WIDTH / 2)) centerPoint.x = Assets.PADDLE_WIDTH / 2;
 		if (centerPoint.x > (Assets.WIDTH - (Assets.PADDLE_WIDTH / 2)))
 			centerPoint.x = Assets.WIDTH - (Assets.PADDLE_WIDTH / 2);
+	}
+	
+	/**
+	 * This onClick function will be called by inputHandler
+	 * When user click, inputHandler will parse the x coordinate to this function.
+	 * Intuitively, longer the distance from x to paddle's current position, faster the paddle
+	 * will move to the position user clicked.
+	 * 
+	 */
+	
+	public void onClick(int x){
+		float screenWidth = Gdx.graphics.getWidth();
+		velocity.x = x/screenWidth - centerPoint.x;
+	}
+	
+	public void update(float delta){
+		
+		// process velocity (avoid too large or too slow cases)
+		// parameters may need further modification
+		if (velocity.x > 0.8) {
+			velocity.x = 0.8;
+		}
+		if (velocity.x < -0.8) {
+			velocity.x = -0.8;
+		}
+		if (velocity.x>0&&velocity.x<0.3){
+			velocity.x = 0.3;
+		}
+		if (velocity.x<0&&velocity.x>-0.3){
+			velocity.x = -0.3;
+		}
+		
+		//side checking
+		if ((centerPoint.x < (Assets.PADDLE_WIDTH / 2))|| (centerPoint.x > (Assets.WIDTH - (Assets.PADDLE_WIDTH / 2))){
+			velocity.x = 0;
+		}
+		
+		centerPoint.add(velocity.cpy().scl(delta));
 	}
 }
