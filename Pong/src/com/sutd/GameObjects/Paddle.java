@@ -1,4 +1,7 @@
-package MultiPong;
+package com.sutd.GameObjects;
+
+import com.sutd.PongHelpers.Assets;
+import com.sutd.PongHelpers.Vector2D;
 
 /**
  * Created by avery_000 on 3/23/14.
