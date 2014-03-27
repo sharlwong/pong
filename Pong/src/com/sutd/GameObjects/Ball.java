@@ -1,4 +1,7 @@
-package MultiPong;
+package com.sutd.GameObjects;
+
+import com.sutd.PongHelpers.Assets;
+import com.sutd.PongHelpers.Vector2D;
 
 public class Ball {
 	private long apparentStartTimeMillis;

@@ -1,4 +1,4 @@
-package MultiPong;
+package com.sutd.PongHelpers;
 
 /**
  * Created by avery_000 on 25-Mar-14.

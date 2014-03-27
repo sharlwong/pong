@@ -1,4 +1,4 @@
-package com.sutd.pong;
+package com.sutd.Pong;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
