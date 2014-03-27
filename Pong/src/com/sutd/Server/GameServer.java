@@ -1,0 +1,33 @@
+package com.sutd.Server;
+
+import java.io.PrintWriter;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.net.ServerSocket;
+import com.badlogic.gdx.net.Socket;
+import com.badlogic.gdx.Net.Protocol;
+
+/**
+ * The authoritative Server.
+ * Responsible for handling requests
+ * updating game state and responding.
+ * @author Swayam
+ *
+ */
+public class GameServer {
+	private final int port = 5000;
+	
+	/**
+	 * Start the server socket
+	 */
+	public void start() {
+		ServerSocket serverSocket =  Gdx.net.newServerSocket(Protocol.TCP,port, null);
+		serverSocket.accept(null);
+		Socket client_socket = serverSocket.accept(null);
+		Socket client_socket_2 = serverSocket.accept(null);
+		PrintWriter pw = new PrintWriter(client_socket.getOutputStream());
+		PrintWriter pw2 = new PrintWriter(client_socket_2.getOutputStream());
+		pw.println("Hello\n");
+		pw2.println("Hello\n");
+	}
+}
