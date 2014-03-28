@@ -14,15 +14,15 @@ import com.badlogic.gdx.Net.Protocol;
  * @author Swayam
  *
  */
-public class GameServer {
+public class GameServer extends Thread {
 	private final int port = 5000;
+	public ServerSocket serverSocket;
 	
 	/**
 	 * Start the server socket
 	 */
-	public void start() {
+	public void run() {
 		ServerSocket serverSocket =  Gdx.net.newServerSocket(Protocol.TCP,port, null);
-		serverSocket.accept(null);
 		Socket client_socket = serverSocket.accept(null);
 		Socket client_socket_2 = serverSocket.accept(null);
 		PrintWriter pw = new PrintWriter(client_socket.getOutputStream());

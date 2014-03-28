@@ -33,11 +33,21 @@ public class StartWorld {
 			System.out.println("X: "+x+", y:"+y);
 			if(start_game_button.contains(x, y)) {
 				System.out.println("Start Touched!");
+				handleStartTouch();
+
 			}
+			//Probably start a server here.
 			else if(join_game_button.contains(x, y)) {
 				System.out.println("Join Touched!");
+			//connect to a server here.
 			}
 		}
 	}
-
+	/**
+	 * Starts Server Thread
+	 * And immediately connects to it as a client
+	 */
+	private void handleStartTouch() {
+		
+	}
 }
