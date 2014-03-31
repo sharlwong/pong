@@ -6,7 +6,7 @@ import com.sutd.PongHelpers.Vector2D;
 
 public class Ball {
 	private long apparentStartTimeMillis;
-	private boolean isMoving = null;
+	private boolean isMoving;
 	private long realEndTimeMillis;
 	private long realStartTimeMillis;
 	private Vector2D realVelocity;
