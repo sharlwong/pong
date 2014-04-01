@@ -26,6 +26,19 @@ public class GameWorld {
 	
 	public GameWorld(Vector2D screenSize){
 		this.screenSize = screenSize;
+		for (int i = 0; i<balls.length; i++){
+			balls[i] = new Ball(startPositionGen(i), startVelocityGen(i), 0);
+			System.out.println(balls[i].getPosition(0).x+" "+balls[i].getPosition(0).y);
+		}
+	}
+	
+	public Vector2D startPositionGen(int index){
+		if (index%2==0) return new Vector2D(Math.random(), 0);
+		else return new Vector2D(Math.random(), 1);
+	}
+	public Vector2D startVelocityGen(int index){
+		if (index%2==0) return new Vector2D(Math.random()-0.5, Math.random());
+		else return new Vector2D(Math.random()-0.5, -1);
 	}
 	
 	public Ball[] getBallsArray(){
@@ -89,4 +102,6 @@ public class GameWorld {
 			}
 		}
 	}
+	
+	
 }

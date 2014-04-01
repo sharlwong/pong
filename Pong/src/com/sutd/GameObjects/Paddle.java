@@ -118,7 +118,7 @@ public class Paddle {
 	}
 	
 	public Vector2D positionForRenderer(){
-		Vector2D rPosition = new Vector2D(centerPoint.x-Assets.PADDLE_WIDTH/2, centerPoint.y+Assets.PADDLE_EFFECTIVE_DEPTH/2);
+		Vector2D rPosition = new Vector2D(centerPoint.x-Assets.PADDLE_WIDTH/2, centerPoint.y-Assets.PADDLE_EFFECTIVE_DEPTH/2);
 		return rPosition;
 	}
 
