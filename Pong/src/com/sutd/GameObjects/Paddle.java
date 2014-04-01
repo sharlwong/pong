@@ -28,17 +28,31 @@ public class Paddle {
 	}
 
 	public boolean collisionCheck(Ball b) {
-		Vector2D ballPosition = b.getCurrentPosition();
-		if (Math.abs(ballPosition.x - centerPoint.x) > Assets.PADDLE_WIDTH) return false;
-		if (playerBottom) {
-			if (ballPosition.y > 0) return false;
-			if (ballPosition.y < (0 - Assets.PADDLE_EFFECTIVE_DEPTH)) return false;
+		if (b.goingToCollide()) {
+			boolean collide = true;
+			Vector2D ballPosition = b.getCurrentPosition();
+			if (Math.abs(ballPosition.x - centerPoint.x) > Assets.PADDLE_WIDTH)
+				collide = false;
+			if (!playerBottom) {
+				if (ballPosition.y > 0)
+					collide = false;
+				if (ballPosition.y < (0 - Assets.PADDLE_EFFECTIVE_DEPTH))
+					collide = false;
+			} else {
+				if (ballPosition.y < Assets.HEIGHT)
+					collide = false;
+				if (ballPosition.y > (Assets.HEIGHT + Assets.PADDLE_EFFECTIVE_DEPTH))
+					collide = false;
+			}
+			if (!collide)
+				b.stop();
+
+			return collide;
 		} else {
-			if (ballPosition.y < Assets.HEIGHT) return false;
-			if (ballPosition.y > (Assets.HEIGHT + Assets.PADDLE_EFFECTIVE_DEPTH)) return false;
+			return false;
 		}
-		return true;
 	}
+
 
 	public Vector2D getCenter() {
 		return centerPoint;
@@ -102,4 +116,10 @@ public class Paddle {
 
 		centerPoint.add(velocity.cpy().multiply(delta));
 	}
+	
+	public Vector2D positionForRenderer(){
+		Vector2D rPosition = new Vector2D(centerPoint.x-Assets.PADDLE_WIDTH/2, centerPoint.y+Assets.PADDLE_EFFECTIVE_DEPTH/2);
+		return rPosition;
+	}
+
 }

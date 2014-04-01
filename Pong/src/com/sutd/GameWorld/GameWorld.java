@@ -3,6 +3,7 @@ package com.sutd.GameWorld;
 import com.badlogic.gdx.math.Rectangle;
 import com.sutd.GameObjects.Ball;
 import com.sutd.GameObjects.Paddle;
+import com.sutd.PongHelpers.Vector2D;
 
 public class GameWorld {
 
@@ -11,7 +12,8 @@ public class GameWorld {
 	private int ballNumber = 20;
 	private Ball[] balls = new Ball[ballNumber];
 	private Rectangle rect = new Rectangle(0, 0, 17, 12);
-	private float timeCounter = 0;
+	private Vector2D screenSize;
+	
 	// all elements in the array of Ball need to be initialized when GameWorld is created
 	// how to initialize balls?
 	/* WILL BE INITED BY SERVER */
@@ -20,7 +22,21 @@ public class GameWorld {
 	/* OKAY CAN */
 	// note that only set the first five elements' isMoving to be true
 	private float totalTime = 0;
+	private float timeCounter = 0;
+	
+	public GameWorld(Vector2D screenSize){
+		this.screenSize = screenSize;
+	}
+	
+	public Ball[] getBallsArray(){
+		return balls;
+	}
+	
+	public Vector2D getScreenSize(){
+		return screenSize;
+	}
 
+	
 	public boolean existDeadBall() {
 		for (Ball b : balls)
 			if (!b.isAlive()) return true;

@@ -13,6 +13,7 @@ public class Ball {
 	private Vector2D startPosition;
 	private Vector2D startVelocity;
 	private long tempCurrentMillis;
+	private boolean goingToCollide = false;
 
 	public Ball(Vector2D startPosition, Vector2D startVelocity, long realStartTime) {
 		this.startPosition = startPosition;
@@ -29,6 +30,10 @@ public class Ball {
 
 	public Vector2D getPosition(long currentTimeMillis) {
 		if (!isAlive()) return new Vector2D(-1,-1);
+		if (currentTimeMillis == realEndTimeMillis){
+			goingToCollide = true;
+		}
+
 		tempCurrentMillis = currentTimeMillis;
 		Vector2D realVelocityReflected = new Vector2D(realVelocity);
 		realVelocityReflected.x = 0 - realVelocityReflected.x;
@@ -75,38 +80,44 @@ public class Ball {
 		double vy = realVelocity.y;
 		Vector2D newVelocity = new Vector2D();
 		double hitPoint = x - paddle.getCenter().x;
-		double hitPointRatio = 2 * hitPoint / Assets.DISPLAY_WIDTH;
-		double innerAngle = 15 * hitPointRatio * Math.PI / 180;
-		if (x >= 0) {
-			if (Math.abs(Math.tan(x / y)) > Math.abs(innerAngle)) {
-				newVelocity.x = vx * (-1) * (Math.abs(Math.tan(x / y)) - Math.abs(innerAngle));
-				newVelocity.y = vx * (-1) * (1 + Math.abs(Math.tan(x / y)) - Math.abs(innerAngle));
-			} else if (Math.abs(Math.tan(x / y)) > Math.abs(innerAngle)) {
-				newVelocity.x = vx * (-1) * (1 + Math.abs(Math.tan(x / y)) - Math.abs(innerAngle));
-				newVelocity.y = vx * (-1) * (Math.abs(Math.tan(x / y)) - Math.abs(innerAngle));
-			} else {
-				newVelocity.x = vx * (-1);
-				newVelocity.y = vx * (-1);
-			}
-		} else {
-			if (Math.abs(Math.tan(x / y)) > Math.abs(innerAngle)) {
-				newVelocity.x = vx * (-1) * (1 + Math.abs(Math.tan(x / y)) - Math.abs(innerAngle));
-				newVelocity.y = vx * (-1) * (Math.abs(Math.tan(x / y)) - Math.abs(innerAngle));
-			} else if (Math.abs(Math.tan(x / y)) > Math.abs(innerAngle)) {
-				newVelocity.x = vx * (-1) * (Math.abs(Math.tan(x / y)) - Math.abs(innerAngle));
-				newVelocity.y = vx * (-1) * (1 + Math.abs(Math.tan(x / y)) - Math.abs(innerAngle));
-			} else {
-				newVelocity.x = vx * (-1);
-				newVelocity.y = vx * (-1);
-			}
-		}
+		double hitRatio = hitPoint/Assets.PADDLE_WIDTH;
+		double deltaX = hitRatio*Assets.BALL_SPEED/2;
+		newVelocity.x = (-1)*(vx+deltaX);
+		newVelocity.y = -vy;
+//		double hitPointRatio = 2 * hitPoint / Assets.DISPLAY_WIDTH;
+//		double innerAngle = 15 * hitPointRatio * Math.PI / 180;
+//		if (x >= 0) {
+//			if (Math.abs(Math.tan(x / y)) > Math.abs(innerAngle)) {
+//				newVelocity.x = vx * (-1) * (Math.abs(Math.tan(x / y)) - Math.abs(innerAngle));
+//				newVelocity.y = vy * (-1) * (1 + Math.abs(Math.tan(x / y)) - Math.abs(innerAngle));
+//			} else if (Math.abs(Math.tan(x / y)) > Math.abs(innerAngle)) {
+//				newVelocity.x = vx * (-1) * (1 + Math.abs(Math.tan(x / y)) - Math.abs(innerAngle));
+//				newVelocity.y = vy * (-1) * (Math.abs(Math.tan(x / y)) - Math.abs(innerAngle));
+//			} else {
+//				newVelocity.x = vx * (-1);
+//				newVelocity.y = vy * (-1);
+//			}
+//		} else {
+//			if (Math.abs(Math.tan(x / y)) > Math.abs(innerAngle)) {
+//				newVelocity.x = vx * (-1) * (1 + Math.abs(Math.tan(x / y)) - Math.abs(innerAngle));
+//				newVelocity.y = vy * (-1) * (Math.abs(Math.tan(x / y)) - Math.abs(innerAngle));
+//			} else if (Math.abs(Math.tan(x / y)) > Math.abs(innerAngle)) {
+//				newVelocity.x = vx * (-1) * (Math.abs(Math.tan(x / y)) - Math.abs(innerAngle));
+//				newVelocity.y = vy * (-1) * (1 + Math.abs(Math.tan(x / y)) - Math.abs(innerAngle));
+//			} else {
+//				newVelocity.x = vx * (-1);
+//				newVelocity.y = vy * (-1);
+//			}
+//		}
+		newVelocity = newVelocity.makeUnitVector().multiply(Assets.BALL_SPEED);
+		System.out.println("New v, x:"+newVelocity.x+" y: "+newVelocity.y);
 		return newVelocity;
 	}
 
 	public Ball paddleReflect(Vector2D newVelocity) {
 		return new Ball(getCurrentPosition(), newVelocity, tempCurrentMillis);
 	}
-
+	
 	public void restart() {
 		isMoving = true;
 	}
@@ -114,4 +125,9 @@ public class Ball {
 	public void stop() {
 		isMoving = false;
 	}
+	
+	public boolean goingToCollide(){
+		return goingToCollide;
+	}
+
 }
