@@ -45,6 +45,7 @@ public class StartWorld {
 			//Probably start a server here.
 			else if(join_game_button.contains(x, y)) {
 				System.out.println("Join Touched!");
+				createClientAndJoinServer();
 			//connect to a server here.
 			}
 		}
@@ -62,5 +63,14 @@ public class StartWorld {
 		client.connectToServer("localhost");
 		client.startListening();
 		client.startConsuming();
+		client.sendMessage("Player 1: Hi!");
+	}
+	
+	private void createClientAndJoinServer() {
+		GameClient client = new GameClient();
+		client.connectToServer("localhost");
+		client.startListening();
+		client.startConsuming();
+		client.sendMessage("Player 2: Hi!");
 	}
 }
