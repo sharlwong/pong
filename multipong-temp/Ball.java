@@ -1,22 +1,22 @@
 package multipong;
 
 public class Ball {
+	private boolean alive;
 	private long apparentStartTimeMillis;
-	private boolean isMoving = false;
 	private long realEndTimeMillis;
 	private long realStartTimeMillis;
 	private Vector2D realVelocity;
 	private Vector2D startPosition;
 	private Vector2D startVelocity;
-	private long tempCurrentMillis;
 	private Vector2D tempCurrentPosition;
+	private long tempCurrentMillis;
 
 	public Ball(Vector2D startPosition, Vector2D startVelocity, long realStartTime) {
+		this.alive = startPosition.x >= 0 && startPosition.x <= Constants.WIDTH && startPosition.y >= 0 && startPosition.y <= Constants.HEIGHT;
 		this.startPosition = startPosition;
-		this.startVelocity = startVelocity.makeUnitVector().multiply(Assets.BALL_SPEED);
+		this.startVelocity = startVelocity.makeUnitVector().multiply(Constants.BALL_SPEED);
 		this.realStartTimeMillis = realStartTime;
 
-		/*  T E M P O R A R Y  O N L Y  */
 		init(realStartTime);
 	}
 
@@ -24,97 +24,54 @@ public class Ball {
 		return tempCurrentPosition;
 	}
 
-	private Vector2D getPosition(long currentTimeMillis) {
-		Vector2D realVelocityReflected = new Vector2D(realVelocity);
-		realVelocityReflected.x = 0 - realVelocityReflected.x;
-
+	public void updateCurrentTime(long currentTimeMillis) {
+		tempCurrentMillis = currentTimeMillis;
 		long timeTravelled = currentTimeMillis - apparentStartTimeMillis;
 		Vector2D youAreHere = new Vector2D(startPosition);
 		youAreHere.add(realVelocity.multiply(timeTravelled));
-		while (youAreHere.x < 0 || youAreHere.x > Assets.WIDTH) {
+		while (youAreHere.x < 0 || youAreHere.x > Constants.WIDTH) {
 			if (youAreHere.x < 0) youAreHere.x = 0 - youAreHere.x;
-			if (youAreHere.x > Assets.WIDTH) youAreHere.x = 2 * Assets.WIDTH - youAreHere.x;
+			if (youAreHere.x > Constants.WIDTH) youAreHere.x = 2 * Constants.WIDTH - youAreHere.x;
 		}
-		return youAreHere;
+		tempCurrentPosition = youAreHere;
 	}
 
 	public boolean inGame() {
 		if (!isAlive()) return false;
-		if (tempCurrentPosition.y < (0 - Assets.PADDLE_EFFECTIVE_DEPTH)) return false;
-		if (tempCurrentPosition.y > (Assets.HEIGHT + Assets.PADDLE_EFFECTIVE_DEPTH)) return false;
+		if (tempCurrentPosition.y < (0 - Constants.PADDLE_EFFECTIVE_DEPTH)) return false;
+		if (tempCurrentPosition.y > (Constants.HEIGHT + Constants.PADDLE_EFFECTIVE_DEPTH)) return false;
 		return true;
 	}
 
-	public void init(long fakeStartTime) throws RuntimeException {
-		this.isMoving = true;
-		this.apparentStartTimeMillis = fakeStartTime;
-		double distanceToTravel = Assets.HEIGHT * startVelocity.length() / Math.abs(startVelocity.y);
-		double realTimeTakenMillis = distanceToTravel / Assets.BALL_SPEED;
-		realEndTimeMillis = realStartTimeMillis + (long) realTimeTakenMillis;
-		if ((apparentStartTimeMillis - realStartTimeMillis) > Assets.MAX_ACCEPTABLE_LAG)
-			throw new Assets.LagException();
+	public void init(long imaginaryStartTime) throws Constants.LagException {
+		/* grab the fake starting time and check it */
+		this.apparentStartTimeMillis = imaginaryStartTime;
+		if ((apparentStartTimeMillis - realStartTimeMillis) > Constants.MAX_ACCEPTABLE_LAG)
+			throw new Constants.LagException();
 
+		/* error containment */
+		if (startVelocity.y == 0) startVelocity = Vector2D.Y.cpy().makeUnitVector().multiply(Constants.BALL_SPEED);
+
+		/* how far does the ball move to the paddle line */
+		double distanceToTravel;
+		if (startVelocity.y > 0)
+			distanceToTravel = (Constants.HEIGHT - startPosition.y) * (startVelocity.length() / Math.abs(startVelocity.y));
+		else distanceToTravel = startPosition.y * (startVelocity.length() / Math.abs(startVelocity.y));
+
+		/* when is it supposed to the paddle line */
+		double realTimeTakenMillis = distanceToTravel / Constants.BALL_SPEED;
+		realEndTimeMillis = realStartTimeMillis + (long) realTimeTakenMillis;
+
+		/* how fast must it move to get there on time */
 		double realSpeed = distanceToTravel / (realEndTimeMillis - apparentStartTimeMillis);
 		realVelocity = startVelocity.makeUnitVector().multiply(realSpeed);
 	}
 
 	public boolean isAlive() {
-		return isMoving;
+		return alive;
 	}
 
-	//	/**
-	//	 * Based on very rough calculation and estimation
-	//	 * May need to further modify
-	//	 *
-	//	 * @param paddle
-	//	 * @return
-	//	 */
-	//
-	//	public Vector2D newVelocityAfterReflection(Paddle paddle) {
-	//		double x = getCurrentPosition().x;
-	//		double y = getCurrentPosition().y;
-	//		double vx = realVelocity.x;
-	//		double vy = realVelocity.y;
-	//		Vector2D newVelocity = new Vector2D();
-	//		double hitPoint = x - paddle.getCenter().x;
-	//		double hitPointRatio = 2 * hitPoint / Assets.DISPLAY_WIDTH;
-	//		double innerAngle = 15 * hitPointRatio * Math.PI / 180;
-	//		if (x >= 0) {
-	//			if (Math.abs(Math.tan(x / y)) > Math.abs(innerAngle)) {
-	//				newVelocity.x = vx * (-1) * (Math.abs(Math.tan(x / y)) - Math.abs(innerAngle));
-	//				newVelocity.y = vx * (-1) * (1 + Math.abs(Math.tan(x / y)) - Math.abs(innerAngle));
-	//			} else if (Math.abs(Math.tan(x / y)) > Math.abs(innerAngle)) {
-	//				newVelocity.x = vx * (-1) * (1 + Math.abs(Math.tan(x / y)) - Math.abs(innerAngle));
-	//				newVelocity.y = vx * (-1) * (Math.abs(Math.tan(x / y)) - Math.abs(innerAngle));
-	//			} else {
-	//				newVelocity.x = vx * (-1);
-	//				newVelocity.y = vx * (-1);
-	//			}
-	//		} else {
-	//			if (Math.abs(Math.tan(x / y)) > Math.abs(innerAngle)) {
-	//				newVelocity.x = vx * (-1) * (1 + Math.abs(Math.tan(x / y)) - Math.abs(innerAngle));
-	//				newVelocity.y = vx * (-1) * (Math.abs(Math.tan(x / y)) - Math.abs(innerAngle));
-	//			} else if (Math.abs(Math.tan(x / y)) > Math.abs(innerAngle)) {
-	//				newVelocity.x = vx * (-1) * (Math.abs(Math.tan(x / y)) - Math.abs(innerAngle));
-	//				newVelocity.y = vx * (-1) * (1 + Math.abs(Math.tan(x / y)) - Math.abs(innerAngle));
-	//			} else {
-	//				newVelocity.x = vx * (-1);
-	//				newVelocity.y = vx * (-1);
-	//			}
-	//		}
-	//		return newVelocity;
-	//	}
-
-	public void restart() {
-		isMoving = true;
-	}
-
-	public void stop() {
-		isMoving = false;
-	}
-
-	public void updateCurrentTime(long currentTimeMillis) {
-		this.tempCurrentMillis = currentTimeMillis;
-		this.tempCurrentPosition = getPosition(currentTimeMillis);
+	public void kill() {
+		alive = false;
 	}
 }
