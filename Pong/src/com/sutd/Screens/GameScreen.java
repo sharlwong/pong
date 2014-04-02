@@ -30,7 +30,7 @@ public class GameScreen implements Screen {
         //Gdx.gl.glClearColor(10/255.0f, 15/255.0f, 230/255.0f, 1f);
         //Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
         start_world.update();
-        start_renderer.render();
+        start_renderer.render(delta);
     }
 
     @Override
