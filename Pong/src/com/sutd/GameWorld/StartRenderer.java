@@ -30,6 +30,7 @@ public class StartRenderer {
 	private GameWorld gameworld;
 	private Ball[] balls;
 	private long totalTime;
+	private float timeCounter;
     
 
     public StartRenderer(StartWorld world) {
@@ -39,7 +40,7 @@ public class StartRenderer {
         shapeRenderer = new ShapeRenderer();
         shapeRenderer.setProjectionMatrix(cam.combined);
         
-        screenSize = new Vector2D(136, 200);
+        screenSize = new Vector2D(136, 204);
         batcher = new SpriteBatch();
 		batcher.setProjectionMatrix(cam.combined);
 		texture = new Texture(Gdx.files.internal("data/texture.png"));
@@ -102,7 +103,22 @@ public class StartRenderer {
         shapeRenderer.end();
         
         //System.out.println(runTime);
+        timeCounter += runTime;
+       // System.out.println(timeCounter);
+        
         totalTime += runTime*100;
+        if (timeCounter > 1) {
+			timeCounter -= 1;
+			System.out.println("Refresh");
+			System.out.println(noAliveBalls());
+			if (existDeadBall()) balls[getNextDeadBallIndex()] = balls[getNextDeadBallIndex()].restart(totalTime);
+			System.out.println(getNextDeadBallIndex());
+			//System.out.println("Restart");
+			if (existDeadBall()) balls[getNextDeadBallIndex()] = balls[getNextDeadBallIndex()].restart(totalTime);
+		}
+        
+        paddle0.update(runTime);
+        
         batcher.begin();
         drawBalls(totalTime);
     	drawPaddles();
@@ -152,6 +168,28 @@ public class StartRenderer {
 		batcher.draw(paddleTexture, (float) (paddle1.positionForRenderer().x *screenSize.x), 
 				(float) (paddle1.positionForRenderer().y*screenSize.y), (float) (Assets.PADDLE_WIDTH*screenSize.x), (float) (Assets.PADDLE_EFFECTIVE_DEPTH*screenSize.y));
 		//System.out.println(paddle1.positionForRenderer().y*screenSize.y);
+	}
+	public boolean existDeadBall() {
+		for (Ball b : balls)
+			if (!b.isAlive()) return true;
+		return false;
+	}
+
+	public int getNextDeadBallIndex() {
+		for (int i = 0; i<balls.length; i++){
+			if (!balls[i].isAlive()){
+				return i;
+			}
+		}
+		return -1;
+	}
+	
+	public int noAliveBalls(){
+		int counter = 0;
+		for(Ball b: balls){
+			if (b.isAlive()) counter++;
+		}
+		return counter;
 	}
 
 }

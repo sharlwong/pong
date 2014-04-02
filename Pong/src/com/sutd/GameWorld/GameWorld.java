@@ -29,6 +29,9 @@ public class GameWorld {
 		for (int i = 0; i<balls.length; i++){
 			balls[i] = new Ball(startPositionGen(i), startVelocityGen(i), 0);
 			System.out.println(balls[i].getPosition(0).x+" "+balls[i].getPosition(0).y);
+			if (i>5){
+				balls[i].stop();
+			}
 		}
 	}
 	
@@ -89,8 +92,8 @@ public class GameWorld {
 		timeCounter = timeCounter + delta;
 		if (timeCounter / 1 != 0) {
 			timeCounter -= 1;
-			if (existDeadBall()) getNextDeadBall().restart();
-			if (existDeadBall()) getNextDeadBall().restart();
+			if (existDeadBall()) getNextDeadBall().restart((long)totalTime);
+			if (existDeadBall()) getNextDeadBall().restart((long)totalTime);
 		}
 		rect.x++;
 		if (rect.x > 137) rect.x = 0;
@@ -102,6 +105,4 @@ public class GameWorld {
 			}
 		}
 	}
-	
-	
 }

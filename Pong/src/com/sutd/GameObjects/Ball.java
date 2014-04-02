@@ -19,6 +19,7 @@ public class Ball {
 		this.startPosition = startPosition;
 		this.startVelocity = startVelocity.makeUnitVector().multiply(Assets.BALL_SPEED);
 		this.realStartTimeMillis = realStartTime;
+		this.isMoving = true;
 
 		/*  T E M P O R A R Y  O N L Y  */
 		init(realStartTime);
@@ -29,9 +30,14 @@ public class Ball {
 	}
 
 	public Vector2D getPosition(long currentTimeMillis) {
-		if (!isAlive()) return new Vector2D(-1,-1);
+		if (!isAlive()){
+			return new Vector2D(-1,-1);
+		}
 		if (currentTimeMillis == realEndTimeMillis){
 			goingToCollide = true;
+		}
+		if (currentTimeMillis > realEndTimeMillis){
+			this.isMoving = false;
 		}
 
 		tempCurrentMillis = currentTimeMillis;
@@ -118,8 +124,8 @@ public class Ball {
 		return new Ball(getCurrentPosition(), newVelocity, tempCurrentMillis);
 	}
 	
-	public void restart() {
-		isMoving = true;
+	public Ball restart(long realStartTime) {
+		return new Ball(new Vector2D(startPosition.x*2*(Math.random()), startPosition.y), new Vector2D((Math.random()-0.5), startVelocity.y), realStartTime);
 	}
 
 	public void stop() {

@@ -17,6 +17,7 @@ public class Paddle {
 		//assumes binary player ID number: 0 at bottom, 1 at top
 		centerPoint = new Vector2D(Assets.WIDTH / 2, Assets.HEIGHT * playerNum);
 		this.playerBottom = (playerNum == 0);
+		this.velocity = new Vector2D(0,0);
 	}
 
 	public Ball bounce(Ball b) {
@@ -85,7 +86,8 @@ public class Paddle {
 
 	public void onClick(int x) {
 		float screenWidth = Gdx.graphics.getWidth();
-		velocity.x = x / screenWidth - centerPoint.x;
+		velocity.x = (x / screenWidth - centerPoint.x)*10;
+		System.out.println("set new velocity.x: "+velocity.x);
 	}
 
 	public void setFractionalPosition(double fraction) {
