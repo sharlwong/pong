@@ -11,7 +11,7 @@ public class StartScreen implements Screen {
 	private StartRenderer start_renderer;
     
     public StartScreen() {
-        System.out.println("GameScreen Attached");
+        System.out.println("StartScreen Attached");
         start_world = new StartWorld(); 
         start_renderer = new StartRenderer(start_world);
     }

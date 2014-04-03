@@ -1,5 +1,7 @@
 package com.sutd.Pong;
 
+
+
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL10;
@@ -17,8 +19,8 @@ public class PongGame extends Game {
 	@Override
 	public void create() {		
 		System.out.println("Game Created!");
-//        setScreen(new SplashScreen());
-        setScreen(new GameScreen());
+        setScreen(new StartScreen());
+//        setScreen(new GameScreen());
 	}
 
 	@Override
