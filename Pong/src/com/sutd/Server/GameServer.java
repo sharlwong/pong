@@ -38,14 +38,16 @@ public class GameServer extends Thread {
 	public void run() {
 
 		// Start Server Socket
-		System.out.println("Sever Starting...");
+		System.out.println("Server Starting...");
 		serverSocket =  Gdx.net.newServerSocket(Protocol.TCP,port, null);
 		
 		// Accept Two clients to connect.
 		// And start listening to messages from them.
 		for(int i = 0 ; i < 2; i ++) {
 			player_sockets[i] = serverSocket.accept(null);
+			System.out.println("player_sockets " + i);
 			listeners[i] = startListening(player_sockets[i]);
+			System.out.println("listeners " + i);
 		}
 		message_service = new MessageService(player_sockets);
 		startConsuming();
@@ -64,7 +66,7 @@ public class GameServer extends Thread {
 	}
 	
 	/**
-	 * Starts  
+	 * Starts to consume the message passed by the client. 
 	 */
 	public void startConsuming() {
 		consumer = new MessageConsumer(buffer, message_service) ;

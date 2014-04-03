@@ -60,6 +60,7 @@ public class StartWorld {
 		// Start Server
 		GameServer server = new GameServer();
 		server.start();
+		
 		GameClient client = new GameClient();
 		client.connectToServer("localhost");
 		client.startListening();

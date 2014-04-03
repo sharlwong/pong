@@ -1,6 +1,7 @@
 package com.sutd.Server;
 
 import java.io.PrintWriter;
+import java.util.Arrays;
 
 import com.badlogic.gdx.net.Socket;
 import com.sutd.Network.MessageHandler;
@@ -11,6 +12,8 @@ class MessageService implements MessageHandler {
 	
 	MessageService(Socket clients[]) {
 		this.clients = clients;
+		out = new PrintWriter[clients.length];
+		System.out.println("Clients.length: " + clients.length);
 		for(int i = 0 ; i< clients.length; i++) {
 			out[i] = new PrintWriter(clients[i].getOutputStream());
 		}
