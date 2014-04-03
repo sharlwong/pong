@@ -9,9 +9,9 @@ public class Ball {
 	private Vector2D startPosition;
 	private Vector2D startVelocity;
 	private Vector2D tempCurrentPosition;
-	private long tempCurrentMillis;
 
 	public Ball(Vector2D startPosition, Vector2D startVelocity, long realStartTime) {
+
 		this.alive = startPosition.x >= 0 && startPosition.x <= Constants.WIDTH && startPosition.y >= 0 && startPosition.y <= Constants.HEIGHT;
 		this.startPosition = startPosition;
 		this.startVelocity = startVelocity.makeUnitVector().multiply(Constants.BALL_SPEED);
@@ -25,10 +25,9 @@ public class Ball {
 	}
 
 	public void updateCurrentTime(long currentTimeMillis) {
-		tempCurrentMillis = currentTimeMillis;
 		long timeTravelled = currentTimeMillis - apparentStartTimeMillis;
 		Vector2D youAreHere = new Vector2D(startPosition);
-		youAreHere.add(realVelocity.multiply(timeTravelled));
+		youAreHere.add(realVelocity.cpy().multiply(timeTravelled));
 		while (youAreHere.x < 0 || youAreHere.x > Constants.WIDTH) {
 			if (youAreHere.x < 0) youAreHere.x = 0 - youAreHere.x;
 			if (youAreHere.x > Constants.WIDTH) youAreHere.x = 2 * Constants.WIDTH - youAreHere.x;
@@ -65,6 +64,11 @@ public class Ball {
 		/* how fast must it move to get there on time */
 		double realSpeed = distanceToTravel / (realEndTimeMillis - apparentStartTimeMillis);
 		realVelocity = startVelocity.makeUnitVector().multiply(realSpeed);
+
+
+		/* setup ball at time zero */
+		updateCurrentTime(imaginaryStartTime);
+
 	}
 
 	public boolean isAlive() {

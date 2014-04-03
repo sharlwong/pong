@@ -13,6 +13,7 @@ public class Paddle {
 		paddleCenter = new Vector2D(-1, Constants.HEIGHT * playerNum);
 		setFractionalPosition(0.5);
 		this.playerBottom = (playerNum == 0);
+		this.velocity = Vector2D.Zero.cpy();
 	}
 
 	public Ball bounce(Ball b, long currentTimeMillis) {
@@ -25,16 +26,14 @@ public class Paddle {
 	}
 
 	public boolean collisionCheck(Ball b) {
-		if (!b.inGame()) return false;
+//		if (!b.inGame()){
+//			System.out.println("!!!!");
+//			return false;
+//		}
 		Vector2D ballPosition = b.getCurrentPosition();
 		if (Math.abs(ballPosition.x - paddleCenter.x) > Constants.PADDLE_WIDTH) return false;
-		if (playerBottom) {
-			if (ballPosition.y > 0) return false;
-			if (ballPosition.y < (0 - Constants.PADDLE_EFFECTIVE_DEPTH)) return false;
-		} else {
-			if (ballPosition.y < Constants.HEIGHT) return false;
-			if (ballPosition.y > (Constants.HEIGHT + Constants.PADDLE_EFFECTIVE_DEPTH)) return false;
-		}
+		if (playerBottom && ballPosition.y > Constants.BALL_RADIUS)  return false;
+		if (!playerBottom && ballPosition.y < (Constants.HEIGHT - Constants.BALL_RADIUS)) return false;
 		return true;
 	}
 
@@ -73,8 +72,8 @@ public class Paddle {
 
 	public void setVelocity(double xVelocity) {
 		if (xVelocity == 0) velocity = Vector2D.Zero.cpy();
-		if (xVelocity > 0) velocity = Vector2D.X.cpy().multiply(0.5);
-		if (xVelocity < 0) velocity = Vector2D.X.cpy().multiply(-0.5);
+		if (xVelocity > 0) velocity = Vector2D.X.cpy().multiply(0.001);
+		if (xVelocity < 0) velocity = Vector2D.X.cpy().multiply(-0.001);
 	}
 
 	public void updateDeltaTime(float delta) {

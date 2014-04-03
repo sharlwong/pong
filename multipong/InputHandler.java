@@ -102,6 +102,11 @@ public class InputHandler {
 				game.exit();
 				System.exit(-1);
 		}
+
+//		System.out.println(player0.getCenter().x);
+//		System.out.println(player0.getCenter().y);
+//		System.out.println(player1.getCenter().x);
+//		System.out.println(player1.getCenter().y);
 	}
 
 	public void keyUp(KeyEvent e) {

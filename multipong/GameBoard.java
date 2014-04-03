@@ -10,8 +10,9 @@ import java.util.List;
  * Created by avery_000 on 31-Mar-14.
  */
 public class GameBoard {
+	public long elapsedTimeMillis;
+	public Constants calc;
 	private List<Ball> balls;
-	private long elapsedTimeMillis;
 	private int heightPixels;
 	private InputHandler inputHandler;
 	private Paddle player0;
@@ -19,7 +20,6 @@ public class GameBoard {
 	private SecureRandom random;
 	private int widthPixels;
 	private Dimension dim;
-	public Constants calc;
 
 	public GameBoard(Dimension sizePixels) {
 		this.calc = new Constants(sizePixels);
@@ -33,6 +33,8 @@ public class GameBoard {
 		random.setSeed(1234567890);
 		inputHandler = new InputHandler(player0, player1, this);
 		dim = sizePixels;
+
+		injectRandomBall();
 	}
 
 	public void exit() {
@@ -74,40 +76,55 @@ public class GameBoard {
 		double speed1 = random.nextDouble() - 0.5;
 		double speed2 = random.nextDouble() - 0.5;
 		Vector2D speed;
-		if (Math.abs(speed1) > Math.abs(speed2)) speed = new Vector2D(speed1, speed2);
+		if (Math.abs(speed1) < Math.abs(speed2)) speed = new Vector2D(speed1, speed2);
 		else speed = new Vector2D(speed2, speed1);
 		balls.add(new Ball(position, speed, elapsedTimeMillis));
 	}
 
-	public void updateDeltaTime(long deltaMillis) {
+	public int[] getScores() {
+		int[] out = new int[2];
+		out[0] = player0.getScore();
+		out[1] = player1.getScore();
+		return out;
+	}
+
+	public synchronized void updateDeltaTime(long deltaMillis) {
 		elapsedTimeMillis += deltaMillis;
 		player0.updateDeltaTime(deltaMillis);
 		player1.updateDeltaTime(deltaMillis);
+		List<Ball> removeThese = new ArrayList<Ball>();
+		List<Ball> addThese = new ArrayList<Ball>();
 		for (Ball b : balls) {
 			b.updateCurrentTime(elapsedTimeMillis);
 			if (player1.collisionCheck(b)) {
-				balls.add(player1.bounce(b, elapsedTimeMillis));
+				addThese.add(player1.bounce(b, elapsedTimeMillis));
 				b.kill();
-				balls.remove(b);
+				removeThese.add(b);
 			}
 			if (player0.collisionCheck(b)) {
-				balls.add(player0.bounce(b, elapsedTimeMillis));
+				addThese.add(player0.bounce(b, elapsedTimeMillis));
 				b.kill();
-				balls.remove(b);
+				removeThese.add(b);
 			}
 			if (!b.inGame()) {
 				b.kill();
-				balls.remove(b);
+				removeThese.add(b);
 				if (b.getCurrentPosition().y < 0) player1.incrementScore();
 				if (b.getCurrentPosition().y > Constants.HEIGHT) player0.incrementScore();
 			}
 		}
+
+		for (Ball b : removeThese) balls.remove(b);
+		for (Ball b : addThese) balls.add(b);
 	}
 
 	public void keyDown(KeyEvent e) {
 		inputHandler.keyDown(e);
 	}
+
 	public void keyUp(KeyEvent e) {
 		inputHandler.keyUp(e);
 	}
 }
+
+
