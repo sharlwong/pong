@@ -10,12 +10,14 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.sutd.Screens.GameScreen;
+import com.sutd.Screens.StartScreen;
 
 public class PongGame extends Game {
 	
 	@Override
 	public void create() {		
 		System.out.println("Game Created!");
+//        setScreen(new SplashScreen());
         setScreen(new GameScreen());
 	}
 

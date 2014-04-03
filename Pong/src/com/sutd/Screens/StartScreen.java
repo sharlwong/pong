@@ -1,26 +1,20 @@
 package com.sutd.Screens;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.GL10;
-import com.sutd.GameWorld.GameRenderer;
-import com.sutd.GameWorld.GameWorld;
-import com.sutd.PongHelpers.Vector2D;
+import com.sutd.GameWorld.StartRenderer;
+import com.sutd.GameWorld.StartWorld;
 
-public class GameScreen implements Screen {
+
+public class StartScreen implements Screen {
 	
-	private GameWorld game_world;
-	private GameRenderer game_renderer;
-	private Vector2D screenSize;
-
+	private StartWorld start_world;
+	private StartRenderer start_renderer;
     
-	public GameScreen() {
-	    System.out.println("GameScreen Attached");
-	    screenSize = new Vector2D(136, 204);
-	    game_world = new GameWorld(screenSize);// initialize world
-	    game_renderer = new GameRenderer(game_world); // initialize renderer
-	
-	}
+    public StartScreen() {
+        System.out.println("GameScreen Attached");
+        start_world = new StartWorld(); 
+        start_renderer = new StartRenderer(start_world);
+    }
 
     @Override
     public void render(float delta) {
@@ -28,8 +22,8 @@ public class GameScreen implements Screen {
     	//System.out.println("Rendering!");
         //Gdx.gl.glClearColor(10/255.0f, 15/255.0f, 230/255.0f, 1f);
         //Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-        game_world.update(delta);
-        game_renderer.render(delta);
+        start_world.update();
+        start_renderer.render(delta);
     }
 
     @Override

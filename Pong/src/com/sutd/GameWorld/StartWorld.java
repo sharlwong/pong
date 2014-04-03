@@ -10,12 +10,13 @@ import com.sutd.Server.*;
 public class StartWorld {
 	private Rectangle start_game_button;
 	private Rectangle join_game_button;
+	
 	public StartWorld() {
 		createButtons();
 	}
 	
 	/**
-	 * Creates the buttons that is shown on the startscreen
+	 * Creates the buttons that is shown on the start screen
 	 */
 	private void createButtons() {
 		start_game_button = new Rectangle(10,10,100,30);

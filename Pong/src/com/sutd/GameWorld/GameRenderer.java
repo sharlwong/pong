@@ -16,10 +16,9 @@ import com.sutd.PongHelpers.Vector2D;
 
 public class GameRenderer {
     
-	private GameWorld myWorld;
+	private GameWorld game_world;
 	private OrthographicCamera cam;
 	private ShapeRenderer shapeRenderer;
-	private Ball[] balls;
 	private Texture texture;
 
 	private SpriteBatch batcher;
@@ -27,9 +26,15 @@ public class GameRenderer {
 	private TextureRegion paddleTexture;
 	
 	private Vector2D screenSize;
+	
+	private Paddle paddle0 = new Paddle(0);
+	private Paddle paddle1 = new Paddle(1);
+	private Ball[] balls;
+	private long totalTime;
+	private float timeCounter;
 
 	public GameRenderer(GameWorld world) {
-		myWorld = world;
+		game_world = world;
 		screenSize = world.getScreenSize();
 		cam = new OrthographicCamera();
 		cam.setToOrtho(true, 136, 204);
@@ -71,9 +76,9 @@ public class GameRenderer {
         // Chooses RGB Color of 87, 109, 120 at full opacity
         shapeRenderer.setColor(87 / 255.0f, 109 / 255.0f, 120 / 255.0f, 1);
 
-        // Draws the rectangle from myWorld (Using ShapeType.Filled)
-        shapeRenderer.rect(myWorld.getRect().x, myWorld.getRect().y,
-                myWorld.getRect().width, myWorld.getRect().height);
+        // Draws the rectangle from game_world (Using ShapeType.Filled)
+        shapeRenderer.rect(game_world.getRect().x, game_world.getRect().y,
+                game_world.getRect().width, game_world.getRect().height);
 
         // Tells the shapeRenderer to finish rendering
         // We MUST do this every time.
@@ -89,39 +94,112 @@ public class GameRenderer {
         // Chooses RGB Color of 255, 109, 120 at full opacity
         shapeRenderer.setColor(255 / 255.0f, 109 / 255.0f, 120 / 255.0f, 1);
 
-        // Draws the rectangle from myWorld (Using ShapeType.Line)
-        shapeRenderer.rect(myWorld.getRect().x, myWorld.getRect().y,
-                myWorld.getRect().width, myWorld.getRect().height);
-        batcher.begin();
-        drawBalls(runTime);
-        drawPaddles();
+        // Draws the rectangle from game_world (Using ShapeType.Line)
+        shapeRenderer.rect(game_world.getRect().x, game_world.getRect().y,
+                game_world.getRect().width, game_world.getRect().height);
+       
+//        drawBalls(runTime);
+//        drawPaddles();
 
         shapeRenderer.end();
         
+
+        //System.out.println(runTime);
+        timeCounter += runTime;
+       // System.out.println(timeCounter);
+        
+        totalTime += runTime*100;
+        if (timeCounter > 1) {
+			timeCounter -= 1;
+			System.out.println("Refresh");
+			System.out.println(noAliveBalls());
+			if (existDeadBall()) balls[getNextDeadBallIndex()] = balls[getNextDeadBallIndex()].restart(totalTime);
+			System.out.println(getNextDeadBallIndex());
+			//System.out.println("Restart");
+			if (existDeadBall()) balls[getNextDeadBallIndex()] = balls[getNextDeadBallIndex()].restart(totalTime);
+		}
+        
+        paddle0.update(runTime);
+        
+        batcher.begin();
+        drawBalls(totalTime);
+    	drawPaddles();
+    	batcher.enableBlending();
+    	batcher.end();
     }
     
-    public void drawBalls(float runTime) {
+    public void drawBalls(long runTime) {
 		for (Ball b : balls) {
 			if (b.isAlive()) {
-				drawThisBall(b);
+				drawThisBall(b, runTime);
 			}
 		}
 	}
-
-	public void drawThisBall(Ball b) {
+    
+    public void drawThisBall(Ball b, long totalTime) {
 		
-		Vector2D ballPosition = b.getCurrentPosition();
+		Vector2D ballPosition = b.getPosition(totalTime);
+		//System.out.println(ballPosition.x+" "+ballPosition.y);
 		// require an Vector2D screenSize in this function
 		batcher.draw(ballTexture, (float) (ballPosition.x * screenSize.x),
-				(float) (ballPosition.y * screenSize.y), (float) Assets.BALL_RADIUS, (float) Assets.BALL_RADIUS); //determine the height of game display region
+				(float) (ballPosition.y * screenSize.y), (float) (Assets.BALL_RADIUS* screenSize.x/2), (float) (Assets.BALL_RADIUS* screenSize.x/2)); //determine the height of game display region
 	}
 	
 	public void drawPaddles(){
 		//Paddle on the top:
-		Paddle top = myWorld.player1;
-		batcher.draw(paddleTexture, (float) top.positionForRenderer().x, (float) top.positionForRenderer().y, (float) Assets.PADDLE_WIDTH, (float) Assets.PADDLE_EFFECTIVE_DEPTH);
-		Paddle down = myWorld.player0;
-		batcher.draw(paddleTexture, (float) down.positionForRenderer().x, (float) down.positionForRenderer().y, (float) Assets.PADDLE_WIDTH, (float) Assets.PADDLE_EFFECTIVE_DEPTH);
+		//Paddle top = game_world.player1;
+		batcher.draw(paddleTexture, (float) (paddle0.positionForRenderer().x *screenSize.x), 
+				(float) (paddle0.positionForRenderer().y*screenSize.y), (float) (Assets.PADDLE_WIDTH*screenSize.x), (float) (Assets.PADDLE_EFFECTIVE_DEPTH*screenSize.y));
+		//Paddle down = game_world.player0;
+		batcher.draw(paddleTexture, (float) (paddle1.positionForRenderer().x *screenSize.x), 
+				(float) (paddle1.positionForRenderer().y*screenSize.y), (float) (Assets.PADDLE_WIDTH*screenSize.x), (float) (Assets.PADDLE_EFFECTIVE_DEPTH*screenSize.y));
+		//System.out.println(paddle1.positionForRenderer().y*screenSize.y);
 	}
+	public boolean existDeadBall() {
+		for (Ball b : balls)
+			if (!b.isAlive()) return true;
+		return false;
+	}
+
+	public int getNextDeadBallIndex() {
+		for (int i = 0; i<balls.length; i++){
+			if (!balls[i].isAlive()){
+				return i;
+			}
+		}
+		return -1;
+	}
+	
+	public int noAliveBalls(){
+		int counter = 0;
+		for(Ball b: balls){
+			if (b.isAlive()) counter++;
+		}
+		return counter;
+	}
+    
+//    public void drawBalls(float runTime) {
+//		for (Ball b : balls) {
+//			if (b.isAlive()) {
+//				drawThisBall(b);
+//			}
+//		}
+//	}
+//
+//	public void drawThisBall(Ball b) {
+//		
+//		Vector2D ballPosition = b.getCurrentPosition();
+//		// require an Vector2D screenSize in this function
+//		batcher.draw(ballTexture, (float) (ballPosition.x * screenSize.x),
+//				(float) (ballPosition.y * screenSize.y), (float) Assets.BALL_RADIUS, (float) Assets.BALL_RADIUS); //determine the height of game display region
+//	}
+//	
+//	public void drawPaddles(){
+//		//Paddle on the top:
+//		Paddle top = game_world.player1;
+//		batcher.draw(paddleTexture, (float) top.positionForRenderer().x, (float) top.positionForRenderer().y, (float) Assets.PADDLE_WIDTH, (float) Assets.PADDLE_EFFECTIVE_DEPTH);
+//		Paddle down = game_world.player0;
+//		batcher.draw(paddleTexture, (float) down.positionForRenderer().x, (float) down.positionForRenderer().y, (float) Assets.PADDLE_WIDTH, (float) Assets.PADDLE_EFFECTIVE_DEPTH);
+//	}
 
 }
