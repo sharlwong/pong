@@ -18,8 +18,8 @@ public class GameClient {
 	private final int port = 5000;
 	private BlockingQueue<String> buffer = new ArrayBlockingQueue<String>(10);
 	
-	/* precondition: we expect a server to be up and running
-	 * and the address should be accessible to the client
+	/* Pre-condition: We expect a server to be up and running
+	 * and the address should be accessible to the client.
 	 */
 	public void connectToServer(String address) {
 		client_socket = Gdx.net.newClientSocket(Protocol.TCP, address, port, null);
@@ -55,40 +55,40 @@ public class GameClient {
 		}
 		
 		public void run() {
-			while(!this.isInterrupted()) {
-				System.out.println("Trying to consume ... Im really hungry :(");
+//			while(!this.isInterrupted()) {
+				System.out.println("CLIENT: Preparing to consume.");
 				try {
 					String message = buffer.take();
-					System.out.println("Consumer consumed" +message);
+					System.out.println("CLIENT: Remove from buffer: " +message);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				
-			}
+//			}
 		}
 		
 	}
 
 	class MessageProducer extends Thread {
 		private BufferedReader reader;
-		private BlockingQueue buffer;
-		MessageProducer(BufferedReader reader, BlockingQueue buffer) {
+		private BlockingQueue<String> buffer;
+		MessageProducer(BufferedReader reader, BlockingQueue<String> buffer) {
 			this.reader = reader;
 			this.buffer = buffer;
 		}
 		public void run() {
-			while(!this.isInterrupted()) {
+//			while(!this.isInterrupted()) {
 				try {
-					System.out.println("Listening for message to produce");
+					System.out.println("CLIENT: Listening for message to produce");
 					String message = reader.readLine();
 					buffer.offer(message);
-					System.out.println("Listener listened: " + message);
+					System.out.println("CLIENT: Add to buffer: " + message);
 					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-			}
+//			}
 		}
 	}
 }

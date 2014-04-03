@@ -3,17 +3,20 @@ package com.sutd.Screens;
 import com.badlogic.gdx.Screen;
 import com.sutd.GameWorld.StartRenderer;
 import com.sutd.GameWorld.StartWorld;
+import com.sutd.Pong.PongGame;
 
 
 public class StartScreen implements Screen {
 	
 	private StartWorld start_world;
 	private StartRenderer start_renderer;
+	private PongGame game;
     
-    public StartScreen() {
+    public StartScreen(PongGame game){
         System.out.println("StartScreen Attached");
-        start_world = new StartWorld(); 
+        start_world = new StartWorld(game); 
         start_renderer = new StartRenderer(start_world);
+        this.game = game;
     }
 
     @Override
@@ -28,27 +31,27 @@ public class StartScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-        System.out.println("GameScreen - resizing");
+        System.out.println("StartScreen - resizing");
     }
 
     @Override
     public void show() {
-        System.out.println("GameScreen - show called");
+        System.out.println("StartScreen - show called");
     }
 
     @Override
     public void hide() {
-        System.out.println("GameScreen - hide called");     
+        System.out.println("StartScreen - hide called");     
     }
 
     @Override
     public void pause() {
-        System.out.println("GameScreen - pause called");        
+        System.out.println("StartScreen - pause called");        
     }
 
     @Override
     public void resume() {
-        System.out.println("GameScreen - resume called");       
+        System.out.println("StartScreen - resume called");       
     }
 
     @Override

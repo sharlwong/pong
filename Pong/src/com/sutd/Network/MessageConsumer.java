@@ -12,11 +12,15 @@ public class MessageConsumer extends Thread{
 	}
 	public void run() {
 		while(!this.isInterrupted()) {
-        System.out.println("Trying to consume ... Im really hungry :(");
+        System.out.println("SERVER: Preparing to consume.");
         try {
+        	// Buffer consumes message
         	String message = buffer.take();
+        	System.out.println("SERVER: Remove from buffer: " +message);
+        	
+        	// Message is passed to handler to handle.
         	handler.handle(message);
-        	System.out.println("Consumer consumed" +message);
+        	
         	}
         catch (InterruptedException e) {
         	// TODO Auto-generated catch block

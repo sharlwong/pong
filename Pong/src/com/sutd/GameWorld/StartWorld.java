@@ -5,14 +5,22 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.input.*;
 import com.sutd.Client.GameClient;
 import com.sutd.Network.*;
+import com.sutd.Pong.PongGame;
+import com.sutd.Screens.GameScreen;
 import com.sutd.Server.*;
+
 
 public class StartWorld {
 	private Rectangle start_game_button;
 	private Rectangle join_game_button;
+	private Boolean server_created = false;
+	private Boolean client1_created = false;
+	private Boolean client2_created = false;
+	private PongGame pong_game;
 	
-	public StartWorld() {
+	public StartWorld(PongGame pong_game) {
 		createButtons();
+		this.pong_game = pong_game;
 	}
 	
 	/**
@@ -32,7 +40,16 @@ public class StartWorld {
 	
 	public void update() {
 		check_if_touched();
+		check_if_server_clients_created();
 	}
+	
+	/** Checks if start game button and join game button starts.
+	 * 
+	 * If start game button is touched, a new server and a new client is created. 
+	 * The client connects to the server.
+	 * 
+	 * If join game button is touched, a new client is created and connected to the server too.*
+	 * */
 	
 	private void check_if_touched() {
 		if(Gdx.input.justTouched()) {
@@ -41,14 +58,28 @@ public class StartWorld {
 			System.out.println("X: "+x+", y:"+y);
 			if(start_game_button.contains(x, y)) {
 				System.out.println("Start Touched!");
+				//Probably start a server here.
 				createServerAndClient();
+				System.out.println("Finish starting game.\n");
 			}
-			//Probably start a server here.
+			
 			else if(join_game_button.contains(x, y)) {
 				System.out.println("Join Touched!");
 				createClientAndJoinServer();
+				System.out.println("Finish joining game.\n");
 			//connect to a server here.
 			}
+		}
+	}
+	
+	/**
+	 * Checks if server and clients are created successfully.
+	 * If they are, the screen is changed to GameScreen. 
+	 * */
+	
+	private void check_if_server_clients_created(){
+		if(server_created == true && client1_created == true && client2_created == true){
+			pong_game.setScreen(new GameScreen());
 		}
 	}
 	
@@ -60,19 +91,31 @@ public class StartWorld {
 		// Start Server
 		GameServer server = new GameServer();
 		server.start();
+		server_created = true;
 		
-		GameClient client = new GameClient();
-		client.connectToServer("localhost");
-		client.startListening();
-		client.startConsuming();
-		client.sendMessage("Player 1: Hi!");
+		GameClient client1 = new GameClient();
+		client1.connectToServer("localhost");
+		client1.startListening();
+		System.out.println("Client 1 finishes listening.");
+		client1.startConsuming();
+		System.out.println("Client 1 finishes consuming.");
+		client1.sendMessage("Player 1: Hi!");
+		client1_created = true;
 	}
 	
+	/**
+	 * Start Client Thread
+	 * **/
+	
 	private void createClientAndJoinServer() {
-		GameClient client = new GameClient();
-		client.connectToServer("localhost");
-		client.startListening();
-		client.startConsuming();
-		client.sendMessage("Player 2: Hi!");
+		GameClient client2 = new GameClient();
+		client2.connectToServer("localhost");
+		client2.startListening();
+		System.out.println("Client 2 finishes listening.");		
+		client2.startConsuming();
+		System.out.println("Client 2 finishes consuming.");
+//		client2.sendMessage("Player 2: Hi!");
+		client2_created = true;
+		
 	}
 }

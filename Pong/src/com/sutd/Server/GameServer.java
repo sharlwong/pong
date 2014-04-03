@@ -49,6 +49,7 @@ public class GameServer extends Thread {
 			listeners[i] = startListening(player_sockets[i]);
 			System.out.println("listeners " + i);
 		}
+		
 		message_service = new MessageService(player_sockets);
 		startConsuming();
 	}

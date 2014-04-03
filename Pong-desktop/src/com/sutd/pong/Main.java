@@ -12,6 +12,8 @@ public class Main {
 		cfg.width = 272;
 		cfg.height = 408;
 		
-		new LwjglApplication(new PongGame(), cfg);
+		PongGame pong_game = new PongGame();
+		
+		new LwjglApplication(pong_game, cfg);
 	}
 }

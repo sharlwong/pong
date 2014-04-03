@@ -11,19 +11,21 @@ import java.util.concurrent.BlockingQueue;
  */
 public class MessageProducer extends Thread {
 	private BufferedReader reader;
-	private BlockingQueue buffer;
+	private BlockingQueue<String> buffer;
 	
-	public MessageProducer(BufferedReader reader, BlockingQueue buffer) {
+	public MessageProducer(BufferedReader reader, BlockingQueue<String> buffer) {
 		this.reader = reader;
 		this.buffer = buffer;
 	}
 	public void run() {
 		while(!this.isInterrupted()) {
 			try {
-				System.out.println("Listening for message to produce");
+				System.out.println("SERVER: Listening for message to produce.");
+				// Listens to message being produced.
 				String message = reader.readLine();
+				// Adds message to the buffer.
 				buffer.offer(message);
-				System.out.println("Listener listened: " + message);
+				System.out.println("SERVER: Add to buffer: " + message);
 
 			} catch (Exception e) {
 				e.printStackTrace();

@@ -139,6 +139,7 @@ public class GameRenderer {
     public void drawThisBall(Ball b, long totalTime) {
 		
 		Vector2D ballPosition = b.getPosition(totalTime);
+		
 		//System.out.println(ballPosition.x+" "+ballPosition.y);
 		// require an Vector2D screenSize in this function
 		batcher.draw(ballTexture, (float) (ballPosition.x * screenSize.x),

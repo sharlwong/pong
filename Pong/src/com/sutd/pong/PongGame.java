@@ -16,10 +16,12 @@ import com.sutd.Screens.StartScreen;
 
 public class PongGame extends Game {
 	
+	
+	
 	@Override
 	public void create() {		
 		System.out.println("Game Created!");
-        setScreen(new StartScreen());
+        setScreen(new StartScreen(this));
 //        setScreen(new GameScreen());
 	}
 
