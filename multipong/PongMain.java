@@ -7,7 +7,7 @@ import java.awt.event.KeyEvent;
 
 public class PongMain extends JFrame {
 
-	final static Dimension dim = new Dimension(500, 500);
+	final static Dimension dim = new Dimension(500,500);
 	private JPanel jContentPane = null;
 	private Renderer gameRenderer = null;
 
@@ -20,8 +20,14 @@ public class PongMain extends JFrame {
 		jContentPane.setLayout(new BorderLayout());
 		jContentPane.add(gameRenderer, BorderLayout.CENTER);
 
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		int x = screenSize.width - dim.width - 10;
+		x = x > 0? x/2 : 0;
+		int y = screenSize.height - dim.height - 75;
+		y = y > 0? y/2 : 0;
+
 		this.setResizable(false);
-		this.setBounds(new Rectangle(1000, 300, 507, 529)); // Position on the desktop
+		this.setBounds(new Rectangle(x, y, dim.width + 7, dim.height + 29)); // Position on the desktop
 		this.setMinimumSize(dim);
 		this.setMaximumSize(dim);
 		this.setContentPane(jContentPane);

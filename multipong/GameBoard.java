@@ -20,6 +20,7 @@ public class GameBoard {
 	private SecureRandom random;
 	private int widthPixels;
 	private Dimension dim;
+	private boolean injectBalls = false;
 
 	public GameBoard(Dimension sizePixels) {
 		this.calc = new Constants(sizePixels);
@@ -46,20 +47,22 @@ public class GameBoard {
 	}
 
 	public int[][] getBallXYs() {
-		int[][] out = new int[balls.size()][2];
-		for (int i = 0; i < balls.size(); i++) {
-			Dimension temp = calc.translateBallReferenceFrame(balls.get(i).getCurrentPosition());
-			out[i][0] = temp.width;
-			out[i][1] = temp.height;
+		synchronized (balls) {
+			int[][] out = new int[balls.size()][2];
+			for (int i = 0; i < balls.size(); i++) {
+				Dimension temp = calc.translateBallReferenceFrame(balls.get(i).getCurrentPosition());
+				out[i][0] = temp.width;
+				out[i][1] = temp.height;
+			}
+			return out;
 		}
-		return out;
 	}
 
 	public int[] getBottomPaddleXY() {
 		int[] out = new int[2];
 		Dimension temp = calc.translateBallReferenceFrame(player0.getCenter());
 		out[0] = temp.width;
-		out[1] = temp.height;
+		out[1] = temp.height + (int) calc.getBallPixelRadius();
 		return out;
 	}
 
@@ -67,8 +70,17 @@ public class GameBoard {
 		int[] out = new int[2];
 		Dimension temp = calc.translateBallReferenceFrame(player1.getCenter());
 		out[0] = temp.width;
-		out[1] = temp.height;
+		out[1] = temp.height - (int) calc.getBallPixelRadius();
 		return out;
+	}
+
+	public void setInjectBalls() {
+		injectBalls = true;
+		injectRandomBall();
+	}
+
+	public void stopInjectBalls() {
+		injectBalls = false;
 	}
 
 	public void injectRandomBall() {
@@ -78,7 +90,9 @@ public class GameBoard {
 		Vector2D speed;
 		if (Math.abs(speed1) < Math.abs(speed2)) speed = new Vector2D(speed1, speed2);
 		else speed = new Vector2D(speed2, speed1);
-		balls.add(new Ball(position, speed, elapsedTimeMillis));
+		synchronized (balls) {
+			balls.add(new Ball(position, speed, elapsedTimeMillis));
+		}
 	}
 
 	public int[] getScores() {
@@ -89,33 +103,38 @@ public class GameBoard {
 	}
 
 	public synchronized void updateDeltaTime(long deltaMillis) {
+
+		if (injectBalls) injectRandomBall();
+
 		elapsedTimeMillis += deltaMillis;
 		player0.updateDeltaTime(deltaMillis);
 		player1.updateDeltaTime(deltaMillis);
 		List<Ball> removeThese = new ArrayList<Ball>();
 		List<Ball> addThese = new ArrayList<Ball>();
-		for (Ball b : balls) {
-			b.updateCurrentTime(elapsedTimeMillis);
-			if (player1.collisionCheck(b)) {
-				addThese.add(player1.bounce(b, elapsedTimeMillis));
-				b.kill();
-				removeThese.add(b);
+		synchronized (balls) {
+			for (Ball b : balls) {
+				b.updateCurrentTime(elapsedTimeMillis);
+				if (player1.collisionCheck(b)) {
+					addThese.add(player1.bounce(b, elapsedTimeMillis));
+					//				b.kill();
+					removeThese.add(b);
+				}
+				if (player0.collisionCheck(b)) {
+					addThese.add(player0.bounce(b, elapsedTimeMillis));
+					//				b.kill();
+					removeThese.add(b);
+				}
+				if (!b.inGame()) {
+					//				b.kill();
+					removeThese.add(b);
+					if (b.getCurrentPosition().y < 0) player1.incrementScore();
+					if (b.getCurrentPosition().y > Constants.HEIGHT) player0.incrementScore();
+				}
 			}
-			if (player0.collisionCheck(b)) {
-				addThese.add(player0.bounce(b, elapsedTimeMillis));
-				b.kill();
-				removeThese.add(b);
-			}
-			if (!b.inGame()) {
-				b.kill();
-				removeThese.add(b);
-				if (b.getCurrentPosition().y < 0) player1.incrementScore();
-				if (b.getCurrentPosition().y > Constants.HEIGHT) player0.incrementScore();
-			}
-		}
 
-		for (Ball b : removeThese) balls.remove(b);
-		for (Ball b : addThese) balls.add(b);
+			for (Ball b : removeThese) balls.remove(b);
+			for (Ball b : addThese) balls.add(b);
+		}
 	}
 
 	public void keyDown(KeyEvent e) {

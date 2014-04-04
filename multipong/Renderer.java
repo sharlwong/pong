@@ -14,8 +14,10 @@ public class Renderer extends JPanel implements Runnable {
 	int[] player0;
 	int[] player1;
 	Thread thread;
+	Dimension dim;
 
 	public Renderer(Dimension d) {
+		dim = d;
 		game = new GameBoard(d);
 		thread = new Thread(this);
 		thread.start();
@@ -31,48 +33,33 @@ public class Renderer extends JPanel implements Runnable {
 
 	@Override
 	protected void paintComponent(Graphics g) {
+		/* i have no idea what these do */
 		setOpaque(false);
 		super.paintComponent(g);
 
-		g.setColor(Color.black);
-
+		/* get all the info */
 		balls = game.getBallXYs();
 		player0 = game.getBottomPaddleXY();
 		player1 = game.getTopPaddleXY();
-
-		//		System.out.println(balls.length);
-		//		System.out.println(player0[1]);
-		//		System.out.println(player1[0]);
-		//		System.out.println(player1[1]);
-		//		System.out.println(game.calc.getBallPixelRadius());
-		//		System.out.println((int)game.calc.getPaddlePixelWidth());
-
-		//		drawRect(g,);
-
-		drawPaddle(g, player0[0], player0[1]);
-		drawPaddle(g, player1[0], player1[1]);
-
-		drawBall(g, 500, 500);
-		drawBall(g, 0, 500);
-		drawBall(g, 500, 0);
-		drawBall(g, 0, 0);
-
 		int[] scores = game.getScores();
-		g.drawString("Player 0: "+ scores[0], 50,490);
-		g.drawString("Player 1: "+ scores[0], 50,10);
 
-//		System.out.println(balls.length);
+		/* render player 0 at the bottom */
+		g.setColor(Color.BLUE);
+		drawPaddle(g, player0[0], player0[1]);
+		g.drawString("Player 0: "+ scores[0], dim.width/10, (int) (dim.height*0.99));
 
-		for (int[] ball : balls) {
-			//			System.out.println(ball[0] + ", "+ ball[1]);
-			drawBall(g, ball[0], ball[1]);
-		}
-		//		System.out.println("\n");
+		/* render lpayer 1 at the top */
+		g.setColor(Color.RED);
+		drawPaddle(g, player1[0], player1[1]);
+		g.drawString("Player 1: "+ scores[1], dim.width/10, (int) (dim.height*0.02));
+
+		/* render all the balls */
+		g.setColor(Color.BLACK);
+		for (int[] ball : balls) drawBall(g, ball[0], ball[1]);
 	}
 
 	private void drawBall(Graphics g, int centerX, int centerY) {
-		//		int radius = (int) game.calc.getBallPixelRadius();
-		int radius = 10;
+		int radius = (int) game.calc.getBallPixelRadius();
 		g.fillOval(centerX - radius, centerY - radius, 2 * radius, 2 * radius);
 	}
 

@@ -1,22 +1,20 @@
 package multipong;
 
 public class Ball {
-	private boolean alive;
+//	private boolean alive;
 	private long apparentStartTimeMillis;
-	private long realEndTimeMillis;
 	private long realStartTimeMillis;
 	private Vector2D realVelocity;
 	private Vector2D startPosition;
 	private Vector2D startVelocity;
 	private Vector2D tempCurrentPosition;
+//	private long timeMillis;
 
 	public Ball(Vector2D startPosition, Vector2D startVelocity, long realStartTime) {
-
-		this.alive = startPosition.x >= 0 && startPosition.x <= Constants.WIDTH && startPosition.y >= 0 && startPosition.y <= Constants.HEIGHT;
+//		this.alive = startPosition.x >= 0 && startPosition.x <= Constants.WIDTH && startPosition.y >= 0 && startPosition.y <= Constants.HEIGHT;
 		this.startPosition = startPosition;
 		this.startVelocity = startVelocity.makeUnitVector().multiply(Constants.BALL_SPEED);
 		this.realStartTimeMillis = realStartTime;
-
 		init(realStartTime);
 	}
 
@@ -24,7 +22,13 @@ public class Ball {
 		return tempCurrentPosition;
 	}
 
+//	public void updateDeltaTime(long deltaMillis){
+//		timeMillis += deltaMillis;
+//		updateCurrentTime(timeMillis);
+//	}
+
 	public void updateCurrentTime(long currentTimeMillis) {
+//		this.timeMillis = currentTimeMillis;
 		long timeTravelled = currentTimeMillis - apparentStartTimeMillis;
 		Vector2D youAreHere = new Vector2D(startPosition);
 		youAreHere.add(realVelocity.cpy().multiply(timeTravelled));
@@ -36,13 +40,13 @@ public class Ball {
 	}
 
 	public boolean inGame() {
-		if (!isAlive()) return false;
+//		if (!isAlive()) return false;
 		if (tempCurrentPosition.y < (0 - Constants.PADDLE_EFFECTIVE_DEPTH)) return false;
 		if (tempCurrentPosition.y > (Constants.HEIGHT + Constants.PADDLE_EFFECTIVE_DEPTH)) return false;
 		return true;
 	}
 
-	public void init(long imaginaryStartTime) throws Constants.LagException {
+	private void init(long imaginaryStartTime) throws Constants.LagException {
 		/* grab the fake starting time and check it */
 		this.apparentStartTimeMillis = imaginaryStartTime;
 		if ((apparentStartTimeMillis - realStartTimeMillis) > Constants.MAX_ACCEPTABLE_LAG)
@@ -59,7 +63,7 @@ public class Ball {
 
 		/* when is it supposed to the paddle line */
 		double realTimeTakenMillis = distanceToTravel / Constants.BALL_SPEED;
-		realEndTimeMillis = realStartTimeMillis + (long) realTimeTakenMillis;
+		long realEndTimeMillis = realStartTimeMillis + (long) realTimeTakenMillis;
 
 		/* how fast must it move to get there on time */
 		double realSpeed = distanceToTravel / (realEndTimeMillis - apparentStartTimeMillis);
@@ -71,11 +75,11 @@ public class Ball {
 
 	}
 
-	public boolean isAlive() {
-		return alive;
-	}
+//	public boolean isAlive() {
+//		return alive;
+//	}
 
-	public void kill() {
-		alive = false;
-	}
+//	public void kill() {
+//		alive = false;
+//	}
 }
