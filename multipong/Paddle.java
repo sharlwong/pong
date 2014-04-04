@@ -21,20 +21,22 @@ public class Paddle {
 		if (!playerBottom) yVelocity = 0 - yVelocity;
 		Vector2D outVelocity = new Vector2D(b.getCurrentPosition().x - paddleCenter.x, yVelocity);
 		outVelocity.makeUnitVector().multiply(Constants.BALL_SPEED);
-//		b.kill();
-		return new Ball(b.getCurrentPosition(), outVelocity, currentTimeMillis);
+		//		b.kill();
+		return new Ball(b.getCurrentPosition(), outVelocity, currentTimeMillis, b.getSimulatedLag());
 	}
 
 	public boolean collisionCheck(Ball b) {
-//		if (!b.inGame()){
-//			System.out.println("!!!!");
-//			return false;
-//		}
+		//		if (!b.inGame()){
+		//			System.out.println("!!!!");
+		//			return false;
+		//		}
 		Vector2D ballPosition = b.getCurrentPosition();
-		if (Math.abs(ballPosition.x - paddleCenter.x) > (Constants.PADDLE_WIDTH/2)) return false;
-		if (playerBottom && ballPosition.y > Constants.BALL_RADIUS)  return false;
-		if (!playerBottom && ballPosition.y < (Constants.HEIGHT - Constants.BALL_RADIUS)) return false;
-		return true;
+		Vector2D ballVelocity = b.getRealVelocity();
+		if (Math.abs(ballPosition.x - paddleCenter.x) > (Constants.PADDLE_WIDTH / 2)) return false;
+		if (playerBottom && ballPosition.y < Constants.BALL_RADIUS && ballVelocity.y < 0) return true;
+		if (!playerBottom && ballPosition.y > (Constants.HEIGHT - Constants.BALL_RADIUS) && ballVelocity.y > 0)
+			return true;
+		return false;
 	}
 
 	public Vector2D getCenter() {
@@ -53,15 +55,15 @@ public class Paddle {
 		this.score++;
 	}
 
-//	public void miss(Ball b) {
-//		if (!collisionCheck(b)) {
-//			b.kill();
-//		}
-//	}
+	//	public void miss(Ball b) {
+	//		if (!collisionCheck(b)) {
+	//			b.kill();
+	//		}
+	//	}
 
 	public void setFractionalPosition(double fraction) {
 		if (fraction < 0 || fraction > 1) return;
-		setPosition(min + fraction*(max-min));
+		setPosition(min + fraction * (max - min));
 	}
 
 	private void setPosition(double xValue) {

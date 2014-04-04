@@ -1,35 +1,42 @@
 package multipong;
 
 public class Ball {
-//	private boolean alive;
+	private final int simulatedLag;
+	//	private boolean alive;
 	private long apparentStartTimeMillis;
 	private long realStartTimeMillis;
 	private Vector2D realVelocity;
 	private Vector2D startPosition;
 	private Vector2D startVelocity;
 	private Vector2D tempCurrentPosition;
-//	private long timeMillis;
 
-	public Ball(Vector2D startPosition, Vector2D startVelocity, long realStartTime) {
-//		this.alive = startPosition.x >= 0 && startPosition.x <= Constants.WIDTH && startPosition.y >= 0 && startPosition.y <= Constants.HEIGHT;
+	public Ball(Vector2D startPosition, Vector2D startVelocity, long realStartTime, int simulatedLagMillis) {
+		//		this.alive = startPosition.x >= 0 && startPosition.x <= Constants.WIDTH && startPosition.y >= 0 && startPosition.y <= Constants.HEIGHT;
 		this.startPosition = startPosition;
+		this.simulatedLag = simulatedLagMillis;
 		this.startVelocity = startVelocity.makeUnitVector().multiply(Constants.BALL_SPEED);
 		this.realStartTimeMillis = realStartTime;
-		init(realStartTime);
+		init(realStartTime + simulatedLagMillis);
+	}
+	//	private long timeMillis;
+
+	public int getSimulatedLag() {
+		return simulatedLag;
 	}
 
 	public Vector2D getCurrentPosition() {
 		return tempCurrentPosition;
 	}
 
-//	public void updateDeltaTime(long deltaMillis){
-//		timeMillis += deltaMillis;
-//		updateCurrentTime(timeMillis);
-//	}
+	//	public void updateDeltaTime(long deltaMillis){
+	//		timeMillis += deltaMillis;
+	//		updateCurrentTime(timeMillis);
+	//	}
 
 	public void updateCurrentTime(long currentTimeMillis) {
-//		this.timeMillis = currentTimeMillis;
+		//		this.timeMillis = currentTimeMillis;
 		long timeTravelled = currentTimeMillis - apparentStartTimeMillis;
+		timeTravelled = timeTravelled < 0 ? 0 : timeTravelled;
 		Vector2D youAreHere = new Vector2D(startPosition);
 		youAreHere.add(realVelocity.cpy().multiply(timeTravelled));
 		while (youAreHere.x < 0 || youAreHere.x > Constants.WIDTH) {
@@ -40,9 +47,10 @@ public class Ball {
 	}
 
 	public boolean inGame() {
-//		if (!isAlive()) return false;
-		if (tempCurrentPosition.y < (0 - Constants.PADDLE_EFFECTIVE_DEPTH)) return false;
-		if (tempCurrentPosition.y > (Constants.HEIGHT + Constants.PADDLE_EFFECTIVE_DEPTH)) return false;
+		//		if (!isAlive()) return false;
+		if (tempCurrentPosition.y < (0 - Constants.PADDLE_EFFECTIVE_DEPTH) && realVelocity.y < 0) return false;
+		if (tempCurrentPosition.y > (Constants.HEIGHT + Constants.PADDLE_EFFECTIVE_DEPTH) && realVelocity.y > 0)
+			return false;
 		return true;
 	}
 
@@ -72,14 +80,17 @@ public class Ball {
 
 		/* setup ball at time zero */
 		updateCurrentTime(imaginaryStartTime);
-
 	}
 
-//	public boolean isAlive() {
-//		return alive;
-//	}
+	public Vector2D getRealVelocity() {
+		return realVelocity;
+	}
 
-//	public void kill() {
-//		alive = false;
-//	}
+	//	public boolean isAlive() {
+	//		return alive;
+	//	}
+
+	//	public void kill() {
+	//		alive = false;
+	//	}
 }

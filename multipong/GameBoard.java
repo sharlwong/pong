@@ -12,6 +12,7 @@ import java.util.List;
 public class GameBoard {
 	public long elapsedTimeMillis;
 	public Constants calc;
+	int simulatedLag = 123;
 	private List<Ball> balls;
 	private int heightPixels;
 	private InputHandler inputHandler;
@@ -91,7 +92,7 @@ public class GameBoard {
 		if (Math.abs(speed1) < Math.abs(speed2)) speed = new Vector2D(speed1, speed2);
 		else speed = new Vector2D(speed2, speed1);
 		synchronized (balls) {
-			balls.add(new Ball(position, speed, elapsedTimeMillis));
+			balls.add(new Ball(position, speed, elapsedTimeMillis, simulatedLag < 0 ? (int) (random.nextDouble() * 500) : simulatedLag));
 		}
 	}
 
