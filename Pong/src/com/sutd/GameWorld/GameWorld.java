@@ -41,6 +41,7 @@ public class GameWorld {
 	private Dimension dim;
 	
 	private boolean injectBalls = false;
+	public Boolean ready = new Boolean(false);
 	
 	public GameWorld(Dimension sizePixels){
 		this.calc = new Constants(sizePixels);
@@ -160,6 +161,7 @@ public class GameWorld {
 	 * @param delta
 	 */
 	public synchronized void update(float delta) {
+		if(!ready.booleanValue()) return;
 			
 		long deltaMillis = (long) (delta * 1000);
 		timeCount += deltaMillis;

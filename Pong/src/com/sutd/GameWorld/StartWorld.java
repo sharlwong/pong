@@ -2,12 +2,11 @@ package com.sutd.GameWorld;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.input.*;
+import com.badlogic.gdx.utils.IntIntMap;
 import com.sutd.Client.GameClient;
-import com.sutd.Network.*;
 import com.sutd.Pong.PongGame;
 import com.sutd.Screens.GameScreen;
-import com.sutd.Server.*;
+import com.sutd.Server.GameServer;
 
 
 public class StartWorld {
@@ -59,13 +58,13 @@ public class StartWorld {
 			if(start_game_button.contains(x, y)) {
 				System.out.println("Start Touched!");
 				//Probably start a server here.
-				createServerAndClient();
+				initializeServerAndClient();
 				System.out.println("Finish starting game.\n");
 			}
 			
 			else if(join_game_button.contains(x, y)) {
 				System.out.println("Join Touched!");
-				createClientAndJoinServer();
+				intializeClientAndJoinServer();
 				System.out.println("Finish joining game.\n");
 			//connect to a server here.
 			}
@@ -79,7 +78,6 @@ public class StartWorld {
 	
 	private void check_if_server_clients_created(){
 		if(server_created == true && client1_created == true && client2_created == true){
-			pong_game.setScreen(new GameScreen());
 		}
 	}
 	
@@ -87,35 +85,30 @@ public class StartWorld {
 	 * Starts Server Thread
 	 * And immediately connects to it as a client
 	 */
-	private void createServerAndClient() {
+	private void initializeServerAndClient() {
 		// Start Server
-		GameServer server = new GameServer();
-		server.start();
+		pong_game.server = new GameServer();
+		pong_game.server.start();
 		server_created = true;
-		
-		GameClient client1 = new GameClient();
-		client1.connectToServer("localhost");
-		client1.startListening();
-		System.out.println("Client 1 finishes listening.");
-		client1.startConsuming();
-		System.out.println("Client 1 finishes consuming.");
-		client1.sendMessage("Player 1: Hi!");
+
+		pong_game.client = new GameClient();
+		pong_game.client.connectToServer("localhost");
+		pong_game.client.startListening();
+		System.out.println("Started Listening");
 		client1_created = true;
+		pong_game.setScreen(new GameScreen(pong_game));
 	}
 	
 	/**
 	 * Start Client Thread
 	 * **/
 	
-	private void createClientAndJoinServer() {
-		GameClient client2 = new GameClient();
-		client2.connectToServer("localhost");
-		client2.startListening();
-		System.out.println("Client 2 finishes listening.");		
-		client2.startConsuming();
-		System.out.println("Client 2 finishes consuming.");
-//		client2.sendMessage("Player 2: Hi!");
+	private void intializeClientAndJoinServer() {
+		pong_game.client = new GameClient();
+		pong_game.client.connectToServer("localhost");
+		pong_game.client.startListening();
+		System.out.println("Started Listening");		
 		client2_created = true;
-		
+		pong_game.setScreen(new GameScreen(pong_game));
 	}
 }

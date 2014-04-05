@@ -1,15 +1,17 @@
 package com.sutd.Client;
 
 import java.io.BufferedReader;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Net.Protocol;
 import com.badlogic.gdx.net.Socket;
+import com.sutd.Network.MessageConsumer;
+import com.sutd.Network.MessageHandler;
+import com.sutd.Network.MessageProducer;
 
 public class GameClient {
 	private Socket client_socket;
@@ -28,6 +30,7 @@ public class GameClient {
 	}
 	
 	public void sendMessage(String message) {
+		System.out.println("Clinet Sending Update:"+message);
 		writer.println(message);
 		writer.flush();
 	}
@@ -37,8 +40,12 @@ public class GameClient {
 		listener.start();
 	}
 	
-	public void startConsuming() {
-		MessageConsumer consumer = new MessageConsumer(buffer);
+	/**
+	 * Start Dealing with the messages
+	 * @param handler the handler that is callbacked after a message is received.
+	 */
+	public void startConsuming(MessageHandler handler) {
+		MessageConsumer consumer = new MessageConsumer(buffer, handler);
 		consumer.start();
 	}
 	
@@ -48,7 +55,7 @@ public class GameClient {
 	 * @author Swayam
 	 *
 	 */
-	class MessageConsumer extends Thread {
+	/*class MessageConsumer extends Thread {
 		private BlockingQueue<String> buffer;
 		MessageConsumer(BlockingQueue<String> buffer) {
 			this.buffer = buffer;
@@ -90,5 +97,5 @@ public class GameClient {
 				}
 //			}
 		}
-	}
+	} */
 }
