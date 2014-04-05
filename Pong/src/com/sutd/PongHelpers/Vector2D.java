@@ -168,16 +168,12 @@ public class Vector2D {
 		}
 		return this;
 	}
-	
-	/*
-	 * If these functions changes this class value, then problems will be caused
-	 * when you calculate velocity*time (make velocity keep changing)
-	 */
-	public Vector2D multiply(double scalar) {
-		Vector2D result = new Vector2D(this.x*scalar, this.y*scalar);
-		return result;
-	}
 
+	public Vector2D multiply(double scalar) {
+		this.x *= scalar;
+		this.y *= scalar;
+		return this;
+	}
 
 	public Vector2D multiply(double x, double y) {
 		this.x *= x;

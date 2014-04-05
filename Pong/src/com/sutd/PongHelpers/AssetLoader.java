@@ -19,9 +19,11 @@ public abstract class AssetLoader {
 	
 	public static BitmapFont font, shadow;
 	
-	public void load(){
+	public static void load(){
 		font = new BitmapFont(Gdx.files.internal("data/text.fnt"));
 		font.setScale(.25f, -.25f);
+		shadow = new BitmapFont(Gdx.files.internal("data/shadow.fnt"));
+		shadow.setScale(.25f, -.25f);
 	}
 	
 	public void dispose(){
