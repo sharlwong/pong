@@ -1,7 +1,5 @@
 package com.sutd.PongHelpers;
 
-
-
 import java.awt.*;
 
 /**
@@ -16,8 +14,10 @@ public class Constants {
 	/* 25 balls (26 including the buffer) fit vertically, but not necessarily sideways, due to XY scaling */
 	public final static double BALL_RADIUS = 0.02;
 
-	/* these are the distances for the paddles */
-	public final static double EDGE_PADDING = BALL_RADIUS / 2;
+
+	/* these are the distances for the vertical buffers */
+	public final static double EDGE_PADDING = BALL_RADIUS *0.75;
+
 	public final static double PADDLE_EFFECTIVE_DEPTH = BALL_RADIUS * 1.5;
 
 	/* this is how big the display will be
@@ -99,12 +99,14 @@ public class Constants {
 		double y = v.y;
 
 		/* translation */
-		x += verticalFractionalPadding;
-		y += horizontalFractionalPadding;
+
+		y += verticalFractionalPadding;
+		x += horizontalFractionalPadding;
 
 		/* scaling */
-		x /= (HEIGHT + 2 * verticalFractionalPadding);
-		y /= (HEIGHT + 2 * horizontalFractionalPadding);
+		y /= (HEIGHT + 2 * verticalFractionalPadding);
+		x /= (WIDTH + 2 * horizontalFractionalPadding);
+
 
 		/* flip upright */
 		y = 1.0 - y;

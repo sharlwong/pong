@@ -4,61 +4,53 @@ package com.sutd.GameObjects;
 
 import com.badlogic.gdx.Gdx;
 import com.sutd.PongHelpers.Assets;
+import com.sutd.PongHelpers.Constants;
 import com.sutd.PongHelpers.Vector2D;
 
 /**
  * Created by avery_000 on 3/23/14.
  */
 public class Paddle {
-	private Vector2D centerPoint;
-	private boolean playerBottom;
+	public boolean playerBottom;
+	private double max = Constants.WIDTH + Constants.BALL_RADIUS - (Constants.PADDLE_WIDTH / 2);
+	private double min = (Constants.PADDLE_WIDTH / 2) - Constants.BALL_RADIUS;
+	private Vector2D paddleCenter;
 	private int score = 0;
 	private Vector2D velocity;
 
 	public Paddle(int playerNum) {
 		//assumes binary player ID number: 0 at bottom, 1 at top
-		centerPoint = new Vector2D(Assets.WIDTH / 2, Assets.HEIGHT * playerNum);
+		paddleCenter = new Vector2D(-1, Constants.HEIGHT * playerNum);
+		setFractionalPosition(0.5);
 		this.playerBottom = (playerNum == 0);
-		this.velocity = new Vector2D(0,0);
+		this.velocity = Vector2D.Zero.cpy();
 	}
 
-	public Ball bounce(Ball b) {
-		double yDist = Assets.PADDLE_WIDTH / 2;
-		if (!playerBottom) yDist = 0 - yDist;
-		Vector2D outVelocity = new Vector2D(b.getCurrentPosition().x - centerPoint.x, yDist);
-		outVelocity.makeUnitVector().multiply(Assets.BALL_SPEED);
-		return b.paddleReflect(outVelocity);
+	public Ball bounce(Ball b, long currentTimeMillis) {
+		double yVelocity = Constants.PADDLE_WIDTH / 2;
+		if (!playerBottom) yVelocity = 0 - yVelocity;
+		Vector2D outVelocity = new Vector2D(b.getCurrentPosition().x - paddleCenter.x, yVelocity);
+		outVelocity.makeUnitVector().multiply(Constants.BALL_SPEED);
+		//		b.kill();
+		return new Ball(b.getCurrentPosition(), outVelocity, currentTimeMillis, b.getSimulatedLag());
 	}
 
 	public boolean collisionCheck(Ball b) {
-		if (b.goingToCollide()) {
-			boolean collide = true;
-			Vector2D ballPosition = b.getCurrentPosition();
-			if (Math.abs(ballPosition.x - centerPoint.x) > Assets.PADDLE_WIDTH)
-				collide = false;
-			if (!playerBottom) {
-				if (ballPosition.y > 0)
-					collide = false;
-				if (ballPosition.y < (0 - Assets.PADDLE_EFFECTIVE_DEPTH))
-					collide = false;
-			} else {
-				if (ballPosition.y < Assets.HEIGHT)
-					collide = false;
-				if (ballPosition.y > (Assets.HEIGHT + Assets.PADDLE_EFFECTIVE_DEPTH))
-					collide = false;
-			}
-			if (!collide)
-				b.stop();
-
-			return collide;
-		} else {
-			return false;
-		}
+		//		if (!b.inGame()){
+		//			System.out.println("!!!!");
+		//			return false;
+		//		}
+		Vector2D ballPosition = b.getCurrentPosition();
+		Vector2D ballVelocity = b.getRealVelocity();
+		if (Math.abs(ballPosition.x - paddleCenter.x) > (Constants.PADDLE_WIDTH / 2)) return false;
+		if (playerBottom && ballPosition.y < Constants.BALL_RADIUS && ballVelocity.y < 0) return true;
+		if (!playerBottom && ballPosition.y > (Constants.HEIGHT - Constants.BALL_RADIUS) && ballVelocity.y > 0)
+			return true;
+		return false;
 	}
 
-
 	public Vector2D getCenter() {
-		return centerPoint;
+		return paddleCenter;
 	}
 
 	public int getScore() {
@@ -73,57 +65,37 @@ public class Paddle {
 		this.score++;
 	}
 
-	public void miss(Ball b) {
-		if (!collisionCheck(b)) {
-			b.stop();
-		}
-	}
-
-	/**
-	 * This onClick function will be called by inputHandler
-	 * When user click, inputHandler will parse the x coordinate to this function.
-	 * Intuitively, longer the distance from x to paddle's current position, faster the paddle
-	 * will move to the position user clicked.
-	 */
-
-	public void onClick(int x) {
-		float screenWidth = Gdx.graphics.getWidth();
-		velocity.x = (x / screenWidth - centerPoint.x)*10;
-		System.out.println("set new velocity.x: "+velocity.x);
-	}
+	//	public void miss(Ball b) {
+	//		if (!collisionCheck(b)) {
+	//			b.kill();
+	//		}
+	//	}
 
 	public void setFractionalPosition(double fraction) {
 		if (fraction < 0 || fraction > 1) return;
-		setPosition((Assets.WIDTH - Assets.PADDLE_WIDTH) * fraction + Assets.PADDLE_WIDTH / 2);
+		setPosition(min + fraction * (max - min));
 	}
 
-	public void setPosition(double xValue) {
-		centerPoint.x = xValue;
-		if (centerPoint.x < (Assets.PADDLE_WIDTH / 2)) centerPoint.x = Assets.PADDLE_WIDTH / 2;
-		if (centerPoint.x > (Assets.DISPLAY_WIDTH - (Assets.PADDLE_WIDTH / 2)))
-			centerPoint.x = Assets.DISPLAY_WIDTH - (Assets.PADDLE_WIDTH / 2);
+	private void setPosition(double xValue) {
+		paddleCenter.x = xValue;
+		if (paddleCenter.x < min) paddleCenter.x = min;
+		if (paddleCenter.x > max) paddleCenter.x = max;
 	}
 
-	public void update(float delta) {
-
-		// process velocity (avoid too large or too slow cases)
-		// parameters may need further modification
-		if (velocity.x > 0.8) velocity.x = 0.8;
-		if (velocity.x < -0.8) velocity.x = -0.8;
-		if (velocity.x > 0 && velocity.x < 0.3) velocity.x = 0.3;
-		if (velocity.x < 0 && velocity.x > -0.3) velocity.x = -0.3;
-
-		//side checking
-		if ((centerPoint.x < (Assets.PADDLE_WIDTH / 2)) || (centerPoint.x > (Assets.DISPLAY_WIDTH - (Assets.PADDLE_WIDTH / 2)))) {
-			velocity.x = 0;
-		}
-
-		centerPoint.add(velocity.cpy().multiply(delta));
+	public void setVelocity(double xVelocity) {
+		if (xVelocity == 0) velocity = Vector2D.Zero.cpy();
+		if (xVelocity > 0) velocity = Vector2D.X.cpy().multiply(0.001);
+		if (xVelocity < 0) velocity = Vector2D.X.cpy().multiply(-0.001);
 	}
-	
-	public Vector2D positionForRenderer(){
-		Vector2D rPosition = new Vector2D(centerPoint.x-Assets.PADDLE_WIDTH/2, centerPoint.y-Assets.PADDLE_EFFECTIVE_DEPTH/2);
-		return rPosition;
+
+	public void updateDeltaTime(float delta) {
+		//		if (velocity.x > 0.8) velocity.x = 0.8;
+		//		if (velocity.x < -0.8) velocity.x = -0.8;
+		//		if (velocity.x > 0 && velocity.x < 0.3) velocity.x = 0.3;
+		//		if (velocity.x < 0 && velocity.x > -0.3) velocity.x = -0.3;
+		//		if ((paddleCenter.x < (Constants.PADDLE_WIDTH / 2)) || (paddleCenter.x > (Constants.DISPLAY_WIDTH - (Constants.PADDLE_WIDTH / 2)))) velocity.x = 0;
+
+		setPosition(paddleCenter.cpy().add(velocity.cpy().multiply(delta)).x);
 	}
 
 }
