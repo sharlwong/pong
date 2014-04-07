@@ -1,6 +1,8 @@
 package multipong;
 
+import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 
 /**
  * Created by avery_000 on 01-Apr-14.
@@ -10,11 +12,13 @@ public class InputHandler {
 	boolean disablePlayer0Movement = false;
 	Paddle player0;
 	Paddle player1;
+	Dimension dimension;
 
 	public InputHandler(Paddle player0, Paddle player1, GameBoard gameBoard) {
 		this.player0 = player0;
 		this.player1 = player1;
 		this.game = gameBoard;
+		this.dimension = gameBoard.calc.getDim();
 	}
 
 	private boolean checkP0Disabled() {
@@ -23,7 +27,6 @@ public class InputHandler {
 
 	private void disableWASD() {
 		disablePlayer0Movement = true;
-		player0.setVelocity(0);
 	}
 
 	private void enableWASD() {
@@ -76,20 +79,20 @@ public class InputHandler {
 
 					/* player 1 moves */
 			case KeyEvent.VK_LEFT:
-				player0.setVelocity(-1);
+				player0.startMoveLeft();
 				break;
 			case KeyEvent.VK_RIGHT:
-				player0.setVelocity(1);
+				player0.startMoveRight();
 				break;
 
 					/* player 0 moves */
 			case KeyEvent.VK_A:
 				if (checkP0Disabled()) break;
-				player1.setVelocity(-1);
+				player1.startMoveLeft();
 				break;
 			case KeyEvent.VK_D:
 				if (checkP0Disabled()) break;
-				player1.setVelocity(1);
+				player1.startMoveRight();
 				break;
 
 					/* insert ball*/
@@ -100,7 +103,7 @@ public class InputHandler {
 					/* quit game */
 			case KeyEvent.VK_ESCAPE:
 				game.exit();
-				System.exit(-1);
+				System.exit(0);
 		}
 	}
 
@@ -140,20 +143,20 @@ public class InputHandler {
 
 					/* player 1 moves */
 			case KeyEvent.VK_LEFT:
-				player0.setVelocity(0);
+				player0.stopMoveLeft();
 				break;
 			case KeyEvent.VK_RIGHT:
-				player0.setVelocity(0);
+				player0.stopMoveRight();
 				break;
 
 					/* player 0 moves */
 			case KeyEvent.VK_A:
 				if (checkP0Disabled()) break;
-				player1.setVelocity(0);
+				player1.stopMoveLeft();
 				break;
 			case KeyEvent.VK_D:
 				if (checkP0Disabled()) break;
-				player1.setVelocity(0);
+				player1.stopMoveRight();
 				break;
 
 			/* insert ball*/
@@ -161,5 +164,21 @@ public class InputHandler {
 				game.stopInjectBalls();
 				break;
 		}
+	}
+
+	public void mouseDown() {
+		game.setInjectBalls();
+	}
+
+	public void mouseUp() {
+		game.stopInjectBalls();
+	}
+
+	public void mouseAt(MouseEvent e) {
+		double relativePos = e.getX() - game.calc.getPaddlePixelWidth() / 2;
+		double relativeMax = game.calc.getHorizontalPixelUnitLength() + 2 * game.calc.getBallPixelRadius() - game.calc.getPaddlePixelWidth();
+		relativePos = relativePos < 0 ? 0 : relativePos;
+		relativePos = relativePos > relativeMax ? relativeMax : relativePos;
+		player0.setFractionalPosition(relativePos / relativeMax);
 	}
 }

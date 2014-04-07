@@ -3,6 +3,7 @@ package multipong;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 
 /**
  * Created by avery_000 on 01-Apr-14.
@@ -21,15 +22,19 @@ public class Renderer extends JPanel implements Runnable {
 		game = new GameBoard(d);
 		thread = new Thread(this);
 		thread.start();
+		this.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+		this.setPreferredSize(d);
 	}
 
-	public void keyPressed(KeyEvent e) {
-		game.keyDown(e);
-	}
+	public void keyPressed(KeyEvent e) { game.keyDown(e); }
 
-	public void keyReleased(KeyEvent e) {
-		game.keyUp(e);
-	}
+	public void keyReleased(KeyEvent e) { game.keyUp(e); }
+
+	public void mouseDown() {game.mouseDown();}
+
+	public void mouseUp() {game.mouseUp();}
+
+	public void mouseAt(MouseEvent e) {game.mouseAt(e);}
 
 	@Override
 	protected void paintComponent(Graphics g) {
@@ -46,12 +51,12 @@ public class Renderer extends JPanel implements Runnable {
 		/* render player 0 at the bottom */
 		g.setColor(Color.BLUE);
 		drawPaddle(g, player0[0], player0[1]);
-		g.drawString("Player 0: "+ scores[0], dim.width/10, (int) (dim.height*0.99));
+		g.drawString("Player 0: " + scores[0], dim.width / 10, (int) (dim.height * 0.99));
 
-		/* render lpayer 1 at the top */
+		/* render player 1 at the top */
 		g.setColor(Color.RED);
 		drawPaddle(g, player1[0], player1[1]);
-		g.drawString("Player 1: "+ scores[1], dim.width/10, (int) (dim.height*0.02));
+		g.drawString("Player 1: " + scores[1], dim.width / 10, (int) (dim.height * 0.02));
 
 		/* render all the balls */
 		g.setColor(Color.BLACK);
@@ -65,7 +70,7 @@ public class Renderer extends JPanel implements Runnable {
 
 	private void drawPaddle(Graphics g, int centerX, int centerY) {
 		int width = (int) game.calc.getPaddlePixelWidth();
-		int height = (int) game.calc.getPaddlePixelDepth();
+		int height = (int) (game.calc.getPaddlePixelDepth() * 0.75);
 		g.fillRect(centerX - width / 2, centerY - height / 2, width, height);
 	}
 

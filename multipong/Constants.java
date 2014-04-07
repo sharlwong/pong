@@ -11,11 +11,11 @@ public class Constants {
 	public final static double HEIGHT = 1;
 	public final static double WIDTH = 1;
 
-	/* 25 balls (26 including the buffer) fit vertically, but not necessarily sideways, due to XY scaling */
+	/* some number of balls fit vertically, but not necessarily sideways, due to XY scaling */
 	public final static double BALL_RADIUS = 0.02;
 
 	/* these are the distances for the vertical buffers */
-	public final static double EDGE_PADDING = BALL_RADIUS *0.75;
+	public final static double EDGE_PADDING = BALL_RADIUS * 0.75;
 	public final static double PADDLE_EFFECTIVE_DEPTH = BALL_RADIUS * 1.5;
 
 	/* this is how big the display will be
@@ -24,16 +24,20 @@ public class Constants {
 	 * the paddles must render above and under this padding
 	 */
 	public final static double DISPLAY_HEIGHT = HEIGHT + 2 * BALL_RADIUS + 2 * PADDLE_EFFECTIVE_DEPTH + 2 * EDGE_PADDING;
-	public final static double BALL_SPEED = 0.001; // distance-units per millisecond
+	public final static double BALL_SPEED = 0.001;
+
 	/* special exception for extreme lag */
-	public final static long MAX_ACCEPTABLE_LAG = 500; // milliseconds
+	public final static long MAX_ACCEPTABLE_LAG_MILLIS = 500;
+
 	/* by default paddle will be one-tenth of the screen
 	 * note though that the screen will have an extra ball-radius at the end, so a bit extra complication there
 	 */
 	public final static double PADDLE_WIDTH = 0.3;
+	public final static double PADDLE_DEFAULT_VELOCITY = 0.002;
 
+	/* delay appearance of first ball by this much to give the user time to prepare */
+	public final static double START_GAME_DELAY = 300;
 	private final Dimension dim;
-
 	private final double verticalFractionalPadding;
 	private final double horizontalFractionalPadding;
 	private final double verticalPixelUnitLength;
@@ -57,6 +61,10 @@ public class Constants {
 		horizontalPixelUnitLength = ((double) dim.width) - 2 * ballPixelRadius;
 		horizontalFractionalPadding = ballPixelRadius / horizontalPixelUnitLength;
 		paddlePixelWidth = PADDLE_WIDTH * horizontalPixelUnitLength;
+	}
+
+	public Dimension getDim() {
+		return dim;
 	}
 
 	public double getVerticalFractionalPadding() {

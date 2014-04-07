@@ -2,6 +2,7 @@ package multipong;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +13,7 @@ import java.util.List;
 public class GameBoard {
 	public long elapsedTimeMillis;
 	public Constants calc;
-	int simulatedLag = 123;
+	int simulatedLag = 0;
 	private List<Ball> balls;
 	private int heightPixels;
 	private InputHandler inputHandler;
@@ -21,7 +22,8 @@ public class GameBoard {
 	private SecureRandom random;
 	private int widthPixels;
 	private Dimension dim;
-	private boolean injectBalls = false;
+	private long injectBalls = 0;
+	private boolean init = true;
 
 	public GameBoard(Dimension sizePixels) {
 		this.calc = new Constants(sizePixels);
@@ -35,8 +37,6 @@ public class GameBoard {
 		random.setSeed(1234567890);
 		inputHandler = new InputHandler(player0, player1, this);
 		dim = sizePixels;
-
-		injectRandomBall();
 	}
 
 	public void exit() {
@@ -76,12 +76,12 @@ public class GameBoard {
 	}
 
 	public void setInjectBalls() {
-		injectBalls = true;
+		injectBalls = elapsedTimeMillis + 100;
 		injectRandomBall();
 	}
 
 	public void stopInjectBalls() {
-		injectBalls = false;
+		injectBalls = 0;
 	}
 
 	public void injectRandomBall() {
@@ -104,10 +104,12 @@ public class GameBoard {
 	}
 
 	public synchronized void updateDeltaTime(long deltaMillis) {
-
-		if (injectBalls) injectRandomBall();
-
 		elapsedTimeMillis += deltaMillis;
+		if (elapsedTimeMillis > Constants.START_GAME_DELAY && init) {
+			init = false;
+			injectRandomBall();
+		}
+		if (injectBalls > 0 && injectBalls < elapsedTimeMillis) injectRandomBall();
 		player0.updateDeltaTime(deltaMillis);
 		player1.updateDeltaTime(deltaMillis);
 		List<Ball> removeThese = new ArrayList<Ball>();
@@ -145,6 +147,12 @@ public class GameBoard {
 	public void keyUp(KeyEvent e) {
 		inputHandler.keyUp(e);
 	}
+
+	public void mouseAt(MouseEvent e) {inputHandler.mouseAt(e);}
+
+	public void mouseDown() {inputHandler.mouseDown();}
+
+	public void mouseUp() {inputHandler.mouseUp();}
 }
 
 
