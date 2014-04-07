@@ -75,6 +75,10 @@ public class Paddle {
 		if (fraction < 0 || fraction > 1) return;
 		setPosition(min + fraction * (max - min));
 	}
+	
+	public double getFractionalPosition() {
+		return (paddleCenter.x - min)/(max-min);
+	}
 
 	private void setPosition(double xValue) {
 		paddleCenter.x = xValue;

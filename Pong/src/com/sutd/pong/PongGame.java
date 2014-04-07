@@ -3,14 +3,16 @@ package com.sutd.Pong;
 import com.badlogic.gdx.Game;
 import com.sutd.PongHelpers.AssetLoader;
 import com.sutd.Screens.StartScreen;
+import com.sutd.Server.*;
+import com.sutd.Client.*;
 
 public class PongGame extends Game {
-	
-	
-	
+	public GameServer server;
+	public GameClient client;
 	@Override
 	public void create() {		
 		System.out.println("Game Created!");
+		initializeNetwork();
 		AssetLoader.load();
         setScreen(new StartScreen(this));
 //        setScreen(new GameScreen());
@@ -32,4 +34,8 @@ public class PongGame extends Game {
 	@Override
 	public void resume() {
 	}
+	private void initializeNetwork() {
+		
+	}
+	
 }

@@ -36,21 +36,21 @@ public class GameServer extends Thread {
 	 * Start the server socket
 	 */
 	public void run() {
-
 		// Start Server Socket
 		System.out.println("Server Starting...");
-		serverSocket =  Gdx.net.newServerSocket(Protocol.TCP,port, null);
+		serverSocket = Gdx.net.newServerSocket(Protocol.TCP,port, null);
 		
 		// Accept Two clients to connect.
 		// And start listening to messages from them.
 		for(int i = 0 ; i < 2; i ++) {
 			player_sockets[i] = serverSocket.accept(null);
 			System.out.println("player_sockets " + i);
-			listeners[i] = startListening(player_sockets[i]);
+			listeners[i] = startListening(player_sockets[i],i);
 			System.out.println("listeners " + i);
 		}
 		
 		message_service = new MessageService(player_sockets);
+		message_service.send("game_state:ready");
 		startConsuming();
 	}
 	
@@ -59,15 +59,16 @@ public class GameServer extends Thread {
 	 * @param socket: The socket to start listening to.
 	 * @return the actual object that handles message production.
 	 */
-	public MessageProducer startListening(Socket socket) {
+	public MessageProducer startListening(Socket socket,int id) {
 		BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-		MessageProducer producer = new MessageProducer(reader, buffer);
+		MessageProducer producer = new MessageProducer(reader, buffer, id);
 		producer.start();
 		return producer;
 	}
 	
 	/**
 	 * Starts to consume the message passed by the client. 
+	 * @param listeners2 
 	 */
 	public void startConsuming() {
 		consumer = new MessageConsumer(buffer, message_service) ;

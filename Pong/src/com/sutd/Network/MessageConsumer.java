@@ -12,21 +12,26 @@ public class MessageConsumer extends Thread{
 	}
 	public void run() {
 		while(!this.isInterrupted()) {
-        System.out.println("SERVER: Preparing to consume.");
+        System.out.println("Preparing to consume.");
         try {
         	// Buffer consumes message
         	String message = buffer.take();
-        	System.out.println("SERVER: Remove from buffer: " +message);
+        	String[] data = message.split(":");
+        	int id = Integer.parseInt(data[0]);
+        	System.out.println("Remove from buffer: " +message);
         	
         	// Message is passed to handler to handle.
-        	handler.handle(message);
+        	handler.handle(id,data[1],data[2]);
         	
         	}
         catch (InterruptedException e) {
         	// TODO Auto-generated catch block
         	e.printStackTrace();
         	}
-        
+        catch (IndexOutOfBoundsException e) {
+        	e.printStackTrace();
+        	
+        	}
 		}
 	}
 }
