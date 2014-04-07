@@ -27,7 +27,6 @@ public class GameRenderer {
 	int[] player0;
 	int[] player1;
 
-
 	public GameRenderer(GameWorld world) {
 		game_world = world;
 		screenSize = world.getDim();
@@ -74,8 +73,8 @@ public class GameRenderer {
         
         batcher.begin();
         //AssetLoader.shadow.draw(batcher, "10", 100, 100);
-        AssetLoader.font.draw(batcher, ""+score0, screenSize.width-20 - (3*score0.length()), screenSize.height/2 - 10);
-        AssetLoader.font.draw(batcher, ""+score1, screenSize.width-20 - (3*score1.length()), screenSize.height/2 + 10);
+        AssetLoader.font.draw(batcher, ""+score1, screenSize.width-20 - (3*score0.length()), screenSize.height/2 - 10);
+        AssetLoader.font.draw(batcher, ""+score0, screenSize.width-20 - (3*score1.length()), screenSize.height/2 + 10);
         batcher.end();
         
 
