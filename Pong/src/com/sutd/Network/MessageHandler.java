@@ -5,5 +5,11 @@ package com.sutd.Network;
  *
  */
 public interface MessageHandler {
-	void handle(String Message);
+	/**
+	 * Generic method that handles a message 
+	 * @param id id of the sender
+	 * @param type type of message
+	 * @param message payload data
+	 */
+	void handle(int id, String type, String message);
 }

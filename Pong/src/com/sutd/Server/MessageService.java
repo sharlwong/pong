@@ -23,23 +23,30 @@ class MessageService implements MessageHandler {
 		
 		for(int i = 0 ; i< clients.length; i++) {
 			out[i] = new PrintWriter(clients[i].getOutputStream());
-			
 		}
-		
 	}
 
 	//Handle requests.
-	public synchronized void handle(String message) {
-		System.out.println("Server handled: "+message);
-		send(message);
+	public synchronized void handle(int i, String type, String message) {
+		String send = ":";
+		if(type.equals("player_position"))
+			send = "opponent_position:"+message;
+			send(send,i);
+		System.out.println("Server handled:"+message);
 	}
 
 	// Broadcast Messages to all clients.
-	public synchronized void send(String message) {
+	// ignore is the client to not send to
+	
+	public synchronized void send(String message, int ignore) {
 		for(int i = 0 ; i < out.length; i++) {
+			if(i == ignore) continue; // don't send message to the sender!
 			out[i].println(message);
 			out[i].flush();
 		}
-		
 	}
+	public synchronized void send(String message) {
+		send(message,-1);
+	}
+
 }
