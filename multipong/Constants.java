@@ -30,7 +30,6 @@ public class Constants {
 	 * note though that the screen will have an extra ball-radius at the end, so a bit extra complication there
 	 */
 	public final static double PADDLE_WIDTH = 0.3;
-	public final static double PADDLE_DEFAULT_VELOCITY = 0.002;
 
 	/* delay appearance of first ball by this much to give the user time to prepare */
 	public final static double START_GAME_DELAY = 300;
@@ -101,6 +100,14 @@ public class Constants {
 		double x = v.x;
 		double y = v.y;
 
+		return translateBallReferenceFrame(new double[] {x, y});
+	}
+
+	private Dimension translateBallReferenceFrame(double[] ball) {
+		/* note that v is in small square reference frame of point-mass balls; do not modify v */
+		double x = ball[0];
+		double y = ball[1];
+
 		/* translation */
 		y += verticalFractionalPadding;
 		x += horizontalFractionalPadding;
@@ -118,5 +125,29 @@ public class Constants {
 
 		/* convert to dimension */
 		return new Dimension((int) x, (int) y);
+	}
+
+	public int[][] makeBallXYs(double[][] state) {
+		int[][] out = new int[state.length - 3][2];
+		for (int i = 0; i < state.length - 3; i++) {
+			Dimension temp = translateBallReferenceFrame(state[i]);
+			out[i][0] = temp.width;
+			out[i][1] = temp.height;
+		}
+		return out;
+	}
+
+	public int[] makePaddleXY(double[][] state, int player) {
+		double[] paddle = state[state.length - (player == 0 ? 3 : 2)];
+		int[] out = new int[2];
+		Dimension temp = translateBallReferenceFrame(paddle);
+		out[0] = temp.width;
+		out[1] = temp.height + (int) (ballPixelRadius / 2) * (paddle[1] == 0 ? 1 : -1);
+		return out;
+	}
+
+	public int[] makeScores(double[][] state) {
+		double[] temp = state[state.length-1];
+		return new int[] {(int) temp[0], (int) temp[1]};
 	}
 }

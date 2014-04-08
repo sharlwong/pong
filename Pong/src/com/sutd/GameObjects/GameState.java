@@ -4,26 +4,31 @@ package multipong;
  * Created by avery_000 on 08-Apr-14.
  */
 public class GameState {
-	private double player0fractional;
-	private double player1fractional;
-	private double[][] balls;
+	private double[][] state;
 
-	public GameState(double player0fractional, double player1fractional, double[][] balls) {
-		this.player0fractional = player0fractional;
-		this.player1fractional = player1fractional;
-		this.balls = balls;
+	public GameState(double[][] gameState) {
+		this.state = state;
 	}
 
-	public double getPlayer0fractional() {
+	public double[] getPlayer0Position() {
 
-		return player0fractional;
+		return state[state.length-3];
 	}
 
-	public double getPlayer1fractional() {
-		return player1fractional;
+	public double[] getPlayer1Position() {
+
+		return state[state.length-2];
 	}
 
 	public double[][] getBalls() {
-		return balls;
+		double[][] out = new double[state.length - 3][2];
+		for (int i = 0; i < state.length - 3; i++) out[i] = state[i];
+		return out;
+	}
+
+	public int[] getScores(){
+
+		double[] temp = state[state.length-1];
+		return new int[] {(int) temp[0], (int) temp[1]};
 	}
 }
