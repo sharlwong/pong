@@ -26,9 +26,6 @@ public class Constants {
 	public final static double DISPLAY_HEIGHT = HEIGHT + 2 * BALL_RADIUS + 2 * PADDLE_EFFECTIVE_DEPTH + 2 * EDGE_PADDING;
 	public final static double BALL_SPEED = 0.001;
 
-	/* special exception for extreme lag */
-	public final static long MAX_ACCEPTABLE_LAG_MILLIS = 500;
-
 	/* by default paddle will be one-tenth of the screen
 	 * note though that the screen will have an extra ball-radius at the end, so a bit extra complication there
 	 */
@@ -121,8 +118,5 @@ public class Constants {
 
 		/* convert to dimension */
 		return new Dimension((int) x, (int) y);
-	}
-
-	public static class LagException extends RuntimeException {
 	}
 }

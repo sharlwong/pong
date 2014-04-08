@@ -20,15 +20,15 @@ public class Paddle {
 		if (!playerBottom) yVelocity = 0 - yVelocity;
 		Vector2D outVelocity = new Vector2D(b.getCurrentPosition().x - paddleCenter.x, yVelocity);
 		outVelocity.makeUnitVector().multiply(Constants.BALL_SPEED);
-		return new Ball(b.getCurrentPosition(), outVelocity, currentTimeMillis, b.getSimulatedLag());
+		return new Ball(b.getCurrentPosition(), outVelocity, currentTimeMillis, b.getUnusedVariable());
 	}
 
 	public boolean collisionCheck(Ball b) {
 		Vector2D ballPosition = b.getCurrentPosition();
-		Vector2D ballVelocity = b.getRealVelocity();
+		boolean up = b.isMovingUp();
 		if (Math.abs(ballPosition.x - paddleCenter.x) > (Constants.PADDLE_WIDTH / 2)) return false;
-		if (playerBottom && ballPosition.y < Constants.BALL_RADIUS && ballVelocity.y < 0) return true;
-		if (!playerBottom && ballPosition.y > (Constants.HEIGHT - Constants.BALL_RADIUS) && ballVelocity.y > 0)
+		if (playerBottom && ballPosition.y < Constants.BALL_RADIUS && !up) return true;
+		if (!playerBottom && ballPosition.y > (Constants.HEIGHT - Constants.BALL_RADIUS) && up)
 			return true;
 		return false;
 	}
@@ -39,10 +39,6 @@ public class Paddle {
 
 	public int getScore() {
 		return score;
-	}
-
-	public void setScore(int score) {
-		this.score = score;
 	}
 
 	public void incrementScore() {

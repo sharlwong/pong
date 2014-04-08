@@ -10,7 +10,7 @@ import java.awt.event.MouseEvent;
  */
 public class Renderer extends JPanel implements Runnable {
 	static int unit;
-	GameBoard game;
+	GameWorld game;
 	int[][] balls;
 	int[] player0;
 	int[] player1;
@@ -19,7 +19,7 @@ public class Renderer extends JPanel implements Runnable {
 
 	public Renderer(Dimension d) {
 		dim = d;
-		game = new GameBoard(d);
+		game = new GameWorld(d);
 		thread = new Thread(this);
 		thread.start();
 		this.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));

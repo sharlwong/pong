@@ -10,25 +10,19 @@ import java.util.List;
 /**
  * Created by avery_000 on 31-Mar-14.
  */
-public class GameBoard {
+public class GameWorld {
 	public long elapsedTimeMillis;
 	public Constants calc;
-	int simulatedLag = 0;
 	private List<Ball> balls;
-	private int heightPixels;
 	private InputHandler inputHandler;
 	private Paddle player0;
 	private Paddle player1;
 	private SecureRandom random;
-	private int widthPixels;
-	private Dimension dim;
 	private long injectBalls = 0;
 	private boolean init = true;
 
-	public GameBoard(Dimension sizePixels) {
+	public GameWorld(Dimension sizePixels) {
 		this.calc = new Constants(sizePixels);
-		this.heightPixels = sizePixels.height;
-		this.widthPixels = sizePixels.width;
 		this.elapsedTimeMillis = 0;
 		this.player0 = new Paddle(0);
 		this.player1 = new Paddle(1);
@@ -36,7 +30,6 @@ public class GameBoard {
 		random = new SecureRandom();
 		random.setSeed(1234567890);
 		inputHandler = new InputHandler(player0, player1, this);
-		dim = sizePixels;
 	}
 
 	public void exit() {
@@ -92,7 +85,7 @@ public class GameBoard {
 		if (Math.abs(speed1) < Math.abs(speed2)) speed = new Vector2D(speed1, speed2);
 		else speed = new Vector2D(speed2, speed1);
 		synchronized (balls) {
-			balls.add(new Ball(position, speed, elapsedTimeMillis, simulatedLag < 0 ? (int) (random.nextDouble() * 500) : simulatedLag));
+			balls.add(new Ball(position, speed, elapsedTimeMillis, (random.nextInt())));
 		}
 	}
 

@@ -8,17 +8,17 @@ import java.awt.event.MouseEvent;
  * Created by avery_000 on 01-Apr-14.
  */
 public class InputHandler {
-	private final GameBoard game;
+	private final GameWorld game;
 	boolean disablePlayer0Movement = false;
 	Paddle player0;
 	Paddle player1;
 	Dimension dimension;
 
-	public InputHandler(Paddle player0, Paddle player1, GameBoard gameBoard) {
+	public InputHandler(Paddle player0, Paddle player1, GameWorld gameWorld) {
 		this.player0 = player0;
 		this.player1 = player1;
-		this.game = gameBoard;
-		this.dimension = gameBoard.calc.getDim();
+		this.game = gameWorld;
+		this.dimension = gameWorld.calc.getDim();
 	}
 
 	private boolean checkP0Disabled() {
