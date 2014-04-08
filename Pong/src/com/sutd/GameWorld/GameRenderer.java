@@ -1,16 +1,18 @@
 package com.sutd.GameWorld;
 
 import java.awt.Dimension;
+import java.util.concurrent.BlockingQueue;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.sutd.PongHelpers.AssetLoader;
+import com.sutd.PongHelpers.Constants;
+import com.sutd.PongHelpers.InputHandler;
 
 public class GameRenderer {
     
@@ -20,15 +22,20 @@ public class GameRenderer {
 
 	private SpriteBatch batcher;
 	
-	private Dimension screenSize;
+	Dimension d;
+	InputHandler inputHandler;
+	Constants calc;
 	
 	int[][] balls;
 	int[] player0;
 	int[] player1;
+	BlockingQueue<double[][]> buffer;
 
-	public GameRenderer(GameWorld world) {
-		game_world = world;
-		screenSize = world.getDim();
+	public GameRenderer(BlockingQueue<double[][]> buffer, Dimension d) {
+		this.d = d;
+		calc = new Constants(d);
+		//game_world = new GameWorld();
+		this.buffer = buffer;
 		cam = new OrthographicCamera();
 		cam.setToOrtho(true, 136, 204);
 		
@@ -38,28 +45,19 @@ public class GameRenderer {
 		batcher = new SpriteBatch();
 		batcher.setProjectionMatrix(cam.combined);
 		
-		
-		
+		inputHandler = new InputHandler(game_world, calc);
 	}
-	
-	public void keyPressed(int keycode) {
-		game_world.keyDown(keycode);
-	}
-
-	public void keyReleased(int keycode) {
-		game_world.keyUp(keycode);
-	}
-	
 
     public void render() {
     	// This runTime keeps accumulating, can be used by Ball class directly
     	
         //System.out.println("GameRenderer - render");
-        
-        balls = game_world.getBallXYs();
-		player0 = game_world.getBottomPaddleXY();
-		player1 = game_world.getTopPaddleXY();
-		int[] scores = game_world.getScores();
+    	double[][] state = buffer.peek();
+    	
+		balls = calc.makeBallXYs(state);
+		player0 = calc.makePaddleXY(state, 0);
+		player1 = calc.makePaddleXY(state, 1);
+		int[] scores = calc.makeScores(state);
         
         /*
          * 1. We draw a black background. This prevents flickering.
@@ -72,8 +70,8 @@ public class GameRenderer {
         
         batcher.begin();
         //AssetLoader.shadow.draw(batcher, "10", 100, 100);
-        AssetLoader.font.draw(batcher, ""+score1, screenSize.width-20 - (3*score0.length()), screenSize.height/2 - 20);
-        AssetLoader.font.draw(batcher, ""+score0, screenSize.width-20 - (3*score0.length()), screenSize.height/2);
+        AssetLoader.font.draw(batcher, ""+score1, d.width-20 - (3*score0.length()), d.height/2 - 20);
+        AssetLoader.font.draw(batcher, ""+score0, d.width-20 - (3*score0.length()), d.height/2);
         batcher.end();
         
 
@@ -108,15 +106,13 @@ public class GameRenderer {
     }
     
     private void drawBall(int centerX, int centerY) {
-		int radius = (int) game_world.calc.getBallPixelRadius();
+		int radius = (int) calc.getBallPixelRadius();
 		shapeRenderer.circle(centerX - radius, centerY - radius, 2 * radius);
 	}
 
 	private void drawPaddle(int centerX, int centerY) {
-		int width = (int) game_world.calc.getPaddlePixelWidth();
-		int height = (int) game_world.calc.getPaddlePixelDepth();
+		int width = (int) calc.getPaddlePixelWidth();
+		int height = (int) calc.getPaddlePixelDepth();
 		shapeRenderer.rect(centerX - width / 2, centerY - height / 2, width, height);
 	}
-
-
 }

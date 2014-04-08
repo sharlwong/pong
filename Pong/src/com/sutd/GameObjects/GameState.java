@@ -1,4 +1,4 @@
-package multipong;
+package com.sutd.GameObjects;
 
 /**
  * Created by avery_000 on 08-Apr-14.
@@ -7,7 +7,7 @@ public class GameState {
 	private double[][] state;
 
 	public GameState(double[][] gameState) {
-		this.state = state;
+		this.state = gameState;
 	}
 
 	public double[] getPlayer0Position() {
@@ -30,5 +30,9 @@ public class GameState {
 
 		double[] temp = state[state.length-1];
 		return new int[] {(int) temp[0], (int) temp[1]};
+	}
+	
+	public double[][] getState(){
+		return this.state;
 	}
 }

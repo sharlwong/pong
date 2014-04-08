@@ -16,8 +16,6 @@ public class Paddle {
 	private double min = (Constants.PADDLE_WIDTH / 2) - Constants.BALL_RADIUS;
 	private Vector2D paddleCenter;
 	private int score = 0;
-	private boolean movingLeft = false;
-	private boolean movingRight = false;
 
 
 	public Paddle(int playerNum) {
@@ -31,16 +29,15 @@ public class Paddle {
 		if (!playerBottom) yVelocity = 0 - yVelocity;
 		Vector2D outVelocity = new Vector2D(b.getCurrentPosition().x - paddleCenter.x, yVelocity);
 		outVelocity.makeUnitVector().multiply(Constants.BALL_SPEED);
-		return new Ball(b.getCurrentPosition(), outVelocity, currentTimeMillis, b.getSimulatedLag());
+		return new Ball(b.getCurrentPosition(), outVelocity, currentTimeMillis, b.getUnusedVariable());
 	}
 
 	public boolean collisionCheck(Ball b) {
 		Vector2D ballPosition = b.getCurrentPosition();
-		Vector2D ballVelocity = b.getRealVelocity();
+		boolean up = b.isMovingUp();
 		if (Math.abs(ballPosition.x - paddleCenter.x) > (Constants.PADDLE_WIDTH / 2)) return false;
-		if (playerBottom && ballPosition.y < Constants.BALL_RADIUS && ballVelocity.y < 0) return true;
-		if (!playerBottom && ballPosition.y > (Constants.HEIGHT - Constants.BALL_RADIUS) && ballVelocity.y > 0)
-			return true;
+		if (playerBottom && ballPosition.y < Constants.BALL_RADIUS && !up) return true;
+		if (!playerBottom && ballPosition.y > (Constants.HEIGHT - Constants.BALL_RADIUS) && up) return true;
 		return false;
 	}
 
@@ -50,10 +47,6 @@ public class Paddle {
 
 	public int getScore() {
 		return score;
-	}
-
-	public void setScore(int score) {
-		this.score = score;
 	}
 
 	public void incrementScore() {
@@ -73,28 +66,5 @@ public class Paddle {
 		paddleCenter.x = xValue;
 		if (paddleCenter.x < min) paddleCenter.x = min;
 		if (paddleCenter.x > max) paddleCenter.x = max;
-	}
-
-	public void updateDeltaTime(float delta) {
-		Vector2D displacement = Vector2D.ZERO.cpy();
-		if (movingRight) displacement.add(Vector2D.X.cpy().multiply(Constants.PADDLE_DEFAULT_VELOCITY));
-		if (movingLeft) displacement.add(Vector2D.X.cpy().multiply(-1 * Constants.PADDLE_DEFAULT_VELOCITY));
-		setPosition(paddleCenter.cpy().add(displacement.cpy().multiply(delta)).x);
-	}
-
-	public void startMoveRight() {
-		movingRight = true;
-	}
-
-	public void stopMoveRight() {
-		movingRight = false;
-	}
-
-	public void startMoveLeft() {
-		movingLeft = true;
-	}
-
-	public void stopMoveLeft() {
-		movingLeft = false;
 	}
 }
