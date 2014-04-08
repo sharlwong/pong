@@ -62,7 +62,7 @@ public class Ball {
 	private void init(long imaginaryStartTime) throws Constants.LagException {
 		/* grab the fake starting time and check it */
 		this.apparentStartTimeMillis = imaginaryStartTime;
-		if ((apparentStartTimeMillis - realStartTimeMillis) > Constants.MAX_ACCEPTABLE_LAG)
+		if ((apparentStartTimeMillis - realStartTimeMillis) > Constants.MAX_ACCEPTABLE_LAG_MILLIS)
 			throw new Constants.LagException();
 
 		/* error containment */

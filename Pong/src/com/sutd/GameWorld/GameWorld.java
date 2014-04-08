@@ -40,7 +40,9 @@ public class GameWorld {
 	private InputHandler inputHandler;
 	private Dimension dim;
 	
-	private boolean injectBalls = false;
+	private long injectBalls = 0;
+	private boolean init = true;
+
 	public Boolean ready = new Boolean(false);
 	
 	public GameWorld(Dimension sizePixels){
@@ -56,8 +58,7 @@ public class GameWorld {
 		
 		inputHandler = new InputHandler(this);
 		dim = sizePixels;
-		
-		injectRandomBall();
+
 	}
 	
 	
@@ -98,12 +99,12 @@ public class GameWorld {
 	}
 
 	public void setInjectBalls() {
-		injectBalls = true;
+		injectBalls = elapsedTimeMillis + 100;
 		injectRandomBall();
 	}
 
 	public void stopInjectBalls() {
-		injectBalls = false;
+		injectBalls = 0;
 	}
 
 	public void injectRandomBall() {
@@ -152,34 +153,21 @@ public class GameWorld {
 		return rect;
 	}
 
-	/**
-	 * initially there will be a certain number of balls (for example, 5 balls)
-	 * every second there will be two more balls (each one comes from each side)
-	 * when the total number of alive balls reached 20 (for example), there will be no more balls added in
-	 * when there are balls stopped, reset those balls
-	 *
-	 * @param delta
-	 */
 	public synchronized void update(float delta) {
-		if(!ready.booleanValue()) return;
+		//if(!ready.booleanValue()) return;
 			
 		long deltaMillis = (long) (delta * 1000);
 		timeCount += deltaMillis;
 		
 		//if (injectBalls) injectRandomBall();
 		
-		if (timeCount/1000 == 1){
-			timeCount -= 1000;
-			injectRandomBall();
-			injectRandomBall();
-			injectRandomBall();
-			injectRandomBall();
-			injectRandomBall();
+		if (elapsedTimeMillis > Constants.START_GAME_DELAY && init) {
+			init = false;
 			injectRandomBall();
 		}
-		
-		
+		if (injectBalls > 0 && injectBalls < elapsedTimeMillis) injectRandomBall();
 
+		
 		elapsedTimeMillis += deltaMillis;
 		player0.updateDeltaTime(deltaMillis);
 		player1.updateDeltaTime(deltaMillis);

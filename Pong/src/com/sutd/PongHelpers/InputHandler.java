@@ -27,7 +27,6 @@ public class InputHandler implements InputProcessor{
 
 	private void disableWASD() {
 		disablePlayer0Movement = true;
-		player0.setVelocity(0);
 	}
 
 	private void enableWASD() {
@@ -81,20 +80,20 @@ public class InputHandler implements InputProcessor{
 
 					/* player 1 moves */
 			case 21:
-				player0.setVelocity(-1);
+				player0.startMoveLeft();
 				break;
 			case 22:
-				player0.setVelocity(1);
+				player0.startMoveRight();
 				break;
 
 					/* player 0 moves */
 			case 29:
 				if (checkP0Disabled()) break;
-				player1.setVelocity(-1);
+				player1.startMoveLeft();
 				break;
 			case 32:
 				if (checkP0Disabled()) break;
-				player1.setVelocity(1);
+				player1.startMoveRight();
 				break;
 
 					/* insert ball*/
@@ -105,7 +104,7 @@ public class InputHandler implements InputProcessor{
 					/* quit game */
 			case 131:
 				game.exit();
-				System.exit(-1);
+				System.exit(0);
 		}
 		return true;
 	}
@@ -147,20 +146,20 @@ public class InputHandler implements InputProcessor{
 
 					/* player 1 moves */
 			case 21:
-				player0.setVelocity(0);
+				player0.stopMoveLeft();
 				break;
 			case 22:
-				player0.setVelocity(0);
+				player0.stopMoveRight();
 				break;
 
 					/* player 0 moves */
 			case 29:
 				if (checkP0Disabled()) break;
-				player1.setVelocity(0);
+				player1.stopMoveLeft();
 				break;
 			case 32:
 				if (checkP0Disabled()) break;
-				player1.setVelocity(0);
+				player1.stopMoveRight();
 				break;
 
 			/* insert ball*/
@@ -181,13 +180,15 @@ public class InputHandler implements InputProcessor{
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 		// TODO Auto-generated method stub
-		return false;
+		game.setInjectBalls();
+		return true;
 	}
 
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
 		// TODO Auto-generated method stub
-		return false;
+		game.stopInjectBalls();
+		return true;
 	}
 
 	@Override
@@ -199,7 +200,14 @@ public class InputHandler implements InputProcessor{
 	@Override
 	public boolean mouseMoved(int screenX, int screenY) {
 		// TODO Auto-generated method stub
-		return false;
+		double relativePos = screenX - game.calc.getPaddlePixelWidth() / 2;
+		//double relativeMax = game.calc.getHorizontalPixelUnitLength() + 2 * game.calc.getBallPixelRadius() - game.calc.getPaddlePixelWidth();
+		double relativeMax = game.calc.getHorizontalPixelUnitLength()+ game.calc.getPaddlePixelWidth()/2;
+		relativePos = relativePos < 0 ? 0 : relativePos;
+		relativePos = relativePos > relativeMax ? relativeMax : relativePos;
+		player0.setFractionalPosition(relativePos / relativeMax);
+
+		return true;
 	}
 
 	@Override

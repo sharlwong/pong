@@ -17,7 +17,6 @@ public class GameRenderer {
 	private GameWorld game_world;
 	private OrthographicCamera cam;
 	private ShapeRenderer shapeRenderer;
-	private Texture texture;
 
 	private SpriteBatch batcher;
 	
@@ -73,8 +72,8 @@ public class GameRenderer {
         
         batcher.begin();
         //AssetLoader.shadow.draw(batcher, "10", 100, 100);
-        AssetLoader.font.draw(batcher, ""+score1, screenSize.width-20 - (3*score0.length()), screenSize.height/2 - 10);
-        AssetLoader.font.draw(batcher, ""+score0, screenSize.width-20 - (3*score1.length()), screenSize.height/2 + 10);
+        AssetLoader.font.draw(batcher, ""+score1, screenSize.width-20 - (3*score0.length()), screenSize.height/2 - 20);
+        AssetLoader.font.draw(batcher, ""+score0, screenSize.width-20 - (3*score0.length()), screenSize.height/2);
         batcher.end();
         
 

@@ -36,8 +36,9 @@ public class GameScreen implements Screen {
         //Gdx.gl.glClearColor(10/255.0f, 15/255.0f, 230/255.0f, 1f);
         //Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
         game_world.update(delta);
-        pong_game.client.sendMessage("player_position:"+game_world.getPaddle(0).getFractionalPosition());
         game_renderer.render();
+        pong_game.client.sendMessage("player_position:"+game_world.getPaddle(0).getFractionalPosition());
+        
     }
 
     @Override
