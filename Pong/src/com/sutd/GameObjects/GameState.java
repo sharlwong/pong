@@ -60,11 +60,24 @@ public class GameState {
 	}
 	
 	/**
+	 * Returns the image of GameState
+	 * IMPORTANT: Not everything flips. Make sure to duplicate!
 	 * Invariant: gamestate.flip.flip == gamestate
 	 * @return
 	 */
 	public GameState flip() {
 		GameState flipped = new GameState();
+		flipped.setStatus(status);
+		flipped.setTimeLeft(timeLeft);
+		flipped.setBallsData(ballsData);
+
+		//flip score
+		flipped.setScores(new int[] {scores[1], scores[0]});
+		//flip paddles
+		flipped.setPlayer1Data(new double[] {1 - player0Data[0], 1});
+		flipped.setPlayer0Data(new double[] {1 - player1Data[0], 0});
+		//flip balls
+		// TODO: Flip balls.
 		return flipped;
 	}
 }
