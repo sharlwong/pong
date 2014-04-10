@@ -52,7 +52,7 @@ public class StartRenderer {
          * 1. We draw a black background. This prevents flickering.
          */
 
-        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClearColor(153, 153, 255, 1);
         Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
         /*

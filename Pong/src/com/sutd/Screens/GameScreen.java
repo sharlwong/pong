@@ -20,9 +20,10 @@ public class GameScreen implements Screen {
 	private GameRenderer game_renderer;
 	private PongGame pong_game;
 	private GameUpdater updater;
+	private float runTime;
 	Constants calc;
 	BlockingQueue<double[][]> buffer = new LinkedBlockingQueue<double[][]>(5);
-    
+	
 	public GameScreen(PongGame pong_game) {
 	    System.out.println("GameScreen Attached");
 	    Dimension dim = new Dimension(136, 204);
@@ -49,7 +50,9 @@ public class GameScreen implements Screen {
         }else{
         	buffer.offer(game_world.getState());
         }
-        game_renderer.render();
+        
+        runTime += delta;
+        game_renderer.render(runTime);
         pong_game.client.sendMessage("player_position:"+game_world.getPaddle(0).getFractionalPosition());
         
     }

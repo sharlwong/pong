@@ -15,6 +15,7 @@ public class Constants {
 	public final static double BALL_RADIUS = 0.02;
 
 	/* these are the distances for the vertical buffers */
+
 	public final static double EDGE_PADDING = BALL_RADIUS * 0.75;
 	public final static double PADDLE_EFFECTIVE_DEPTH = BALL_RADIUS * 1.5;
 
@@ -42,6 +43,7 @@ public class Constants {
 	private final double paddlePixelWidth;
 	private final double paddlePixelDepth;
 	private final double edgePixelPadding;
+	
 
 	public Constants(Dimension dimension) {
 		this.dim = dimension;
@@ -109,12 +111,14 @@ public class Constants {
 		double y = ball[1];
 
 		/* translation */
+
 		y += verticalFractionalPadding;
 		x += horizontalFractionalPadding;
 
 		/* scaling */
 		y /= (HEIGHT + 2 * verticalFractionalPadding);
 		x /= (WIDTH + 2 * horizontalFractionalPadding);
+
 
 		/* flip upright */
 		y = 1.0 - y;
@@ -149,5 +153,8 @@ public class Constants {
 	public int[] makeScores(double[][] state) {
 		double[] temp = state[state.length-1];
 		return new int[] {(int) temp[0], (int) temp[1]};
+	}
+	
+	public static class LagException extends RuntimeException {
 	}
 }
