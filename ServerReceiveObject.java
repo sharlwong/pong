@@ -33,7 +33,7 @@ public class ServerReceiveObject {
 		System.out.println("Making signature...");
 		RSATools.RSASign rsaSign = new RSATools.RSASign(decryption);
 		RSATools.RSAVerify rsaVerify = new RSATools.RSAVerify(encryption);
-		rsaSign.sendMessage(socket,temp1);
+		rsaSign.sendSignature(socket, temp1);
 		verified = rsaVerify.getVerification(socket,temp2);
 
 		System.out.println("Verified: " + verified);
@@ -48,7 +48,7 @@ public class ServerReceiveObject {
 		/* speak */
 		aesHelper.sendMessage(socket, serverText);
 
-		Object o = aesHelper.getUnencryptedObject(socket);
+		Object o = aesHelper.getObject(socket);
 		double[][] a = (double[][]) o;
 
 		for (int i = 0; i < a.length; i++) {

@@ -36,7 +36,7 @@ public class ClientSendObject {
 		RSATools.RSASign rsaSign = new RSATools.RSASign(decryption);
 		RSATools.RSAVerify rsaVerify = new RSATools.RSAVerify(encryption);
 		verified = rsaVerify.getVerification(socket,temp1);
-		rsaSign.sendMessage(socket,temp2);
+		rsaSign.sendSignature(socket, temp2);
 
 		System.out.println("Verified: " + verified);
 
@@ -58,7 +58,7 @@ public class ClientSendObject {
 		String s = aesHelper.getMessage(socket);
 		System.out.println("Server: " + s);
 
-		aesHelper.sendUnencryptedObject(socket,a);
+		aesHelper.sendObject(socket,a);
 
 		socket.close();
 	}
