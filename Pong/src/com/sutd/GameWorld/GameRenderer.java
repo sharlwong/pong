@@ -10,54 +10,58 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.sutd.GameObjects.GameState;
+import com.sutd.GameObjects.Paddle;
 import com.sutd.PongHelpers.AssetLoader;
 import com.sutd.PongHelpers.Constants;
 import com.sutd.PongHelpers.InputHandler;
 
 public class GameRenderer {
     
-	private GameWorld game_world;
 	private OrthographicCamera cam;
 	private ShapeRenderer shapeRenderer;
-
 	private SpriteBatch batcher;
 	
 	Dimension d;
 	InputHandler inputHandler;
 	Constants calc;
 	
+	private Paddle player_paddle;
 	int[][] balls;
 	int[] player0;
 	int[] player1;
-	BlockingQueue<double[][]> buffer;
+	private GameState lastKnownState;
+	BlockingQueue<GameState> buffer;
 
-	public GameRenderer(BlockingQueue<double[][]> buffer, Dimension d) {
+	public GameRenderer(Paddle paddle, BlockingQueue<GameState> buffer2, Dimension d) {
 		this.d = d;
 		calc = new Constants(d);
 		//game_world = new GameWorld();
-		this.buffer = buffer;
+		this.buffer = buffer2;
 		cam = new OrthographicCamera();
 		cam.setToOrtho(true, 136, 204);
 		
 		shapeRenderer = new ShapeRenderer();
 		shapeRenderer.setProjectionMatrix(cam.combined);
-
+		this.player_paddle = paddle;
 		batcher = new SpriteBatch();
 		batcher.setProjectionMatrix(cam.combined);
-		
-		inputHandler = new InputHandler(game_world, calc);
 	}
 
     public void render() {
     	// This runTime keeps accumulating, can be used by Ball class directly
     	
         //System.out.println("GameRenderer - render");
-    	double[][] state = buffer.peek();
-    	
-		balls = calc.makeBallXYs(state);
-		player0 = calc.makePaddleXY(state, 0);
-		player1 = calc.makePaddleXY(state, 1);
-		int[] scores = calc.makeScores(state);
+    	GameState state = buffer.poll();
+    	if(state == null && lastKnownState == null) return;
+    	if(state == null) state = lastKnownState;
+    	else lastKnownState = state;
+
+		balls = calc.makeBallXYs(state.getBallsData());
+		//player0 = calc.makePaddleXY(state.getPlayer0Data(), 0);
+		player0 = calc.makePaddleXY(player_paddle.getXY(),0);
+		player1 = calc.makePaddleXY(state.getPlayer1Data(), 1);
+		int[] scores = state.getScores(); 
         
         /*
          * 1. We draw a black background. This prevents flickering.

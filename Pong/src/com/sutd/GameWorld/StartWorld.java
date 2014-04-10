@@ -91,11 +91,14 @@ public class StartWorld {
 		pong_game.server.start();
 		server_created = true;
 
+		System.out.println("Client Creating");
 		pong_game.client = new GameClient();
 		pong_game.client.connectToServer("localhost");
 		pong_game.client.startListening();
 		System.out.println("Started Listening");
 		client1_created = true;
+		System.out.println("Client Created");
+		pong_game.player = 0;
 		pong_game.setScreen(new GameScreen(pong_game));
 	}
 	
@@ -109,6 +112,7 @@ public class StartWorld {
 		pong_game.client.startListening();
 		System.out.println("Started Listening");		
 		client2_created = true;
+		pong_game.player = 1;
 		pong_game.setScreen(new GameScreen(pong_game));
 	}
 }

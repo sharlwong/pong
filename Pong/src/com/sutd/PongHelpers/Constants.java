@@ -127,27 +127,21 @@ public class Constants {
 		return new Dimension((int) x, (int) y);
 	}
 
-	public int[][] makeBallXYs(double[][] state) {
-		int[][] out = new int[state.length - 3][2];
-		for (int i = 0; i < state.length - 3; i++) {
-			Dimension temp = translateBallReferenceFrame(state[i]);
+	public int[][] makeBallXYs(double[][] ballsData) {
+		int[][] out = new int[ballsData.length][2];
+		for (int i = 0; i < ballsData.length; i++) {
+			Dimension temp = translateBallReferenceFrame(ballsData[i]);
 			out[i][0] = temp.width;
 			out[i][1] = temp.height;
 		}
 		return out;
 	}
 
-	public int[] makePaddleXY(double[][] state, int player) {
-		double[] paddle = state[state.length - (player == 0 ? 3 : 2)];
+	public int[] makePaddleXY(double[] paddle, int player) {
 		int[] out = new int[2];
 		Dimension temp = translateBallReferenceFrame(paddle);
 		out[0] = temp.width;
 		out[1] = temp.height + (int) (ballPixelRadius / 2) * (paddle[1] == 0 ? 1 : -1);
 		return out;
-	}
-
-	public int[] makeScores(double[][] state) {
-		double[] temp = state[state.length-1];
-		return new int[] {(int) temp[0], (int) temp[1]};
 	}
 }

@@ -16,7 +16,7 @@ public class MessageConsumer extends Thread{
         try {
         	// Buffer consumes message
         	String message = buffer.take();
-        	String[] data = message.split(":");
+        	String[] data = message.split(";");
         	int id = Integer.parseInt(data[0]);
         	System.out.println("Remove from buffer: " +message);
         	
