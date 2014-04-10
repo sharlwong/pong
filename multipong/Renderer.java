@@ -9,32 +9,36 @@ import java.awt.event.MouseEvent;
  * Created by avery_000 on 01-Apr-14.
  */
 public class Renderer extends JPanel implements Runnable {
-	static int unit;
-	GameBoard game;
-	int[][] balls;
-	int[] player0;
-	int[] player1;
+	GameWorld game;
+	InputHandler inputHandler;
 	Thread thread;
 	Dimension dim;
+	Constants calc;
 
 	public Renderer(Dimension d) {
 		dim = d;
-		game = new GameBoard(d);
+		calc = new Constants(d);
+		game = new GameWorld();
 		thread = new Thread(this);
 		thread.start();
 		this.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 		this.setPreferredSize(d);
+		inputHandler = new InputHandler(game, calc);
 	}
 
-	public void keyPressed(KeyEvent e) { game.keyDown(e); }
+	public void keyPressed(KeyEvent e) {
+		inputHandler.keyDown(e);
+	}
 
-	public void keyReleased(KeyEvent e) { game.keyUp(e); }
+	public void keyReleased(KeyEvent e) {
+		inputHandler.keyUp(e);
+	}
 
-	public void mouseDown() {game.mouseDown();}
+	public void mouseAt(MouseEvent e) {inputHandler.mouseAt(e);}
 
-	public void mouseUp() {game.mouseUp();}
+	public void mouseDown() {inputHandler.mouseDown();}
 
-	public void mouseAt(MouseEvent e) {game.mouseAt(e);}
+	public void mouseUp() {inputHandler.mouseUp();}
 
 	@Override
 	protected void paintComponent(Graphics g) {
@@ -42,11 +46,18 @@ public class Renderer extends JPanel implements Runnable {
 		setOpaque(false);
 		super.paintComponent(g);
 
+		int[][] balls;
+		int[] player0;
+		int[] player1;
+
+
 		/* get all the info */
-		balls = game.getBallXYs();
-		player0 = game.getBottomPaddleXY();
-		player1 = game.getTopPaddleXY();
-		int[] scores = game.getScores();
+		double[][] state = game.getState();
+
+		balls = calc.makeBallXYs(state);
+		player0 = calc.makePaddleXY(state, 0);
+		player1 = calc.makePaddleXY(state, 1);
+		int[] scores = calc.makeScores(state);
 
 		/* render player 0 at the bottom */
 		g.setColor(Color.BLUE);
@@ -64,13 +75,13 @@ public class Renderer extends JPanel implements Runnable {
 	}
 
 	private void drawBall(Graphics g, int centerX, int centerY) {
-		int radius = (int) game.calc.getBallPixelRadius();
+		int radius = (int) calc.getBallPixelRadius();
 		g.fillOval(centerX - radius, centerY - radius, 2 * radius, 2 * radius);
 	}
 
 	private void drawPaddle(Graphics g, int centerX, int centerY) {
-		int width = (int) game.calc.getPaddlePixelWidth();
-		int height = (int) (game.calc.getPaddlePixelDepth() * 0.75);
+		int width = (int) calc.getPaddlePixelWidth();
+		int height = (int) (calc.getPaddlePixelDepth() * 0.75);
 		g.fillRect(centerX - width / 2, centerY - height / 2, width, height);
 	}
 

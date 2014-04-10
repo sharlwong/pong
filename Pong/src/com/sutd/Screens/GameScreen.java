@@ -1,12 +1,16 @@
 package com.sutd.Screens;
 
 import java.awt.Dimension;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.sutd.GameObjects.GameState;
 import com.sutd.GameWorld.GameRenderer;
 import com.sutd.GameWorld.GameWorld;
 import com.sutd.Pong.PongGame;
+import com.sutd.PongHelpers.Constants;
 import com.sutd.PongHelpers.GameUpdater;
 import com.sutd.PongHelpers.InputHandler;
 
@@ -16,15 +20,18 @@ public class GameScreen implements Screen {
 	private GameRenderer game_renderer;
 	private PongGame pong_game;
 	private GameUpdater updater;
-
+	Constants calc;
+	BlockingQueue<double[][]> buffer = new LinkedBlockingQueue<double[][]>(5);
     
 	public GameScreen(PongGame pong_game) {
 	    System.out.println("GameScreen Attached");
 	    Dimension dim = new Dimension(136, 204);
-	    game_world = new GameWorld(dim);// initialize world
-	    game_renderer = new GameRenderer(game_world); // initialize renderer
+	    game_world = new GameWorld();// initialize world
+	    buffer.offer(game_world.getState());
+	    game_renderer = new GameRenderer(buffer,dim); // initialize renderer
 	    this.pong_game = pong_game;
-	    Gdx.input.setInputProcessor(new InputHandler(game_world));
+	    calc = new Constants(dim);
+	    Gdx.input.setInputProcessor(new InputHandler(game_world, calc));
 	    updater = new GameUpdater(game_world);
 	    pong_game.client.startConsuming(updater);
 	}
@@ -36,8 +43,15 @@ public class GameScreen implements Screen {
         //Gdx.gl.glClearColor(10/255.0f, 15/255.0f, 230/255.0f, 1f);
         //Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
         game_world.update(delta);
-        pong_game.client.sendMessage("player_position:"+game_world.getPaddle(0).getFractionalPosition());
+        if (buffer.remainingCapacity() == 0){
+        	buffer.poll();
+        	buffer.offer(game_world.getState());
+        }else{
+        	buffer.offer(game_world.getState());
+        }
         game_renderer.render();
+        pong_game.client.sendMessage("player_position:"+game_world.getPaddle(0).getFractionalPosition());
+        
     }
 
     @Override

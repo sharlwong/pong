@@ -6,7 +6,7 @@ import java.awt.event.*;
 
 public class PongMain extends JFrame {
 
-	final static Dimension dim = new Dimension(1357, 987);
+	final static Dimension dim = new Dimension(1000, 600);
 	private JPanel jContentPane = null;
 	private Renderer gameRenderer = null;
 
