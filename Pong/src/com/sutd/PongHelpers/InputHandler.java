@@ -1,9 +1,6 @@
 package com.sutd.PongHelpers;
 
-import java.awt.event.KeyEvent;
-
 import com.badlogic.gdx.InputProcessor;
-import com.sutd.GameObjects.Paddle;
 import com.sutd.GameWorld.GameWorld;
 
 /**
@@ -11,27 +8,11 @@ import com.sutd.GameWorld.GameWorld;
  */
 public class InputHandler implements InputProcessor{
 	private final GameWorld game;
-	boolean disablePlayer0Movement = false;
-	Paddle player0;
-	Paddle player1;
+	private final Constants calc;
 
-	public InputHandler(GameWorld gameBoard) {
-		this.player0 = gameBoard.getPaddle(0);
-		this.player1 = gameBoard.getPaddle(1);
+	public InputHandler(GameWorld gameBoard, Constants calc) {
 		this.game = gameBoard;
-	}
-
-	private boolean checkP0Disabled() {
-		return disablePlayer0Movement;
-	}
-
-	private void disableWASD() {
-		disablePlayer0Movement = true;
-		player0.setVelocity(0);
-	}
-
-	private void enableWASD() {
-		disablePlayer0Movement = false;
+		this.calc = calc;
 	}
 	
 	@Override
@@ -39,62 +20,34 @@ public class InputHandler implements InputProcessor{
 		switch (keycode) {
 					/* player 0 moves (alternate) */
 			case 8:
-				disableWASD();
-				player1.setFractionalPosition(0.000);
+				game.setP1fractional(0.000);
 				break;
 			case 9:
-				disableWASD();
-				player1.setFractionalPosition(0.111);
+				game.setP1fractional(0.111);
 				break;
 			case 10:
-				disableWASD();
-				player1.setFractionalPosition(0.222);
+				game.setP1fractional(0.222);
 				break;
 			case 11:
-				disableWASD();
-				player1.setFractionalPosition(0.333);
+				game.setP1fractional(0.333);
 				break;
 			case 12:
-				disableWASD();
-				player1.setFractionalPosition(0.444);
+				game.setP1fractional(0.444);
 				break;
 			case 13:
-				disableWASD();
-				player1.setFractionalPosition(0.556);
+				game.setP1fractional(0.556);
 				break;
 			case 14:
-				disableWASD();
-				player1.setFractionalPosition(0.667);
+				game.setP1fractional(0.667);
 				break;
 			case 15:
-				disableWASD();
-				player1.setFractionalPosition(0.778);
+				game.setP1fractional(0.778);
 				break;
 			case 16:
-				disableWASD();
-				player1.setFractionalPosition(0.889);
+				game.setP1fractional(0.889);
 				break;
 			case 7:
-				disableWASD();
-				player1.setFractionalPosition(1.000);
-				break;
-
-					/* player 1 moves */
-			case 21:
-				player0.setVelocity(-1);
-				break;
-			case 22:
-				player0.setVelocity(1);
-				break;
-
-					/* player 0 moves */
-			case 29:
-				if (checkP0Disabled()) break;
-				player1.setVelocity(-1);
-				break;
-			case 32:
-				if (checkP0Disabled()) break;
-				player1.setVelocity(1);
+				game.setP1fractional(1.000);
 				break;
 
 					/* insert ball*/
@@ -105,7 +58,7 @@ public class InputHandler implements InputProcessor{
 					/* quit game */
 			case 131:
 				game.exit();
-				System.exit(-1);
+				System.exit(0);
 		}
 		return true;
 	}
@@ -113,56 +66,6 @@ public class InputHandler implements InputProcessor{
 	@Override
 	public boolean keyUp(int keycode) {
 		switch (keycode) {
-			/* player 0 moves (alternate) */
-			case 8:
-				enableWASD();
-				break;
-			case 9:
-				enableWASD();
-				break;
-			case 10:
-				enableWASD();
-				break;
-			case 11:
-				enableWASD();
-				break;
-			case 12:
-				enableWASD();
-				break;
-			case 13:
-				enableWASD();
-				break;
-			case 14:
-				enableWASD();
-				break;
-			case 15:
-				enableWASD();
-				break;
-			case 16:
-				enableWASD();
-				break;
-			case 7:
-				enableWASD();
-				break;
-
-					/* player 1 moves */
-			case 21:
-				player0.setVelocity(0);
-				break;
-			case 22:
-				player0.setVelocity(0);
-				break;
-
-					/* player 0 moves */
-			case 29:
-				if (checkP0Disabled()) break;
-				player1.setVelocity(0);
-				break;
-			case 32:
-				if (checkP0Disabled()) break;
-				player1.setVelocity(0);
-				break;
-
 			/* insert ball*/
 			case 62:
 				game.stopInjectBalls();
@@ -181,13 +84,15 @@ public class InputHandler implements InputProcessor{
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 		// TODO Auto-generated method stub
-		return false;
+		game.setInjectBalls();
+		return true;
 	}
 
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
 		// TODO Auto-generated method stub
-		return false;
+		game.stopInjectBalls();
+		return true;
 	}
 
 	@Override
@@ -199,7 +104,13 @@ public class InputHandler implements InputProcessor{
 	@Override
 	public boolean mouseMoved(int screenX, int screenY) {
 		// TODO Auto-generated method stub
-		return false;
+		double relativePos = screenX - calc.getPaddlePixelWidth() / 2;
+		//double relativeMax = game.calc.getHorizontalPixelUnitLength() + 2 * game.calc.getBallPixelRadius() - game.calc.getPaddlePixelWidth();
+		double relativeMax = calc.getHorizontalPixelUnitLength()+ calc.getPaddlePixelWidth()/2;
+		relativePos = relativePos < 0 ? 0 : relativePos;
+		relativePos = relativePos > relativeMax ? relativeMax : relativePos;
+		game.setP0fractional(relativePos / relativeMax);
+		return true;
 	}
 
 	@Override

@@ -1,7 +1,11 @@
 package com.sutd.PongHelpers;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 /**
  * Created by avery_000 on 25-Mar-14.
@@ -19,15 +23,35 @@ public abstract class AssetLoader {
 	
 	public static BitmapFont font, shadow;
 	
+	public static Texture texture;
+	public static TextureRegion octopusGasp, octopusSmile;
+	public static Animation octopusAnimation;
+	
 	public static void load(){
 		font = new BitmapFont(Gdx.files.internal("data/text.fnt"));
 		font.setScale(.25f, -.25f);
 		shadow = new BitmapFont(Gdx.files.internal("data/shadow.fnt"));
 		shadow.setScale(.25f, -.25f);
+		
+		texture = new Texture(Gdx.files.internal("data/Octopus_256x128.png"));
+		texture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+	
+		octopusSmile = new TextureRegion(texture, 0, 0, 128, 128);
+		octopusSmile.flip(false, true);
+
+		octopusGasp = new TextureRegion(texture, 128, 0, 128, 128);
+		octopusGasp.flip(false, true);
+		
+		TextureRegion[] octopus = { octopusGasp, octopusSmile };
+		octopusAnimation = new Animation(0.06f, octopus);
+		octopusAnimation.setPlayMode(Animation.LOOP_PINGPONG);
+		
+	
 	}
 	
 	public void dispose(){
 		font.dispose();
+		texture.dispose();
 	}
 
 	public static class LagException extends RuntimeException {
