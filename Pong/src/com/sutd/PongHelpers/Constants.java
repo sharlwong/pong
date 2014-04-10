@@ -24,7 +24,7 @@ public class Constants {
 	 * the paddles must render above and under this padding
 	 */
 	public final static double DISPLAY_HEIGHT = HEIGHT + 2 * BALL_RADIUS + 2 * PADDLE_EFFECTIVE_DEPTH + 2 * EDGE_PADDING;
-	public final static double BALL_SPEED = 0.001;
+	public final static double BALL_SPEED = 0.0005;
 
 	/* by default paddle will be one-tenth of the screen
 	 * note though that the screen will have an extra ball-radius at the end, so a bit extra complication there
@@ -32,7 +32,7 @@ public class Constants {
 	public final static double PADDLE_WIDTH = 0.3;
 
 	/* delay appearance of first ball by this much to give the user time to prepare */
-	public final static double START_GAME_DELAY = 300;
+	public final static double START_GAME_DELAY = 2000;
 	private final Dimension dim;
 	private final double verticalFractionalPadding;
 	private final double horizontalFractionalPadding;

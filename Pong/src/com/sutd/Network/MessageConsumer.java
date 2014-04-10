@@ -12,13 +12,11 @@ public class MessageConsumer extends Thread{
 	}
 	public void run() {
 		while(!this.isInterrupted()) {
-        System.out.println("Preparing to consume.");
         try {
         	// Buffer consumes message
         	String message = buffer.take();
         	String[] data = message.split(";");
         	int id = Integer.parseInt(data[0]);
-        	System.out.println("Remove from buffer: " +message);
         	
         	// Message is passed to handler to handle.
         	handler.handle(id,data[1],data[2]);

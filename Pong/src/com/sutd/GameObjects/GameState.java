@@ -77,7 +77,12 @@ public class GameState {
 		flipped.setPlayer1Data(new double[] {1 - player0Data[0], 1});
 		flipped.setPlayer0Data(new double[] {1 - player1Data[0], 0});
 		//flip balls
-		// TODO: Flip balls.
+		double temp[][] = new double[ballsData.length][2];
+		for(int i = 0; i < ballsData.length;i++) {
+			temp[i][0] = 1 - ballsData[i][0];
+			temp[i][1] = 1 - ballsData[i][1];
+		}
+		flipped.setBallsData(temp);
 		return flipped;
 	}
 }

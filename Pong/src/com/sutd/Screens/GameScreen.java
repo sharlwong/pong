@@ -22,10 +22,10 @@ public class GameScreen implements Screen {
 	private PongGame pong_game;
 	private GameUpdater updater;
 	Constants calc;
-	BlockingQueue<GameState> buffer = new LinkedBlockingQueue<GameState>(5);
+	BlockingQueue<GameState> buffer = new LinkedBlockingQueue<GameState>(50);
     
 	public GameScreen(PongGame pong_game) {
-	    System.out.println("GameScreen Attached");
+	    //System.out.println("GameScreen Attached");
 	    player_paddle = new Paddle(0);
 	    player_paddle.setFractionalPosition(0.5);
 	    Dimension dim = new Dimension(136, 204);
@@ -56,27 +56,27 @@ public class GameScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-        System.out.println("GameScreen - resizing");
+        //System.out.println("GameScreen - resizing");
     }
 
     @Override
     public void show() {
-        System.out.println("GameScreen - show called");
+        //System.out.println("GameScreen - show called");
     }
 
     @Override
     public void hide() {
-        System.out.println("GameScreen - hide called");     
+        //System.out.println("GameScreen - hide called");     
     }
 
     @Override
     public void pause() {
-        System.out.println("GameScreen - pause called");        
+        //System.out.println("GameScreen - pause called");        
     }
 
     @Override
     public void resume() {
-        System.out.println("GameScreen - resume called");       
+        //System.out.println("GameScreen - resume called");       
     }
 
     @Override

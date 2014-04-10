@@ -43,7 +43,7 @@ public class GameServer extends Thread {
 		game_world = new GameWorld();
 		message_service = new MessageService(this);
 		// Start Server Socket
-		System.out.println("Server Starting...");
+		//System.out.println("Server Starting...");
 		serverSocket = Gdx.net.newServerSocket(Protocol.TCP,port, null);
 		
 		// Accept Two clients to connect.

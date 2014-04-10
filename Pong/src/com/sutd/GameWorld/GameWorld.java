@@ -42,7 +42,6 @@ public class GameWorld {
 		this.balls = new ArrayList<Ball>();
 		random = new SecureRandom();
 		random.setSeed(1234567890);
-		injectRandomBall();
 	}
 	
 	
@@ -131,7 +130,7 @@ public class GameWorld {
 	public void update(float delta) {
 		if(!ready.booleanValue()) return;
 			
-		long deltaMillis = (long) (delta * 1000);
+		long deltaMillis = (long) (delta);
 		
 		//if (injectBalls) injectRandomBall();
 		
@@ -169,6 +168,7 @@ public class GameWorld {
 
 			for (Ball b : removeThese) balls.remove(b);
 			for (Ball b : addThese) balls.add(b);
+			if(balls.size() == 0) injectRandomBall();
 		}
 	}
 	

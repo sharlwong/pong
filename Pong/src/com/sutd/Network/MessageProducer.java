@@ -30,7 +30,7 @@ public class MessageProducer extends Thread {
 				String message = reader.readLine();
 				// Adds message to the buffer.
 				boolean offered = buffer.offer(id+";"+message);
-				if(offered) System.out.println("Add to buffer"+ id +";" + message);
+				//if(offered) System.out.println("Add to buffer"+ id +";" + message);
 
 			} catch (Exception e) {
 				e.printStackTrace();
