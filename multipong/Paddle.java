@@ -5,7 +5,7 @@ public class Paddle {
 	private double max = Constants.WIDTH + Constants.BALL_RADIUS - (Constants.PADDLE_WIDTH / 2);
 	private double min = (Constants.PADDLE_WIDTH / 2) - Constants.BALL_RADIUS;
 	private Vector2D paddleCenter;
-	private int score = 0;
+	private double score = 0;
 
 	public Paddle(int playerNum) {
 		paddleCenter = new Vector2D(-1, Constants.HEIGHT * playerNum);
@@ -35,11 +35,15 @@ public class Paddle {
 	}
 
 	public int getScore() {
-		return score;
+		return (int) Math.floor(score);
 	}
 
 	public void incrementScore() {
-		this.score++;
+		incrementScore(0);
+	}
+
+	public void incrementScore(double n) {
+		this.score += n;
 	}
 
 	public void setFractionalPosition(double fraction) {

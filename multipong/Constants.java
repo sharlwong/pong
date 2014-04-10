@@ -95,6 +95,14 @@ public class Constants {
 		return edgePixelPadding;
 	}
 
+	public double[] makeBallTypes(double[][] state) {
+		double[] out = new double[state.length - 3];
+		for (int i = 0; i < state.length - 3; i++) {
+			out[i] = state[i][2];
+		}
+		return out;
+	}
+
 	public Dimension translateBallReferenceFrame(Vector2D v) {
 		/* note that v is in small square reference frame of point-mass balls; do not modify v */
 		double x = v.x;

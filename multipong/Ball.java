@@ -1,13 +1,13 @@
 package multipong;
 
 public class Ball {
-	private int uselessVar;
-	private long initTime;
+	private double   uselessVar;
+	private long     initTime;
 	private Vector2D velocity;
 	private Vector2D initialPosition;
 	private Vector2D currentPosition;
 
-	public Ball(Vector2D startPosition, Vector2D startVelocity, long startTimeMillis, int unusedVariable) {
+	public Ball(Vector2D startPosition, Vector2D startVelocity, long startTimeMillis, double unusedVariable) {
 		this.initialPosition = startPosition;
 		this.uselessVar = unusedVariable;
 		this.initTime = startTimeMillis;
@@ -37,7 +37,7 @@ public class Ball {
 		updateCurrentTime(startTimeMillis);
 	}
 
-	public int getUnusedVariable() {
+	public double getUnusedVariable() {
 		return uselessVar;
 	}
 
