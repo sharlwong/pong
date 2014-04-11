@@ -72,10 +72,11 @@ public class GameRenderer {
          * We draw a black background. This prevents flickering.
          */
 
-        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClearColor(153, 153, 255, 1);
         Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
         String score0 = scores[0] + "";
         String score1 = scores[1] + "";
+        
         
         batcher.begin();
         //AssetLoader.shadow.draw(batcher, "10", 100, 100);
@@ -101,7 +102,7 @@ public class GameRenderer {
         shapeRenderer.begin(ShapeType.Filled);
         
         /* Draw normal balls: For testing.*/
-        // for (int[] ball : balls) drawBall(ball[0], ball[1]); 
+         for (int[] ball : balls) drawBall(ball[0], ball[1]); 
 
         /*render player 0 at the bottom */
         shapeRenderer.setColor(Color.BLUE);

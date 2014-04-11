@@ -12,7 +12,7 @@ public class Constants {
 	public final static double WIDTH = 1;
 
 	/* some number of balls fit vertically, but not necessarily sideways, due to XY scaling */
-	public final static double BALL_RADIUS = 0.02;
+	public final static double BALL_RADIUS = 0.06;
 
 	/* these are the distances for the vertical buffers */
 
