@@ -3,7 +3,9 @@ package com.sutd.GameWorld;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
+
 import com.sutd.GameObjects.Ball;
+import com.sutd.GameObjects.GameState;
 import com.sutd.GameObjects.Paddle;
 import com.sutd.PongHelpers.Constants;
 import com.sutd.PongHelpers.Vector2D;
@@ -49,6 +51,30 @@ public class GameWorld {
 		System.out.println("Player 1: " + player1.getScore());
 		System.out.println("Done!");
 		System.exit(0);
+	}
+
+	public GameState getGameState() {
+		GameState out = new GameState();
+		Vector2D temp;
+		//Set Balls:
+		double[][] ballsData = new double[balls.size()][2];
+		for (int i = 0; i < balls.size(); i++){
+			temp = balls.get(i).getCurrentPosition();
+			ballsData[i][0] = temp.x;
+			ballsData[i][1] = temp.y;
+		}
+		out.setBallsData(ballsData);
+		//Set Status:
+		int status = ready?1:0;
+		out.setStatus(1);
+		//Set Player Data:
+		temp = player0.getCenter();
+		out.setPlayer0Data(new double[] {temp.x, temp.y});
+		temp = player1.getCenter();
+		out.setPlayer1Data(new double[] {temp.x, temp.y});
+		//Set Scores
+		out.setScores(new int[] {player0.getScore(), player1.getScore()});
+		return out;
 	}
 
 	public double[][] getState(){
@@ -104,7 +130,7 @@ public class GameWorld {
 	public void update(float delta) {
 		if(!ready.booleanValue()) return;
 			
-		long deltaMillis = (long) (delta * 1000);
+		long deltaMillis = (long) (delta);
 		
 		//if (injectBalls) injectRandomBall();
 		
@@ -142,6 +168,7 @@ public class GameWorld {
 
 			for (Ball b : removeThese) balls.remove(b);
 			for (Ball b : addThese) balls.add(b);
+			if(balls.size() == 0) injectRandomBall();
 		}
 	}
 	

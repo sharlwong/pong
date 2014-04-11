@@ -7,8 +7,8 @@ import java.util.concurrent.LinkedBlockingQueue;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.sutd.GameObjects.GameState;
+import com.sutd.GameObjects.Paddle;
 import com.sutd.GameWorld.GameRenderer;
-import com.sutd.GameWorld.GameWorld;
 import com.sutd.Pong.PongGame;
 import com.sutd.PongHelpers.Constants;
 import com.sutd.PongHelpers.GameUpdater;
@@ -16,24 +16,24 @@ import com.sutd.PongHelpers.InputHandler;
 
 public class GameScreen implements Screen {
 	
-	private GameWorld game_world;
+	private Paddle player_paddle;
 	private GameRenderer game_renderer;
 	private PongGame pong_game;
 	private GameUpdater updater;
 	private float runTime;
 	Constants calc;
-	BlockingQueue<double[][]> buffer = new LinkedBlockingQueue<double[][]>(5);
-	
+	BlockingQueue<GameState> buffer = new LinkedBlockingQueue<GameState>(50);
+    
 	public GameScreen(PongGame pong_game) {
-	    System.out.println("GameScreen Attached");
+	    //System.out.println("GameScreen Attached");
+	    player_paddle = new Paddle(0);
+	    player_paddle.setFractionalPosition(0.5);
 	    Dimension dim = new Dimension(136, 204);
-	    game_world = new GameWorld();// initialize world
-	    buffer.offer(game_world.getState());
-	    game_renderer = new GameRenderer(buffer,dim); // initialize renderer
+	    game_renderer = new GameRenderer(player_paddle, buffer,dim); // initialize renderer
 	    this.pong_game = pong_game;
 	    calc = new Constants(dim);
-	    Gdx.input.setInputProcessor(new InputHandler(game_world, calc));
-	    updater = new GameUpdater(game_world);
+	    Gdx.input.setInputProcessor(new InputHandler(player_paddle, calc));
+	    updater = new GameUpdater(buffer, pong_game.player);
 	    pong_game.client.startConsuming(updater);
 	}
 
@@ -43,43 +43,42 @@ public class GameScreen implements Screen {
     	//System.out.println("Rendering!");
         //Gdx.gl.glClearColor(10/255.0f, 15/255.0f, 230/255.0f, 1f);
         //Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-        game_world.update(delta);
+        /*game_world.update(delta);
         if (buffer.remainingCapacity() == 0){
         	buffer.poll();
         	buffer.offer(game_world.getState());
         }else{
         	buffer.offer(game_world.getState());
-        }
-        
+        pong_game.client.sendMessage("player_position:"+game_world.getPaddle(0).getFractionalPosition());
+        } */
         runTime += delta;
         game_renderer.render(runTime);
-        pong_game.client.sendMessage("player_position:"+game_world.getPaddle(0).getFractionalPosition());
-        
+        pong_game.client.sendMessage("player_position;"+player_paddle.getFractionalPosition());
     }
 
     @Override
     public void resize(int width, int height) {
-        System.out.println("GameScreen - resizing");
+        //System.out.println("GameScreen - resizing");
     }
 
     @Override
     public void show() {
-        System.out.println("GameScreen - show called");
+        //System.out.println("GameScreen - show called");
     }
 
     @Override
     public void hide() {
-        System.out.println("GameScreen - hide called");     
+        //System.out.println("GameScreen - hide called");     
     }
 
     @Override
     public void pause() {
-        System.out.println("GameScreen - pause called");        
+        //System.out.println("GameScreen - pause called");        
     }
 
     @Override
     public void resume() {
-        System.out.println("GameScreen - resume called");       
+        //System.out.println("GameScreen - resume called");       
     }
 
     @Override

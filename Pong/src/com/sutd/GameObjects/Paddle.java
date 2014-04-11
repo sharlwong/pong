@@ -62,6 +62,9 @@ public class Paddle {
 		return (paddleCenter.x - min)/(max-min);
 	}
 
+	public double[] getXY() {
+		return new double[] { paddleCenter.x, paddleCenter.y };
+	}
 	private void setPosition(double xValue) {
 		paddleCenter.x = xValue;
 		if (paddleCenter.x < min) paddleCenter.x = min;

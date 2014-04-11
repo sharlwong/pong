@@ -9,6 +9,7 @@ import com.sutd.Client.*;
 public class PongGame extends Game {
 	public GameServer server;
 	public GameClient client;
+	public int player;
 	@Override
 	public void create() {		
 		System.out.println("Game Created!");

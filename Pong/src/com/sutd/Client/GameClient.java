@@ -30,7 +30,6 @@ public class GameClient {
 	}
 	
 	public void sendMessage(String message) {
-		System.out.println("Clinet Sending Update:"+message);
 		writer.println(message);
 		writer.flush();
 	}
@@ -48,54 +47,4 @@ public class GameClient {
 		MessageConsumer consumer = new MessageConsumer(buffer, handler);
 		consumer.start();
 	}
-	
-	/**
-	 * Listens for incoming messages from the server
-	 * Notifies the Network handler about received messages. 
-	 * @author Swayam
-	 *
-	 */
-	/*class MessageConsumer extends Thread {
-		private BlockingQueue<String> buffer;
-		MessageConsumer(BlockingQueue<String> buffer) {
-			this.buffer = buffer;
-		}
-		
-		public void run() {
-//			while(!this.isInterrupted()) {
-				System.out.println("CLIENT: Preparing to consume.");
-				try {
-					String message = buffer.take();
-					System.out.println("CLIENT: Remove from buffer: " +message);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				
-//			}
-		}
-		
-	}
-
-	class MessageProducer extends Thread {
-		private BufferedReader reader;
-		private BlockingQueue<String> buffer;
-		MessageProducer(BufferedReader reader, BlockingQueue<String> buffer) {
-			this.reader = reader;
-			this.buffer = buffer;
-		}
-		public void run() {
-//			while(!this.isInterrupted()) {
-				try {
-					System.out.println("CLIENT: Listening for message to produce");
-					String message = reader.readLine();
-					buffer.offer(message);
-					System.out.println("CLIENT: Add to buffer: " + message);
-					
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-//			}
-		}
-	} */
 }
