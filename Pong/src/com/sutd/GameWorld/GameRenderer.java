@@ -32,7 +32,7 @@ public class GameRenderer {
 	int[] player1;
 	BlockingQueue<double[][]> buffer;
 	
-	private TextureRegion octopusSmile;
+	private TextureRegion octopusSmile, fishCake, salmonSushi, riceCracker;
 	
 
 	public GameRenderer(BlockingQueue<double[][]> buffer, Dimension d) {
@@ -55,6 +55,9 @@ public class GameRenderer {
 	
 	private void initAssets() {
 		octopusSmile = AssetLoader.octopusSmile;
+		fishCake = AssetLoader.fishCake;
+		riceCracker = AssetLoader.riceCracker;
+		salmonSushi = AssetLoader.salmonSushi;
 	}
 
     public void render(float runTime) {
@@ -72,7 +75,7 @@ public class GameRenderer {
          * We draw a black background. This prevents flickering.
          */
 
-        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClearColor(255, 255, 183, 1);
         Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
         String score0 = scores[0] + "";
         String score1 = scores[1] + "";
@@ -83,11 +86,29 @@ public class GameRenderer {
         AssetLoader.font.draw(batcher, ""+score0, d.width-20 - (3*score0.length()), d.height/2);
         
         /*
-         * Draw octopus as a ball and animate it!
+         * Draw octopus as a ball.
          */
         
-        for (int[] ball : balls) drawOctopus(ball[0], ball[1]);
-        		
+//        for (int[] ball : balls) drawOctopus(ball[0], ball[1]);
+        
+        
+        /*
+         * Draw fish cake as a ball.
+         */
+        
+//        for (int[] ball : balls) drawFishCake(ball[0], ball[1]);
+        
+        /*
+         * Draw rice cracker as a ball.
+         */
+        
+//        for (int[] ball : balls) drawRiceCracker(ball[0], ball[1]);
+        
+        /*
+         * Draw salmon sushi as a ball.
+         */
+        
+//        for (int[] ball : balls) drawSalmonSushi(ball[0], ball[1]);
         
         // End SpriteBatch
         batcher.end();
@@ -122,6 +143,30 @@ public class GameRenderer {
         
         
     }
+    
+    private void drawRiceCracker(int centerX, int centerY) {
+		int radius = (int) calc.getBallPixelRadius();
+				
+		// The octopus needs transparency, so we enable that.
+        batcher.enableBlending();
+        batcher.draw(riceCracker, centerX, centerY, 2*radius, 2*radius);
+	}
+    
+    private void drawSalmonSushi(int centerX, int centerY) {
+		int radius = (int) calc.getBallPixelRadius();
+				
+		// The octopus needs transparency, so we enable that.
+        batcher.enableBlending();
+        batcher.draw(salmonSushi, centerX, centerY, 2*radius, 2*radius);
+	}
+    
+    private void drawFishCake(int centerX, int centerY) {
+		int radius = (int) calc.getBallPixelRadius();
+				
+		// The octopus needs transparency, so we enable that.
+        batcher.enableBlending();
+        batcher.draw(fishCake, centerX, centerY, 2*radius, 2*radius);
+	}
     
     private void drawOctopus(int centerX, int centerY) {
 		int radius = (int) calc.getBallPixelRadius();
