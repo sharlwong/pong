@@ -64,7 +64,7 @@ public class GameRenderer {
         //System.out.println("GameRenderer - render");
     	GameState state = buffer.poll();
     	if(state == null && lastKnownState == null) return;
-    	if(state == null) state = lastKnownState;
+    	if(state == null) { state = lastKnownState; System.out.println("Missed Frame to Render");}
     	else lastKnownState = state;
 
 		balls = calc.makeBallXYs(state.getBallsData());
@@ -91,7 +91,7 @@ public class GameRenderer {
          * Draw octopus as a ball.
          */
         
-//        for (int[] ball : balls) drawOctopus(ball[0], ball[1]);
+        for (int[] ball : balls) drawOctopus(ball[0], ball[1]);
         
         
         /*

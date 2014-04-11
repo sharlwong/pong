@@ -16,6 +16,7 @@ import com.badlogic.gdx.net.Socket;
 import com.sutd.GameWorld.GameWorld;
 import com.sutd.Network.MessageConsumer;
 import com.sutd.Network.MessageProducer;
+import com.sutd.PongHelpers.Constants;
 
 
 /**
@@ -59,7 +60,7 @@ public class GameServer extends Thread {
 
 		ServerUpdater serverUpdater = new ServerUpdater(game_world, message_service);
 		ScheduledExecutorService exec = Executors.newSingleThreadScheduledExecutor();
-		exec.scheduleWithFixedDelay(serverUpdater, 0, 50, TimeUnit.MILLISECONDS);
+		exec.scheduleWithFixedDelay(serverUpdater, 0, Constants.UPDATE_DELTA, TimeUnit.MILLISECONDS);
 	}
 	
 	/**

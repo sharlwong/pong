@@ -19,13 +19,7 @@ public class GameUpdater implements MessageHandler {
 		if(!type.equals("game_update")) return;
 		Gson gson = new Gson();
 		GameState state = gson.fromJson(message, GameState.class);
-
 		if (player == 1) state = state.flip();
-
-		try {
-			stateBuffer.put(state);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+		stateBuffer.offer(state);
 	}
 }

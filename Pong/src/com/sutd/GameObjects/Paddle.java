@@ -70,4 +70,8 @@ public class Paddle {
 		if (paddleCenter.x < min) paddleCenter.x = min;
 		if (paddleCenter.x > max) paddleCenter.x = max;
 	}
+
+	public double getTransformedFractionalPosition(int player) {
+		return Math.abs(player - getFractionalPosition());
+	}
 }

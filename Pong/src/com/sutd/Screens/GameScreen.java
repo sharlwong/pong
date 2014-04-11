@@ -9,6 +9,7 @@ import com.badlogic.gdx.Screen;
 import com.sutd.GameObjects.GameState;
 import com.sutd.GameObjects.Paddle;
 import com.sutd.GameWorld.GameRenderer;
+import com.sutd.GameWorld.GameWorld;
 import com.sutd.Pong.PongGame;
 import com.sutd.PongHelpers.Constants;
 import com.sutd.PongHelpers.GameUpdater;
@@ -22,7 +23,7 @@ public class GameScreen implements Screen {
 	private GameUpdater updater;
 	private float runTime;
 	Constants calc;
-	BlockingQueue<GameState> buffer = new LinkedBlockingQueue<GameState>(50);
+	BlockingQueue<GameState> buffer = new LinkedBlockingQueue<GameState>(Constants.STATE_BUFFER_SIZE);
     
 	public GameScreen(PongGame pong_game) {
 	    //System.out.println("GameScreen Attached");
@@ -53,7 +54,7 @@ public class GameScreen implements Screen {
         } */
         runTime += delta;
         game_renderer.render(runTime);
-        pong_game.client.sendMessage("player_position;"+player_paddle.getFractionalPosition());
+        pong_game.client.sendMessage("player_position;"+player_paddle.getTransformedFractionalPosition(pong_game.player));
     }
 
     @Override

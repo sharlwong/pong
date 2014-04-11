@@ -16,7 +16,7 @@ class ServerUpdater implements Runnable {
 	public void run() {
 		float delta = ((float) (System.nanoTime() - LastTime)) / 1000000;
 		game_world.update(delta);
-		System.out.println(delta);
+		//System.out.println(delta);
 		messageService.sendState(game_world.getGameState());
 		LastTime = System.nanoTime();
 	}
