@@ -113,6 +113,8 @@ public class Constants {
 	private Dimension translateBallReferenceFrame(double[] ball) {
 		/* note that v is in small square reference frame of point-mass balls; do not modify v */
 		double x = ball[0];
+		x = x < 0 ? 0 : x;
+		x = x > 1 ? 1 : x;
 		double y = ball[1];
 
 		/* translation */
@@ -150,7 +152,9 @@ public class Constants {
 		int[] out = new int[2];
 		Dimension temp = translateBallReferenceFrame(paddle);
 		out[0] = temp.width;
-		out[1] = temp.height + (int) (ballPixelRadius / 2) * (paddle[1] == 0 ? 1 : -1);
+		//out[1] = temp.height + (int) (ballPixelRadius / 2) * (paddle[1] == 0 ? 1 : -1);
+		out[1] = (int) (getEdgePixelPadding() + getPaddlePixelDepth() / 2);
+		if (player == 0) out[1] = dim.height - out[1];
 		return out;
 	}
 	public static class LagException extends RuntimeException {
