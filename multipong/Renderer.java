@@ -132,8 +132,10 @@ public class Renderer extends JPanel implements Runnable {
 
 	private void drawPaddle(Graphics g, int centerX, int centerY) {
 		int width = (int) calc.getPaddlePixelWidth();
-		int height = (int) (calc.getPaddlePixelDepth() * 0.75);
-		g.fillRect(centerX - width / 2, centerY - height / 2, width, height);
+		int height = (int) (calc.getPaddlePixelDepth());
+		int height2 = (int) calc.getEdgePixelPadding() + height/2;
+//		if (centerY > 0.5)
+		g.fillRect(centerX - width/2,  centerY - height/2, width, height);
 	}
 
 	@Override

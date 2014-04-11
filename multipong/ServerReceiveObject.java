@@ -1,3 +1,5 @@
+package multipong;
+
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -18,28 +20,27 @@ public class ServerReceiveObject {
 		socket = server.accept();
 
 		/* part 0 */
-		RSATools.RSAEncryption encryption = new RSATools.RSAEncryption();
-		encryption.getKey(socket);
-		RSATools.RSADecryption decryption = new RSATools.RSADecryption();
-		decryption.sendKey(socket);
+		RSATools.RSAPublic rsaPublic = new RSATools.RSAPublic();
+		rsaPublic.getKey(socket);
+		RSATools.RSAPrivate rsaPrivate = new RSATools.RSAPrivate();
+		rsaPrivate.sendKey(socket);
 
 		System.out.println("Generating randomness...");
 		temp1 = RSATools.nonce();
 
 		System.out.println("Exchanging bits...");
-		encryption.sendMessage(socket, temp1);
-		temp2 = decryption.getMessage(socket);
+		rsaPublic.sendMessage(socket, temp1);
+		temp2 = rsaPrivate.getMessage(socket);
 
 		System.out.println("Making signature...");
-		RSATools.RSASign rsaSign = new RSATools.RSASign(decryption);
-		RSATools.RSAVerify rsaVerify = new RSATools.RSAVerify(encryption);
-		rsaSign.sendSignature(socket, temp1);
-		verified = rsaVerify.getVerification(socket,temp2);
+		rsaPrivate.sendSignature(socket, temp1);
+		verified = rsaPublic.getVerification(socket,temp2);
 
 		System.out.println("Verified: " + verified);
 
 		System.out.println("AES key now shared!\n");
 		RSATools.AESHelper aesHelper = new RSATools.AESHelper(temp1 + temp2);
+		System.out.println(RSATools.base64(aesHelper.keySpec.getEncoded()));
 
 		/*************************/
 		/* CREATED SYMMETRIC KEY */

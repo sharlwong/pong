@@ -1,3 +1,5 @@
+package multipong;
+
 import java.net.InetAddress;
 import java.net.Socket;
 
@@ -20,23 +22,21 @@ public class ClientSendObject {
 		socket = new Socket(InetAddress.getLocalHost(), port);
 
 		/* part 0 */
-		RSATools.RSADecryption decryption = new RSATools.RSADecryption();
-		decryption.sendKey(socket);
-		RSATools.RSAEncryption encryption = new RSATools.RSAEncryption();
-		encryption.getKey(socket);
+		RSATools.RSAPrivate rsaPrivate = new RSATools.RSAPrivate();
+		rsaPrivate.sendKey(socket);
+		RSATools.RSAPublic rsaPublic = new RSATools.RSAPublic();
+		rsaPublic.getKey(socket);
 
 		System.out.println("Generating randomness...");
 		temp2 = RSATools.nonce();
 
 		System.out.println("Exchanging bits...");
-		temp1 = decryption.getMessage(socket);;
-		encryption.sendMessage(socket,temp2);
+		temp1 = rsaPrivate.getMessage(socket);;
+		rsaPublic.sendMessage(socket, temp2);
 
 		System.out.println("Exchanging signatures...");
-		RSATools.RSASign rsaSign = new RSATools.RSASign(decryption);
-		RSATools.RSAVerify rsaVerify = new RSATools.RSAVerify(encryption);
-		verified = rsaVerify.getVerification(socket,temp1);
-		rsaSign.sendSignature(socket, temp2);
+		verified = rsaPublic.getVerification(socket,temp1);
+		rsaPrivate.sendSignature(socket, temp2);
 
 		System.out.println("Verified: " + verified);
 

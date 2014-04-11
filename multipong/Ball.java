@@ -58,8 +58,8 @@ public class Ball {
 	}
 
 	public boolean inGame() {
-		if (currentPosition.y < (0 - Constants.PADDLE_EFFECTIVE_DEPTH) && velocity.y < 0) return false;
-		if (currentPosition.y > (Constants.HEIGHT + Constants.PADDLE_EFFECTIVE_DEPTH) && velocity.y > 0) return false;
+		if (currentPosition.y < (0 - Constants.PADDLE_EFFECTIVE_DEPTH - Constants.EDGE_PADDING) && velocity.y < 0) return false;
+		if (currentPosition.y > (Constants.HEIGHT + Constants.PADDLE_EFFECTIVE_DEPTH + Constants.EDGE_PADDING) && velocity.y > 0) return false;
 		return true;
 	}
 
