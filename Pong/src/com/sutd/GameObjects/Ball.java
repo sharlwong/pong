@@ -1,4 +1,7 @@
-package multipong;
+package com.sutd.GameObjects;
+
+import com.sutd.PongHelpers.Constants;
+import com.sutd.PongHelpers.Vector2D;
 
 public class Ball {
 	private double   uselessVar;

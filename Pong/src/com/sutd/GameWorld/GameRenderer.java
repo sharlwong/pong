@@ -69,7 +69,7 @@ public class GameRenderer {
 
 		balls = calc.makeBallXYs(state.getBallsData());
 		//player0 = calc.makePaddleXY(state.getPlayer0Data(), 0);
-		player0 = calc.makePaddleXY(player_paddle.getXY(),0);
+		player0 = calc.makePaddleXY(state.getPlayer0Data(),0);
 		player1 = calc.makePaddleXY(state.getPlayer1Data(), 1);
 		int[] scores = state.getScores(); 
         
@@ -91,7 +91,7 @@ public class GameRenderer {
          * Draw octopus as a ball.
          */
         
-        for (int[] ball : balls) drawOctopus(ball[0], ball[1]);
+        // for (int[] ball : balls) drawOctopus(ball[0], ball[1]);
         
         
         /*
@@ -104,7 +104,7 @@ public class GameRenderer {
          * Draw rice cracker as a ball.
          */
         
-//        for (int[] ball : balls) drawRiceCracker(ball[0], ball[1]);
+        for (int[] ball : balls) drawRiceCracker(ball[0], ball[1]);
         
         /*
          * Draw salmon sushi as a ball.
