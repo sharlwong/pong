@@ -3,7 +3,9 @@ package com.sutd.GameWorld;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
+
 import com.sutd.GameObjects.Ball;
+import com.sutd.GameObjects.GameState;
 import com.sutd.GameObjects.Paddle;
 import com.sutd.PongHelpers.Constants;
 import com.sutd.PongHelpers.Vector2D;
@@ -51,6 +53,32 @@ public class GameWorld {
 		System.exit(0);
 	}
 
+	public GameState getGameState() {
+		GameState out = new GameState();
+		Vector2D temp;
+		//Set Balls:
+		double[][] ballsData = new double[balls.size()][2];
+		int[] ballsType = new int[balls.size()];
+		for (int i = 0; i < balls.size(); i++){
+			temp = balls.get(i).getCurrentPosition();
+			ballsData[i][0] = temp.x;
+			ballsData[i][1] = temp.y;
+			ballsType[i] = balls.get(i).getType();
+		}
+		out.setBallsData(ballsData);
+		//Set Status:
+		int status = ready?1:0;
+		out.setStatus(1);
+		//Set Player Data:
+		temp = player0.getCenter();
+		out.setPlayer0Data(new double[] {temp.x, temp.y});
+		temp = player1.getCenter();
+		out.setPlayer1Data(new double[] {temp.x, temp.y});
+		//Set Scores
+		out.setScores(new int[] {player0.getScore(), player1.getScore()});
+		return out;
+	}
+
 	public double[][] getState(){
 		Vector2D temp;
 		int num;
@@ -87,7 +115,8 @@ public class GameWorld {
 		if (Math.abs(speed1) < Math.abs(speed2)) speed = new Vector2D(speed1, speed2);
 		else speed = new Vector2D(speed2, speed1);
 		synchronized (balls) {
-			balls.add(new Ball(position, speed, elapsedTimeMillis, simulatedLag < 0 ? (int) (random.nextDouble() * 500) : simulatedLag));
+			// assume that all balls are type 1 at this moment
+			balls.add(new Ball(position, speed, elapsedTimeMillis, simulatedLag < 0 ? (int) (random.nextDouble() * 500) : simulatedLag, 1));
 		}
 	}
 
@@ -104,7 +133,7 @@ public class GameWorld {
 	public void update(float delta) {
 		if(!ready.booleanValue()) return;
 			
-		long deltaMillis = (long) (delta * 1000);
+		long deltaMillis = (long) (delta);
 		
 		//if (injectBalls) injectRandomBall();
 		
@@ -135,13 +164,14 @@ public class GameWorld {
 				if (!b.inGame()) {
 					//				b.kill();
 					removeThese.add(b);
-					if (b.getCurrentPosition().y < 0) player1.incrementScore();
-					if (b.getCurrentPosition().y > Constants.HEIGHT) player0.incrementScore();
+					if (b.getCurrentPosition().y < 0) player1.incrementScore(b);
+					if (b.getCurrentPosition().y > Constants.HEIGHT) player0.incrementScore(b);
 				}
 			}
 
 			for (Ball b : removeThese) balls.remove(b);
 			for (Ball b : addThese) balls.add(b);
+			if(balls.size() == 0) injectRandomBall();
 		}
 	}
 	

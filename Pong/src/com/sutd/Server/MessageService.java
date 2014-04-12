@@ -1,10 +1,10 @@
 package com.sutd.Server;
 
 import java.io.PrintWriter;
-import java.util.Arrays;
 
 import com.badlogic.gdx.net.Socket;
-import com.sun.security.ntlm.Client;
+import com.google.gson.Gson;
+import com.sutd.GameObjects.GameState;
 import com.sutd.Network.MessageHandler;
 
 /**
@@ -13,26 +13,25 @@ import com.sutd.Network.MessageHandler;
  * **/
 
 class MessageService implements MessageHandler {
-	Socket[] clients;
-	PrintWriter[] out;
-	String message;
+	GameServer server;
+	Socket[] clients = new Socket[2];
+	PrintWriter[] out = new PrintWriter[2];
 	
-	MessageService(Socket clients[]) {
-		this.clients = clients;
-		out = new PrintWriter[clients.length];
-		
-		for(int i = 0 ; i< clients.length; i++) {
-			out[i] = new PrintWriter(clients[i].getOutputStream());
-		}
+	public MessageService(GameServer gameServer) {
+		// TODO Auto-generated constructor stub
+		this.server = gameServer;
+	}
+
+	public synchronized void addSocket(Socket client, int index) {
+		clients[index] = client;
+		out[index]  = new PrintWriter(client.getOutputStream());
 	}
 
 	//Handle requests.
 	public synchronized void handle(int i, String type, String message) {
-		String send = ":";
-		if(type.equals("player_position"))
-			send = "opponent_position:"+message;
-			send(send,i);
-		System.out.println("Server handled:"+message);
+		if(type.equals("player_position")) {
+			server.setPaddle(Double.parseDouble(message), i);
+		}
 	}
 
 	// Broadcast Messages to all clients.
@@ -48,5 +47,20 @@ class MessageService implements MessageHandler {
 	public synchronized void send(String message) {
 		send(message,-1);
 	}
+	
+	public synchronized void sendState(GameState state) {
+		String type = "game_update;";
+		send(type+getJSONfromState(state));
+	}
 
+	public synchronized void sendStateToSocket(GameState gameState, int i) {
+		out[i].println("game_update;"+getJSONfromState(gameState));
+		out[i].flush();
+	}
+	
+	private synchronized String getJSONfromState(GameState state) {
+		Gson gson = new Gson();
+		String message = gson.toJson(state);
+		return message;
+	}
 }

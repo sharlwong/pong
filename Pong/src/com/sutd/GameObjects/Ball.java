@@ -3,18 +3,22 @@ package com.sutd.GameObjects;
 import com.sutd.PongHelpers.Constants;
 import com.sutd.PongHelpers.Vector2D;
 
+
+
 public class Ball {
-	private int uselessVar;
-	private long initTime;
+	private double   uselessVar;
+	private long     initTime;
 	private Vector2D velocity;
 	private Vector2D initialPosition;
 	private Vector2D currentPosition;
+	private int type = 0;
 
-	public Ball(Vector2D startPosition, Vector2D startVelocity, long startTimeMillis, int unusedVariable) {
+	public Ball(Vector2D startPosition, Vector2D startVelocity, long startTimeMillis, double unusedVariable, int type) {
 		this.initialPosition = startPosition;
 		this.uselessVar = unusedVariable;
 		this.initTime = startTimeMillis;
 		this.initTime = startTimeMillis;
+		this.type = type;
 
 		/* error correct starting speed, leaving the direction equal */
 		Vector2D initialVelocity = startVelocity.cpy().makeUnitVector().multiply(Constants.BALL_SPEED);
@@ -40,7 +44,7 @@ public class Ball {
 		updateCurrentTime(startTimeMillis);
 	}
 
-	public int getUnusedVariable() {
+	public double getUnusedVariable() {
 		return uselessVar;
 	}
 
@@ -61,12 +65,16 @@ public class Ball {
 	}
 
 	public boolean inGame() {
-		if (currentPosition.y < (0 - Constants.PADDLE_EFFECTIVE_DEPTH) && velocity.y < 0) return false;
-		if (currentPosition.y > (Constants.HEIGHT + Constants.PADDLE_EFFECTIVE_DEPTH) && velocity.y > 0) return false;
+		if (currentPosition.y < (0 - Constants.PADDLE_EFFECTIVE_DEPTH - Constants.EDGE_PADDING) && velocity.y < 0) return false;
+		if (currentPosition.y > (Constants.HEIGHT + Constants.PADDLE_EFFECTIVE_DEPTH + Constants.EDGE_PADDING) && velocity.y > 0) return false;
 		return true;
 	}
 
 	public boolean isMovingUp() {
 		return velocity.y > 0;
+	}
+	
+	public int getType(){
+		return type;
 	}
 }

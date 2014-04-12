@@ -26,12 +26,11 @@ public class MessageProducer extends Thread {
 	public void run() {
 		while(!this.isInterrupted()) {
 			try {
-				System.out.println("Listening for message to produce.");
 				// Listens to message being produced.
 				String message = reader.readLine();
 				// Adds message to the buffer.
-				buffer.offer(id+":"+message);
-				System.out.println("Add to buffer"+ id +":" + message);
+				boolean offered = buffer.offer(id+";"+message);
+				//if(offered) System.out.println("Add to buffer"+ id +";" + message);
 
 			} catch (Exception e) {
 				e.printStackTrace();

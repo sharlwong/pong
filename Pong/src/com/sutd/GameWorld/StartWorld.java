@@ -54,18 +54,13 @@ public class StartWorld {
 		if(Gdx.input.justTouched()) {
 			float x = (float) (Gdx.input.getX())/ 2;
 			float y = (float)(Gdx.input.getY()) / 2;
-			System.out.println("X: "+x+", y:"+y);
 			if(start_game_button.contains(x, y)) {
-				System.out.println("Start Touched!");
 				//Probably start a server here.
 				initializeServerAndClient();
-				System.out.println("Finish starting game.\n");
 			}
 			
 			else if(join_game_button.contains(x, y)) {
-				System.out.println("Join Touched!");
 				intializeClientAndJoinServer();
-				System.out.println("Finish joining game.\n");
 			//connect to a server here.
 			}
 		}
@@ -94,8 +89,8 @@ public class StartWorld {
 		pong_game.client = new GameClient();
 		pong_game.client.connectToServer("localhost");
 		pong_game.client.startListening();
-		System.out.println("Started Listening");
 		client1_created = true;
+		pong_game.player = 0;
 		pong_game.setScreen(new GameScreen(pong_game));
 	}
 	
@@ -107,8 +102,8 @@ public class StartWorld {
 		pong_game.client = new GameClient();
 		pong_game.client.connectToServer("localhost");
 		pong_game.client.startListening();
-		System.out.println("Started Listening");		
 		client2_created = true;
+		pong_game.player = 1;
 		pong_game.setScreen(new GameScreen(pong_game));
 	}
 }

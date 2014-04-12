@@ -8,13 +8,13 @@ import java.util.List;
  * Created by avery_000 on 31-Mar-14.
  */
 public class GameWorld {
-	public long elapsedTimeMillis;
-	private List<Ball> balls;
-	private Paddle player0;
-	private Paddle player1;
+	public  long         elapsedTimeMillis;
+	private List<Ball>   balls;
+	private Paddle       player0;
+	private Paddle       player1;
 	private SecureRandom random;
-	private long injectBalls = 0;
-	private boolean init = true;
+	private long    injectBalls = 0;
+	private boolean init        = true;
 
 	public GameWorld() {
 		this.elapsedTimeMillis = 0;
@@ -39,18 +39,19 @@ public class GameWorld {
 		double[][] out;
 		synchronized (balls) {
 			num = balls.size();
-			out = new double[num+3][2];
+			out = new double[num + 3][3];
 			for (int i = 0; i < num; i++) {
 				temp = balls.get(i).getCurrentPosition();
 				out[i][0] = temp.x;
 				out[i][1] = temp.y;
+				out[i][2] = balls.get(i).getUnusedVariable();
 			}
 		}
 		temp = player0.getCenter();
-		out[num] = new double[] {temp.x, temp.y};
+		out[num] = new double[]{temp.x, temp.y};
 		temp = player1.getCenter();
-		out[num + 1] = new double[] {temp.x, temp.y};
-		out[num+2]= new double[] {player0.getScore(), player1.getScore()};
+		out[num + 1] = new double[]{temp.x, temp.y};
+		out[num + 2] = new double[]{player0.getScore(), player1.getScore()};
 		return out;
 	}
 
@@ -71,7 +72,7 @@ public class GameWorld {
 		if (Math.abs(speed1) < Math.abs(speed2)) speed = new Vector2D(speed1, speed2);
 		else speed = new Vector2D(speed2, speed1);
 		synchronized (balls) {
-			balls.add(new Ball(position, speed, elapsedTimeMillis, (random.nextInt())));
+			balls.add(new Ball(position, speed, elapsedTimeMillis, (random.nextDouble() * 14)));
 		}
 	}
 
@@ -97,8 +98,8 @@ public class GameWorld {
 				}
 				if (!b.inGame()) {
 					removeThese.add(b);
-					if (b.getCurrentPosition().y < 0) player1.incrementScore();
-					if (b.getCurrentPosition().y > Constants.HEIGHT) player0.incrementScore();
+					if (b.getCurrentPosition().y < 0) player1.incrementScore(b.getUnusedVariable());
+					if (b.getCurrentPosition().y > Constants.HEIGHT) player0.incrementScore(b.getUnusedVariable());
 				}
 			}
 

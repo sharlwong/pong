@@ -31,27 +31,27 @@ public class StartScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-        System.out.println("StartScreen - resizing");
+        //System.out.println("StartScreen - resizing");
     }
 
     @Override
     public void show() {
-        System.out.println("StartScreen - show called");
+        //System.out.println("StartScreen - show called");
     }
 
     @Override
     public void hide() {
-        System.out.println("StartScreen - hide called");     
+        //System.out.println("StartScreen - hide called");     
     }
 
     @Override
     public void pause() {
-        System.out.println("StartScreen - pause called");        
+        //System.out.println("StartScreen - pause called");        
     }
 
     @Override
     public void resume() {
-        System.out.println("StartScreen - resume called");       
+        //System.out.println("StartScreen - resume called");       
     }
 
     @Override

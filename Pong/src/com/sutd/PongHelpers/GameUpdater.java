@@ -1,24 +1,25 @@
 package com.sutd.PongHelpers;
 
-import com.sutd.GameObjects.Paddle;
+import java.util.concurrent.BlockingQueue;
+
+import com.google.gson.Gson;
+import com.sutd.GameObjects.GameState;
 import com.sutd.GameWorld.GameWorld;
 import com.sutd.Network.MessageHandler;
 
-/** Update the game when the message is handled. **/
-
 public class GameUpdater implements MessageHandler {
-	GameWorld game_world;
+	BlockingQueue<GameState> stateBuffer;
+	private int player;
 
-	public GameUpdater(GameWorld game_world) {
-		this.game_world = game_world;
+	public GameUpdater(BlockingQueue<GameState> buffer, int player) {
+		this.stateBuffer = buffer;
+		this.player = player;
 	}
 	public void handle(int id, String type, String message) {
-		if(type.equals("opponent_position")) {
-			System.out.println("Updating opponent to:"+message);
-			game_world.getPaddle(1).setFractionalPosition(Double.parseDouble(message));
-		}
-		else if(type.equals("game_state")) {
-			if(message.equals("ready")) game_world.ready = new Boolean(true);
-		}
+		if(!type.equals("game_update")) return;
+		Gson gson = new Gson();
+		GameState state = gson.fromJson(message, GameState.class);
+		if (player == 1) state = state.flip();
+		stateBuffer.offer(state);
 	}
 }
