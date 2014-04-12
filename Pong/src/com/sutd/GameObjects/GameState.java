@@ -7,6 +7,7 @@ public class GameState {
 	private double[][] ballsData;
 	private double[] player0Data;
 	private double[] player1Data;
+	private int[] ballsType;
 	private int status;
 	private int timeLeft;
 	private int[] scores;
@@ -34,6 +35,10 @@ public class GameState {
 	public int[] getScores() {
 		return scores;
 	}
+	
+	public int[] getBallsType() {
+		return ballsType;
+	}
 
 	public void setBallsData(double[][] ballsData) {
 		this.ballsData = ballsData;
@@ -57,6 +62,10 @@ public class GameState {
 
 	public void setScores(int[] scores) {
 		this.scores = scores;
+	}
+	
+	public void setBallsType(int[] ballsType){
+		this.ballsType = ballsType;
 	}
 	
 	/**
