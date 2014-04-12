@@ -14,6 +14,7 @@ public class Renderer extends JPanel implements Runnable {
 	Thread       thread;
 	Dimension    dim;
 	Constants    calc;
+	private GameState lastKnownState;
 
 	public Renderer(Dimension d) {
 		dim = d;
@@ -51,15 +52,26 @@ public class Renderer extends JPanel implements Runnable {
 		int[] player0;
 		int[] player1;
 
+		/* get state */
+		GameState gameState = game.getGameState();
 
-		/* get all the info */
-		double[][] state = game.getState();
+		/* check state and store */
+		if (gameState == null && lastKnownState == null) {
+			System.out.println("Nothing to render...");
+			return;
+		}
+		if (gameState == null) {
+			gameState = lastKnownState;
+			System.out.println("Missed frame to render...");
+		}
+		else lastKnownState = gameState;
 
-		balls = calc.makeBallXYs(state);
-		player0 = calc.makePaddleXY(state, 0);
-		player1 = calc.makePaddleXY(state, 1);
-		int[] scores = calc.makeScores(state);
-		ballTypes = calc.makeBallTypes(state);
+		/* make things to render */
+		balls = calc.makeBallXYs(gameState.getBallsData());
+		player0 = calc.makePaddleXY(gameState.getPlayer0Data(), 0);
+		player1 = calc.makePaddleXY(gameState.getPlayer1Data(), 1);
+		int[] scores = gameState.getScores();
+		ballTypes = gameState.getSpareVar();
 
 		/* render all the balls */
 		for (int i = 0; i < balls.length; i++) {
@@ -112,8 +124,6 @@ public class Renderer extends JPanel implements Runnable {
 			drawBall(g, balls[i][0], balls[i][1]);
 		}
 
-		//		for (int[] ball : balls) drawBall(g, ball[0], ball[1]);
-
 		/* render player 0 at the bottom */
 		g.setColor(Color.BLUE);
 		drawPaddle(g, player0[0], player0[1]);
@@ -133,21 +143,24 @@ public class Renderer extends JPanel implements Runnable {
 	private void drawPaddle(Graphics g, int centerX, int centerY) {
 		int width = (int) calc.getPaddlePixelWidth();
 		int height = (int) (calc.getPaddlePixelDepth());
-		int height2 = (int) calc.getEdgePixelPadding() + height/2;
-//		if (centerY > 0.5)
-		g.fillRect(centerX - width/2,  centerY - height/2, width, height);
+		g.fillRect(centerX - width / 2, centerY - height / 2, width, height);
 	}
 
 	@Override
 	public void run() {
+		long jump = Constants.UPDATE_DELTA;
+		long time1 = System.currentTimeMillis();
+		long time2;
+
 		while (true) {
 			try {
-				Thread.sleep(10);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			game.updateDeltaTime(10);
-			//			System.out.println(game.elapsedTimeMillis);
+				Thread.sleep(jump);
+			} catch (InterruptedException e) { }
+			time2 = System.currentTimeMillis();
+			long delta = time2 - time1;
+			delta = delta > 0 ? delta : jump;
+			game.updateDeltaTime(delta);
+			time1 = time2;
 			repaint();
 		}
 	}

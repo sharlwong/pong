@@ -18,7 +18,7 @@ public class Paddle {
 		if (!playerBottom) yVelocity = 0 - yVelocity;
 		Vector2D outVelocity = new Vector2D(b.getCurrentPosition().x - paddleCenter.x, yVelocity);
 		outVelocity.makeUnitVector().multiply(Constants.BALL_SPEED);
-		return new Ball(b.getCurrentPosition(), outVelocity, currentTimeMillis, b.getUnusedVariable());
+		return new Ball(b.getCurrentPosition(), outVelocity, currentTimeMillis, b.getUnusedVariable(), b.getType());
 	}
 
 	public boolean collisionCheck(Ball b) {
@@ -44,6 +44,10 @@ public class Paddle {
 		incrementScore(0);
 	}
 
+	public void incrementScore(Ball b) {
+		score += b.getType();
+	}
+
 	public void incrementScore(double n) {
 		this.score += n;
 	}
@@ -53,9 +57,21 @@ public class Paddle {
 		setPosition(min + fraction * (max - min));
 	}
 
+	public double getFractionalPosition() {
+		return (paddleCenter.x - min) / (max - min);
+	}
+
+	public double[] getXY() {
+		return new double[]{paddleCenter.x, paddleCenter.y};
+	}
+
 	private void setPosition(double xValue) {
 		paddleCenter.x = xValue;
 		if (paddleCenter.x < min) paddleCenter.x = min;
 		if (paddleCenter.x > max) paddleCenter.x = max;
+	}
+
+	public double getTransformedFractionalPosition(int player) {
+		return Math.abs(player - getFractionalPosition());
 	}
 }

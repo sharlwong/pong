@@ -6,9 +6,9 @@ import java.awt.event.*;
 
 public class PongMain extends JFrame {
 
-	final static Dimension dim = new Dimension(1000, 600);
-	private JPanel jContentPane = null;
-	private Renderer gameRenderer = null;
+	final static Dimension dim          = new Dimension(1000, 600);
+	private      JPanel    jContentPane = null;
+	private      Renderer  gameRenderer = null;
 
 	public PongMain() {
 
@@ -21,9 +21,9 @@ public class PongMain extends JFrame {
 
 		/* find center on desktop */
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		int x = screenSize.width - dim.width - 10;
+		int x = screenSize.width - dim.width - 14;
 		x = x > 0 ? x / 2 : 0;
-		int y = screenSize.height - dim.height - 75;
+		int y = screenSize.height - dim.height - 75; //includes start menu
 		y = y > 0 ? y / 2 : 0;
 
 		/* more magic */

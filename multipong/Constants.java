@@ -12,10 +12,10 @@ public class Constants {
 	public final static double WIDTH  = 1;
 
 	/* some number of balls fit vertically, but not necessarily sideways, due to XY scaling */
-	public final static double BALL_RADIUS = 0.05;
+	public final static double BALL_RADIUS = 0.02;
 
 	/* these are the distances for the vertical buffers */
-	public final static double EDGE_PADDING           = 0.1;
+	public final static double EDGE_PADDING           = 0.03;
 	public final static double PADDLE_EFFECTIVE_DEPTH = 0.03;
 
 	/* this is how big the display will be
@@ -32,7 +32,7 @@ public class Constants {
 	public final static double PADDLE_WIDTH = 0.3;
 
 	/* delay appearance of first ball by this much to give the user time to prepare */
-	public final static double START_GAME_DELAY = 300;
+	public final static double START_GAME_DELAY = 2000;
 	private final Dimension screen;
 	private final double    verticalFractionalPadding;
 	private final double    horizontalFractionalPadding;
@@ -42,6 +42,11 @@ public class Constants {
 	private final double    paddlePixelWidth;
 	private final double    paddlePixelDepth;
 	private final double    edgePixelPadding;
+
+	/* Speed of rendering, gameworld updating and buffer size respectively */
+	public final static int FPS               = 50;
+	public final static int UPDATE_DELTA      = 10;
+	public final static int STATE_BUFFER_SIZE = 50;
 
 	public Constants(Dimension dimension) {
 		this.screen = dimension;
@@ -95,22 +100,6 @@ public class Constants {
 		return edgePixelPadding;
 	}
 
-	public double[] makeBallTypes(double[][] state) {
-		double[] out = new double[state.length - 3];
-		for (int i = 0; i < state.length - 3; i++) {
-			out[i] = state[i][2];
-		}
-		return out;
-	}
-
-	public Dimension translateBallReferenceFrame(Vector2D v) {
-		/* note that v is in small square reference frame of point-mass balls; do not modify v */
-		double x = v.x;
-		double y = v.y;
-
-		return translateBallReferenceFrame(new double[]{x, y});
-	}
-
 	private Dimension translateBallReferenceFrame(double[] ball) {
 		/* note that v is in small square reference frame of point-mass balls; do not modify v */
 		double x = ball[0];
@@ -137,30 +126,23 @@ public class Constants {
 		return new Dimension((int) x, (int) y);
 	}
 
-	public int[][] makeBallXYs(double[][] state) {
-		int[][] out = new int[state.length - 3][2];
-		for (int i = 0; i < state.length - 3; i++) {
-			Dimension temp = translateBallReferenceFrame(state[i]);
+	public int[][] makeBallXYs(double[][] doubles) {
+		int[][] out = new int[doubles.length][2];
+		for (int i = 0; i < doubles.length; i++) {
+			Dimension temp = translateBallReferenceFrame(doubles[i]);
 			out[i][0] = temp.width;
 			out[i][1] = temp.height;
 		}
 		return out;
 	}
 
-	public int[] makePaddleXY(double[][] state, int player) {
-		double[] paddle = state[state.length - (player == 0 ? 3 : 2)];
+	public int[] makePaddleXY(double[] paddle, int player) {
 		int[] out = new int[2];
 		Dimension temp = translateBallReferenceFrame(paddle);
 		out[0] = temp.width;
-		//		out[1] = temp.height + (int) (ballPixelRadius / 2) * (paddle[1] == 0 ? 1 : -1);
 		out[1] = (int) (getEdgePixelPadding() + getPaddlePixelDepth() / 2);
 		if (player == 0) out[1] = screen.height - out[1];
 
 		return out;
-	}
-
-	public int[] makeScores(double[][] state) {
-		double[] temp = state[state.length - 1];
-		return new int[]{(int) temp[0], (int) temp[1]};
 	}
 }
