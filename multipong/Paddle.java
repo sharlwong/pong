@@ -40,16 +40,8 @@ public class Paddle {
 		return (int) Math.floor(score);
 	}
 
-	public void incrementScore() {
-		incrementScore(0);
-	}
-
 	public void incrementScore(Ball b) {
 		score += b.getType();
-	}
-
-	public void incrementScore(double n) {
-		this.score += n;
 	}
 
 	public void setFractionalPosition(double fraction) {
@@ -61,17 +53,9 @@ public class Paddle {
 		return (paddleCenter.x - min) / (max - min);
 	}
 
-	public double[] getXY() {
-		return new double[]{paddleCenter.x, paddleCenter.y};
-	}
-
 	private void setPosition(double xValue) {
 		paddleCenter.x = xValue;
 		if (paddleCenter.x < min) paddleCenter.x = min;
 		if (paddleCenter.x > max) paddleCenter.x = max;
-	}
-
-	public double getTransformedFractionalPosition(int player) {
-		return Math.abs(player - getFractionalPosition());
 	}
 }

@@ -9,7 +9,7 @@ public class Ball {
 	private Vector2D velocity;
 	private Vector2D initialPosition;
 	private Vector2D currentPosition;
-	private int type = 0;
+	int type;
 
 	public Ball(Vector2D startPosition, Vector2D startVelocity, long startTimeMillis, double unusedVariable, int type) {
 		this.initialPosition = startPosition;
@@ -42,6 +42,10 @@ public class Ball {
 		updateCurrentTime(startTimeMillis);
 	}
 
+	public int getType() {
+		return type;
+	}
+
 	public double getUnusedVariable() {
 		return uselessVar;
 	}
@@ -63,16 +67,14 @@ public class Ball {
 	}
 
 	public boolean inGame() {
-		if (currentPosition.y < (0 - Constants.PADDLE_EFFECTIVE_DEPTH - Constants.EDGE_PADDING) && velocity.y < 0) return false;
-		if (currentPosition.y > (Constants.HEIGHT + Constants.PADDLE_EFFECTIVE_DEPTH + Constants.EDGE_PADDING) && velocity.y > 0) return false;
+		if (currentPosition.y < (0 - Constants.PADDLE_EFFECTIVE_DEPTH - Constants.EDGE_PADDING) && velocity.y < 0)
+			return false;
+		if (currentPosition.y > (Constants.HEIGHT + Constants.PADDLE_EFFECTIVE_DEPTH + Constants.EDGE_PADDING) && velocity.y > 0)
+			return false;
 		return true;
 	}
 
 	public boolean isMovingUp() {
 		return velocity.y > 0;
-	}
-	
-	public int getType(){
-		return type;
 	}
 }

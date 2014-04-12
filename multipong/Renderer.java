@@ -14,17 +14,25 @@ public class Renderer extends JPanel implements Runnable {
 	Thread       thread;
 	Dimension    dim;
 	Constants    calc;
-	private GameState lastKnownState;
+	GameState    lastKnownState;
+
+	int[][]  balls;
+	int[]    player0;
+	int[]    player1;
+	int[]    scores;
+	int[]    ballTypes;
+	double[] ballDoubles;
 
 	public Renderer(Dimension d) {
 		dim = d;
 		calc = new Constants(d);
 		game = new GameWorld();
 		thread = new Thread(this);
-		thread.start();
+		inputHandler = new InputHandler(game, calc);
 		this.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 		this.setPreferredSize(d);
-		inputHandler = new InputHandler(game, calc);
+
+		thread.start();
 	}
 
 	public void keyPressed(KeyEvent e) {
@@ -47,35 +55,31 @@ public class Renderer extends JPanel implements Runnable {
 		setOpaque(false);
 		super.paintComponent(g);
 
-		int[][] balls;
-		double[] ballTypes;
-		int[] player0;
-		int[] player1;
-
 		/* get state */
-		GameState gameState = game.getGameState();
+		GameState state = game.getGameState();
 
 		/* check state and store */
-		if (gameState == null && lastKnownState == null) {
+		if (state == null && lastKnownState == null) {
 			System.out.println("Nothing to render...");
 			return;
 		}
-		if (gameState == null) {
-			gameState = lastKnownState;
+		if (state == null) {
+			state = lastKnownState;
 			System.out.println("Missed frame to render...");
 		}
-		else lastKnownState = gameState;
+		else lastKnownState = state;
 
 		/* make things to render */
-		balls = calc.makeBallXYs(gameState.getBallsData());
-		player0 = calc.makePaddleXY(gameState.getPlayer0Data(), 0);
-		player1 = calc.makePaddleXY(gameState.getPlayer1Data(), 1);
-		int[] scores = gameState.getScores();
-		ballTypes = gameState.getSpareVar();
+		balls = calc.makeBallXYs(state.getBallsData());
+		player0 = calc.makePaddleXY(state.getPlayer0Data(), 0);
+		player1 = calc.makePaddleXY(state.getPlayer1Data(), 1);
+		scores = state.getScores();
+		ballDoubles = state.getSpareVar();
+		ballTypes = state.getBallsType();
 
 		/* render all the balls */
 		for (int i = 0; i < balls.length; i++) {
-			int type = (int) Math.floor(ballTypes[i]);
+			int type = (int) Math.floor(ballDoubles[i]);
 			switch (type) {
 				case 0:
 					g.setColor(Color.BLACK);
@@ -142,7 +146,7 @@ public class Renderer extends JPanel implements Runnable {
 
 	private void drawPaddle(Graphics g, int centerX, int centerY) {
 		int width = (int) calc.getPaddlePixelWidth();
-		int height = (int) (calc.getPaddlePixelDepth());
+		int height = (int) calc.getPaddlePixelDepth();
 		g.fillRect(centerX - width / 2, centerY - height / 2, width, height);
 	}
 

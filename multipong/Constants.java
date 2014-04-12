@@ -32,7 +32,7 @@ public class Constants {
 	public final static double PADDLE_WIDTH = 0.3;
 
 	/* delay appearance of first ball by this much to give the user time to prepare */
-	public final static double START_GAME_DELAY = 2000;
+	public final static double START_GAME_DELAY = 300;
 	private final Dimension screen;
 	private final double    verticalFractionalPadding;
 	private final double    horizontalFractionalPadding;
@@ -126,10 +126,10 @@ public class Constants {
 		return new Dimension((int) x, (int) y);
 	}
 
-	public int[][] makeBallXYs(double[][] doubles) {
-		int[][] out = new int[doubles.length][2];
-		for (int i = 0; i < doubles.length; i++) {
-			Dimension temp = translateBallReferenceFrame(doubles[i]);
+	public int[][] makeBallXYs(double[][] ballsData) {
+		int[][] out = new int[ballsData.length][2];
+		for (int i = 0; i < ballsData.length; i++) {
+			Dimension temp = translateBallReferenceFrame(ballsData[i]);
 			out[i][0] = temp.width;
 			out[i][1] = temp.height;
 		}

@@ -11,6 +11,11 @@ public class GameState {
 	private int status;
 	private int timeLeft;
 	private int[] scores;
+	private double[]   spareVar;
+
+	public double[] getSpareVar() {
+		return spareVar;
+	}
 
 	public double[][] getBallsData() {
 		return ballsData;
@@ -68,10 +73,15 @@ public class GameState {
 		this.ballsType = ballsType;
 	}
 	
+	public void setSpareVar(double[] spareVar) {
+		this.spareVar = spareVar;
+	}
+
 	/**
 	 * Returns the image of GameState
 	 * IMPORTANT: Not everything flips. Make sure to duplicate!
 	 * Invariant: gamestate.flip.flip == gamestate
+	 *
 	 * @return
 	 */
 	public GameState flip() {

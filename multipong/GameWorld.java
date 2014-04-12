@@ -18,16 +18,16 @@ public class GameWorld {
 	private final static double frameDrop = 0.25;
 
 	public GameWorld() {
-		random = new SecureRandom();
-		random.setSeed(1234567890);
-		System.out.println("Game initialized, please wait for start...");
 		elapsedTimeMillis = 0;
-		balls = new ArrayList<Ball>();
 		player0 = new Paddle(0);
 		player1 = new Paddle(1);
+		balls = new ArrayList<Ball>();
+		random = new SecureRandom();
+		random.setSeed(1234567890);
 		injectBalls = 0;
 		init = true;
 		ready = true;
+		System.out.println("Game initialized, please wait for start...");
 	}
 
 	public void exit() {

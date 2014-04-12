@@ -2,8 +2,6 @@ package com.sutd.GameObjects;
 
 /** Tian Chi's version **/
 
-import com.badlogic.gdx.Gdx;
-import com.sutd.PongHelpers.Assets;
 import com.sutd.PongHelpers.Constants;
 import com.sutd.PongHelpers.Vector2D;
 
@@ -16,7 +14,6 @@ public class Paddle {
 	private double min = (Constants.PADDLE_WIDTH / 2) - Constants.BALL_RADIUS;
 	private Vector2D paddleCenter;
 	private int score = 0;
-
 
 	public Paddle(int playerNum) {
 		paddleCenter = new Vector2D(-1, Constants.HEIGHT * playerNum);
@@ -36,7 +33,7 @@ public class Paddle {
 		Vector2D ballPosition = b.getCurrentPosition();
 		boolean up = b.isMovingUp();
 		if (Math.abs(ballPosition.x - paddleCenter.x) > (Constants.PADDLE_WIDTH / 2)) return false;
-	if (playerBottom && ballPosition.y < (0 - Constants.PADDLE_EFFECTIVE_DEPTH) && !up) return false;
+		if (playerBottom && ballPosition.y < (0 - Constants.PADDLE_EFFECTIVE_DEPTH) && !up) return false;
 		if (playerBottom && ballPosition.y < 0 && !up) return true;
 		if (!playerBottom && ballPosition.y > (Constants.HEIGHT + Constants.PADDLE_EFFECTIVE_DEPTH) && up) return false;
 		if (!playerBottom && ballPosition.y > (Constants.HEIGHT) && up) return true;
@@ -59,21 +56,21 @@ public class Paddle {
 		if (fraction < 0 || fraction > 1) return;
 		setPosition(min + fraction * (max - min));
 	}
-	
-	public double getFractionalPosition() {
-		return (paddleCenter.x - min)/(max-min);
-	}
 
 	public double[] getXY() {
-		return new double[] { paddleCenter.x, paddleCenter.y };
+		return new double[]{paddleCenter.x, paddleCenter.y};
 	}
+
 	private void setPosition(double xValue) {
 		paddleCenter.x = xValue;
 		if (paddleCenter.x < min) paddleCenter.x = min;
 		if (paddleCenter.x > max) paddleCenter.x = max;
 	}
 
-	public double getTransformedFractionalPosition(int player) {
-		return Math.abs(player - getFractionalPosition());
-	}
+	//	public double getFractionalPosition() {
+	//		return (paddleCenter.x - min)/(max-min);
+	//	}
+	//	public double getTransformedFractionalPosition(int player) {
+	//		return Math.abs(player - getFractionalPosition());
+	//	}
 }
