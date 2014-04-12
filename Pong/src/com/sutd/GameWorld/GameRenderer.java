@@ -151,7 +151,7 @@ public class GameRenderer {
 				
 		// The octopus needs transparency, so we enable that.
         batcher.enableBlending();
-        batcher.draw(riceCracker, centerX, centerY, 2*radius, 2*radius);
+        batcher.draw(riceCracker, centerX - radius, centerY - radius, 2*radius, 2*radius);
 	}
     
     private void drawSalmonSushi(int centerX, int centerY) {
@@ -159,7 +159,7 @@ public class GameRenderer {
 				
 		// The octopus needs transparency, so we enable that.
         batcher.enableBlending();
-        batcher.draw(salmonSushi, centerX, centerY, 2*radius, 2*radius);
+        batcher.draw(salmonSushi, centerX - radius, centerY - radius, 2*radius, 2*radius);
 	}
     
     private void drawFishCake(int centerX, int centerY) {
@@ -167,15 +167,17 @@ public class GameRenderer {
 				
 		// The octopus needs transparency, so we enable that.
         batcher.enableBlending();
-        batcher.draw(fishCake, centerX, centerY, 2*radius, 2*radius);
+        batcher.draw(fishCake, centerX - radius, centerY - radius, 2*radius, 2*radius);
 	}
     
+    
+    // for draw function, the x and y parameters indicates the bottom left corner
     private void drawOctopus(int centerX, int centerY) {
 		int radius = (int) calc.getBallPixelRadius();
 				
 		// The octopus needs transparency, so we enable that.
         batcher.enableBlending();
-        batcher.draw(octopusSmile, centerX, centerY, 2*radius, 2*radius);
+        batcher.draw(octopusSmile, centerX - radius, centerY - radius, 2*radius, 2*radius);
 	}
     
     
@@ -189,13 +191,8 @@ public class GameRenderer {
         // Draw bird at its coordinates. Retrieve the Animation object from AssetLoader
         // Pass in the runTime variable to get the current frame.
         batcher.draw(AssetLoader.octopusAnimation.getKeyFrame(runTime),
-        		centerX, centerY, 2*radius, 2*radius);
+        		centerX - radius, centerY - radius, 2*radius, 2*radius);
 
-	}
-    
-    private void drawBall(int centerX, int centerY) {
-		int radius = (int) calc.getBallPixelRadius();
-		shapeRenderer.circle(centerX - radius, centerY - radius, 2 * radius);
 	}
 
 	private void drawPaddle(int centerX, int centerY) {

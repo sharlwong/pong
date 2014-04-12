@@ -29,7 +29,7 @@ public class Paddle {
 		if (!playerBottom) yVelocity = 0 - yVelocity;
 		Vector2D outVelocity = new Vector2D(b.getCurrentPosition().x - paddleCenter.x, yVelocity);
 		outVelocity.makeUnitVector().multiply(Constants.BALL_SPEED);
-		return new Ball(b.getCurrentPosition(), outVelocity, currentTimeMillis, b.getUnusedVariable());
+		return new Ball(b.getCurrentPosition(), outVelocity, currentTimeMillis, b.getUnusedVariable(), b.getType());
 	}
 
 	public boolean collisionCheck(Ball b) {
@@ -51,8 +51,8 @@ public class Paddle {
 		return score;
 	}
 
-	public void incrementScore() {
-		this.score++;
+	public void incrementScore(Ball b) {
+		score += b.getType();
 	}
 
 	public void setFractionalPosition(double fraction) {

@@ -58,10 +58,12 @@ public class GameWorld {
 		Vector2D temp;
 		//Set Balls:
 		double[][] ballsData = new double[balls.size()][2];
+		int[] ballsType = new int[balls.size()];
 		for (int i = 0; i < balls.size(); i++){
 			temp = balls.get(i).getCurrentPosition();
 			ballsData[i][0] = temp.x;
 			ballsData[i][1] = temp.y;
+			ballsType[i] = balls.get(i).getType();
 		}
 		out.setBallsData(ballsData);
 		//Set Status:
@@ -113,7 +115,8 @@ public class GameWorld {
 		if (Math.abs(speed1) < Math.abs(speed2)) speed = new Vector2D(speed1, speed2);
 		else speed = new Vector2D(speed2, speed1);
 		synchronized (balls) {
-			balls.add(new Ball(position, speed, elapsedTimeMillis, simulatedLag < 0 ? (int) (random.nextDouble() * 500) : simulatedLag));
+			// assume that all balls are type 1 at this moment
+			balls.add(new Ball(position, speed, elapsedTimeMillis, simulatedLag < 0 ? (int) (random.nextDouble() * 500) : simulatedLag, 1));
 		}
 	}
 
@@ -161,8 +164,8 @@ public class GameWorld {
 				if (!b.inGame()) {
 					//				b.kill();
 					removeThese.add(b);
-					if (b.getCurrentPosition().y < 0) player1.incrementScore();
-					if (b.getCurrentPosition().y > Constants.HEIGHT) player0.incrementScore();
+					if (b.getCurrentPosition().y < 0) player1.incrementScore(b);
+					if (b.getCurrentPosition().y > Constants.HEIGHT) player0.incrementScore(b);
 				}
 			}
 

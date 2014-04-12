@@ -1,4 +1,9 @@
-package multipong;
+package com.sutd.GameObjects;
+
+import com.sutd.PongHelpers.Constants;
+import com.sutd.PongHelpers.Vector2D;
+
+
 
 public class Ball {
 	private double   uselessVar;
@@ -6,12 +11,14 @@ public class Ball {
 	private Vector2D velocity;
 	private Vector2D initialPosition;
 	private Vector2D currentPosition;
+	private int type = 0;
 
-	public Ball(Vector2D startPosition, Vector2D startVelocity, long startTimeMillis, double unusedVariable) {
+	public Ball(Vector2D startPosition, Vector2D startVelocity, long startTimeMillis, double unusedVariable, int type) {
 		this.initialPosition = startPosition;
 		this.uselessVar = unusedVariable;
 		this.initTime = startTimeMillis;
 		this.initTime = startTimeMillis;
+		this.type = type;
 
 		/* error correct starting speed, leaving the direction equal */
 		Vector2D initialVelocity = startVelocity.cpy().makeUnitVector().multiply(Constants.BALL_SPEED);
@@ -65,5 +72,9 @@ public class Ball {
 
 	public boolean isMovingUp() {
 		return velocity.y > 0;
+	}
+	
+	public int getType(){
+		return type;
 	}
 }
