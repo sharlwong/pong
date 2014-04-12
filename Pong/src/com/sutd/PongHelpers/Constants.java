@@ -1,16 +1,14 @@
 package com.sutd.PongHelpers;
 
 import java.awt.*;
+import java.util.Collection;
+
+import com.sutd.GameObjects.GameState;
 
 /**
  * Created by avery_000 on 25-Mar-14.
  */
 public class Constants {
-	
-	/* Speed of rendering, gameworld updating and buffer size respectively */
-	public final static int FPS = 50;
-	public final static int UPDATE_DELTA = 20;
-	public final static int STATE_BUFFER_SIZE = 5;
 
 	/* this is the square unit-length board on which the point-mass balls move about */
 	public final static double HEIGHT = 1;
@@ -30,7 +28,7 @@ public class Constants {
 	 * the paddles must render above and under this padding
 	 */
 	public final static double DISPLAY_HEIGHT = HEIGHT + 2 * BALL_RADIUS + 2 * PADDLE_EFFECTIVE_DEPTH + 2 * EDGE_PADDING;
-	public final static double BALL_SPEED = 0.0008;
+	public final static double BALL_SPEED = 0.001;
 
 	/* by default paddle will be one-tenth of the screen
 	 * note though that the screen will have an extra ball-radius at the end, so a bit extra complication there
@@ -38,7 +36,7 @@ public class Constants {
 	public final static double PADDLE_WIDTH = 0.3;
 
 	/* delay appearance of first ball by this much to give the user time to prepare */
-	public final static double START_GAME_DELAY = 2000;
+	public final static double START_GAME_DELAY = 300;
 	private final Dimension dim;
 	private final double verticalFractionalPadding;
 	private final double horizontalFractionalPadding;
@@ -48,6 +46,12 @@ public class Constants {
 	private final double paddlePixelWidth;
 	private final double paddlePixelDepth;
 	private final double edgePixelPadding;
+	
+	/* Speed of rendering, gameworld updating and buffer size respectively */
+	
+	public final static int STATE_BUFFER_SIZE = 50;
+	public final static int UPDATE_DELTA = 50;
+	public final static int FPS = 50;
 	
 
 	public Constants(Dimension dimension) {
@@ -105,6 +109,9 @@ public class Constants {
 	public Dimension translateBallReferenceFrame(Vector2D v) {
 		/* note that v is in small square reference frame of point-mass balls; do not modify v */
 		double x = v.x;
+		x = x < 0 ? 0 : x;
+		x = x > 1 ? 1 : x;
+		
 		double y = v.y;
 
 		return translateBallReferenceFrame(new double[] {x, y});
@@ -112,9 +119,7 @@ public class Constants {
 
 	private Dimension translateBallReferenceFrame(double[] ball) {
 		/* note that v is in small square reference frame of point-mass balls; do not modify v */
-		double x = ball[0];
-		x = x < 0 ? 0 : x;
-		x = x > 1 ? 1 : x;
+		double x = ball[0];		
 		double y = ball[1];
 
 		/* translation */
@@ -137,7 +142,7 @@ public class Constants {
 		/* convert to dimension */
 		return new Dimension((int) x, (int) y);
 	}
-
+	
 	public int[][] makeBallXYs(double[][] ballsData) {
 		int[][] out = new int[ballsData.length][2];
 		for (int i = 0; i < ballsData.length; i++) {
@@ -152,11 +157,15 @@ public class Constants {
 		int[] out = new int[2];
 		Dimension temp = translateBallReferenceFrame(paddle);
 		out[0] = temp.width;
-		//out[1] = temp.height + (int) (ballPixelRadius / 2) * (paddle[1] == 0 ? 1 : -1);
-		out[1] = (int) (getEdgePixelPadding() + getPaddlePixelDepth() / 2);
-		if (player == 0) out[1] = dim.height - out[1];
+		out[1] = temp.height + (int) (ballPixelRadius / 2) * (paddle[1] == 0 ? 1 : -1);
 		return out;
 	}
+
+	public int[] makeScores(double[][] state) {
+		double[] temp = state[state.length-1];
+		return new int[] {(int) temp[0], (int) temp[1]};
+	}
+	
 	public static class LagException extends RuntimeException {
 	}
 }
