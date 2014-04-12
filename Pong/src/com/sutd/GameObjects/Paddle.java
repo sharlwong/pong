@@ -2,6 +2,8 @@ package com.sutd.GameObjects;
 
 /** Tian Chi's version **/
 
+import com.badlogic.gdx.Gdx;
+import com.sutd.PongHelpers.Assets;
 import com.sutd.PongHelpers.Constants;
 import com.sutd.PongHelpers.Vector2D;
 

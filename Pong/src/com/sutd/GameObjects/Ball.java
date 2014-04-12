@@ -9,7 +9,7 @@ public class Ball {
 	private Vector2D velocity;
 	private Vector2D initialPosition;
 	private Vector2D currentPosition;
-	int type;
+	private int type;
 
 	public Ball(Vector2D startPosition, Vector2D startVelocity, long startTimeMillis, double unusedVariable, int type) {
 		this.initialPosition = startPosition;

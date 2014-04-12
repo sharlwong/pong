@@ -14,7 +14,9 @@ import com.sutd.PongHelpers.AssetLoader;
 import com.sutd.PongHelpers.Constants;
 import com.sutd.PongHelpers.InputHandler;
 
+import java.awt.Dimension;
 import java.util.concurrent.BlockingQueue;
+
 
 public class GameRenderer {
 
