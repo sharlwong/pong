@@ -21,7 +21,7 @@ public class GameWorld {
 	public        boolean      ready;
 
 	/* simulation variable */
-	private final static double frameDrop = 0.25;
+	private final static double frameDrop = 0;
 
 	public GameWorld() {
 		elapsedTimeMillis = 0;
@@ -32,7 +32,7 @@ public class GameWorld {
 		random.setSeed(1234567890);
 		injectBalls = 0;
 		init = true;
-		ready = true;
+		ready = false;
 		System.out.println("Game initialized, please wait for start...");
 	}
 
