@@ -1,5 +1,6 @@
 package com.sutd.GameWorld;
 
+import com.badlogic.gdx.Gdx;
 import com.sutd.GameObjects.Ball;
 import com.sutd.GameObjects.GameState;
 import com.sutd.GameObjects.Paddle;
@@ -19,6 +20,9 @@ public class GameWorld {
 	private       long         injectBalls;
 	private       boolean      init;
 	public        boolean      ready;
+	public 		  boolean      gameover;
+	public        int          ticktock;
+	public        int          timeLimit; //maximum time for each round
 
 	/* simulation variable */
 	private final static double frameDrop = 0;
@@ -31,8 +35,11 @@ public class GameWorld {
 		random = new SecureRandom();
 		random.setSeed(1234567890);
 		injectBalls = 0;
+		ticktock = 0;
+		timeLimit = 10;    //should be changed later
 		init = true;
 		ready = false;
+		gameover = false;
 		System.out.println("Game initialized, please wait for start...");
 	}
 
@@ -83,6 +90,7 @@ public class GameWorld {
 
 		/* set scores */
 		out.setScores(new int[]{player0.getScore(), player1.getScore()});
+		out.setTimeLeft(getSecondLeft());
 
 		/* done */
 		return out;
@@ -135,13 +143,25 @@ public class GameWorld {
 	}
 
 	public void update(float delta) {
+		// set time for each round
+		if (ticktock >= timeLimit) gameover = true;
 
 		/* checks whether game is ready to start */
 		if (!ready) return;
-
+		if (gameover) {
+			checkrestart();
+			checkexit();
+			return;
+		}
+			
+		long temp = elapsedTimeMillis;
 		/* increment time */
 		long deltaMillis = (long) (delta);
 		elapsedTimeMillis += deltaMillis;
+		
+		if ((int) elapsedTimeMillis/1000 > (int) temp/1000) ticktock++;
+		
+		System.out.println(deltaMillis+" "+elapsedTimeMillis+" "+ticktock);
 		
 		/* conditions under which a ball should be injected */
 		boolean firstBallIn = init && (elapsedTimeMillis > Constants.START_GAME_DELAY) && (balls.size() == 0);
@@ -173,6 +193,39 @@ public class GameWorld {
 
 			for (Ball b : removeThese) balls.remove(b);
 			for (Ball b : addThese) balls.add(b);
+		}
+	}
+	
+	public int getSecondLeft(){
+		return timeLimit - ticktock;
+	}
+	
+	public void checkrestart(){
+		if(Gdx.input.justTouched()) {
+			int x = Gdx.input.getX()/2;
+			int y = Gdx.input.getY();
+			//System.out.println(x+" "+y+" "+Gdx.graphics.getWidth()/2+" "+Gdx.graphics.getHeight());
+			if (x>5 && x<Gdx.graphics.getWidth()/2 && y > Gdx.graphics.getHeight() - 80 && y < Gdx.graphics.getHeight() - 40){
+				// restart
+				// initialize objects inside game world
+				ticktock = 0;
+				elapsedTimeMillis = 0;
+				ready = true;
+				player0 = new Paddle(0);
+				player1 = new Paddle(1);
+				gameover = false;
+			}
+		}
+	}
+	
+	public void checkexit(){
+		if(Gdx.input.justTouched()) {
+			int x = Gdx.input.getX()/2;
+			int y = Gdx.input.getY();
+			if (x>Gdx.graphics.getWidth()/2 && x<Gdx.graphics.getWidth() && y > Gdx.graphics.getHeight() - 80 && y < Gdx.graphics.getHeight() - 40){
+				// exit
+				System.out.println("EXIT");
+			}
 		}
 	}
 

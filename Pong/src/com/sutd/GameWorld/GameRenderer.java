@@ -37,6 +37,7 @@ public class GameRenderer {
 	int[]    scores;
 	int[]    ballTypes;
 	double[] ballDoubles;
+	int      timeLeft;
 
 	BlockingQueue<GameState> buffer;
 
@@ -86,6 +87,7 @@ public class GameRenderer {
 		scores = state.getScores();
 		ballDoubles = state.getSpareVar();
 		ballTypes = state.getBallsType();
+		timeLeft = state.getTimeLeft();
 
 		/* black background drawn to prevent flickering */
 		Gdx.gl.glClearColor(255, 255, 183, 1);
@@ -95,35 +97,46 @@ public class GameRenderer {
 
 		batcher.begin();
 		//AssetLoader.shadow.draw(batcher, "10", 100, 100);
-		AssetLoader.font.draw(batcher, "" + score1, d.width - 20 - (3 * score0.length()), d.height / 2 - 20);
-		AssetLoader.font.draw(batcher, "" + score0, d.width - 20 - (3 * score0.length()), d.height / 2);
+		
+		if (timeLeft == 0){
+			AssetLoader.font.draw(batcher, "GAME OVER", d.width/2 - 48, d.height / 2 - 40);
+			if (scores[0] > scores[1]) AssetLoader.font.draw(batcher, "YOU WIN", d.width/2 - 40, d.height / 2 - 20);
+			else if (scores[0] < scores[1]) AssetLoader.font.draw(batcher, "YOU LOSE", d.width/2 - 37, d.height / 2 - 20);
+			else AssetLoader.font.draw(batcher, "TIE", d.width/2 - 10, d.height / 2 - 20);
+			AssetLoader.font.draw(batcher, score0+":"+score1, d.width/2 - 3 * score0.length() - 10, d.height / 2);
+			AssetLoader.font.draw(batcher, "AGAIN", 5, d.height - 40);
+			AssetLoader.font.draw(batcher, "EXIT", d.width/2 + 30, d.height - 40);	
+		}else{
+			AssetLoader.font.draw(batcher, "" + score1, d.width - 20 - (3 * score0.length()), d.height / 2 - 20);
+			AssetLoader.font.draw(batcher, "" + score0, d.width - 20 - (3 * score0.length()), d.height / 2);
+			AssetLoader.font.draw(batcher, "" + timeLeft, 5, d.height / 2 - 10);
+			 /*
+	         * Draw octopus as a ball.
+	         */
 
-        /*
-         * Draw octopus as a ball.
-         */
+			// for (int[] ball : balls) drawOctopus(ball[0], ball[1]);
 
-		// for (int[] ball : balls) drawOctopus(ball[0], ball[1]);
+	        
+	        /*
+	         * Draw fish cake as a ball.
+	         */
 
-        
-        /*
-         * Draw fish cake as a ball.
-         */
+			//        for (int[] ball : balls) drawFishCake(ball[0], ball[1]);
 
-		//        for (int[] ball : balls) drawFishCake(ball[0], ball[1]);
+	        /*
+	         * Draw rice cracker as a ball.
+	         */
 
-        /*
-         * Draw rice cracker as a ball.
-         */
+			for (int[] ball : balls) drawRiceCracker(ball[0], ball[1]);
+	        
+	        /*
+	         * Draw salmon sushi as a ball.
+	         */
 
-		for (int[] ball : balls) drawRiceCracker(ball[0], ball[1]);
-        
-        /*
-         * Draw salmon sushi as a ball.
-         */
+			//        for (int[] ball : balls) drawSalmonSushi(ball[0], ball[1]);
 
-		//        for (int[] ball : balls) drawSalmonSushi(ball[0], ball[1]);
-
-		// End SpriteBatch
+			// End SpriteBatch
+		}
 		batcher.end();
 
         /* Draw normal balls: For testing.*/
