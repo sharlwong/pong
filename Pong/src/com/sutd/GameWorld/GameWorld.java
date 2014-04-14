@@ -159,7 +159,10 @@ public class GameWorld {
 		long deltaMillis = (long) (delta);
 		elapsedTimeMillis += deltaMillis;
 		
-		if ((int) elapsedTimeMillis/1000 > (int) temp/1000) ticktock++;
+		if ((int) elapsedTimeMillis/1000 > (int) temp/1000){
+			ticktock++;
+			injectRandomBall();
+		}
 		
 		System.out.println(deltaMillis+" "+elapsedTimeMillis+" "+ticktock);
 		
@@ -205,7 +208,7 @@ public class GameWorld {
 			int x = Gdx.input.getX()/2;
 			int y = Gdx.input.getY();
 			//System.out.println(x+" "+y+" "+Gdx.graphics.getWidth()/2+" "+Gdx.graphics.getHeight());
-			if (x>5 && x<Gdx.graphics.getWidth()/2 && y > Gdx.graphics.getHeight() - 80 && y < Gdx.graphics.getHeight() - 40){
+			if (x>5 && x<Gdx.graphics.getWidth()/4 && y > Gdx.graphics.getHeight() - 80 && y < Gdx.graphics.getHeight() - 40){
 				// restart
 				// initialize objects inside game world
 				ticktock = 0;
@@ -214,6 +217,7 @@ public class GameWorld {
 				player0 = new Paddle(0);
 				player1 = new Paddle(1);
 				gameover = false;
+				balls.clear();
 			}
 		}
 	}
@@ -222,7 +226,7 @@ public class GameWorld {
 		if(Gdx.input.justTouched()) {
 			int x = Gdx.input.getX()/2;
 			int y = Gdx.input.getY();
-			if (x>Gdx.graphics.getWidth()/2 && x<Gdx.graphics.getWidth() && y > Gdx.graphics.getHeight() - 80 && y < Gdx.graphics.getHeight() - 40){
+			if (x>Gdx.graphics.getWidth()/4 && x<Gdx.graphics.getWidth()/2 && y > Gdx.graphics.getHeight() - 80 && y < Gdx.graphics.getHeight() - 40){
 				// exit
 				System.out.println("EXIT");
 			}
