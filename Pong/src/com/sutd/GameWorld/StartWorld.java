@@ -3,6 +3,7 @@ package com.sutd.GameWorld;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.IntIntMap;
+import com.sutd.Client.ClientBroadcaster;
 import com.sutd.Client.GameClient;
 import com.sutd.Pong.PongGame;
 import com.sutd.Screens.GameScreen;
@@ -84,14 +85,11 @@ public class StartWorld {
 		// Start Server
 		pong_game.server = new GameServer();
 		pong_game.server.start();
-		server_created = true;
-
-		pong_game.client = new GameClient();
-		pong_game.client.connectToServer("localhost");
+		pong_game.client.setServer("localhost", 5000); //default
+		/*pong_game.client.connectToServer();
 		pong_game.client.startListening();
-		client1_created = true;
 		pong_game.player = 0;
-		pong_game.setScreen(new GameScreen(pong_game));
+		pong_game.setScreen(new GameScreen(pong_game)); */
 	}
 	
 	/**
@@ -99,11 +97,16 @@ public class StartWorld {
 	 * **/
 	
 	private void intializeClientAndJoinServer() {
-		pong_game.client = new GameClient();
+		//first set us up as player 1
+		pong_game.player = 1;
+		// broadcast request to join
+		ClientBroadcaster bcaster = new ClientBroadcaster(pong_game.client);
+		bcaster.start();
+		//once discovered, we can start:
+		/*pong_game.client = new GameClient();
 		pong_game.client.connectToServer("localhost");
 		pong_game.client.startListening();
 		client2_created = true;
-		pong_game.player = 1;
-		pong_game.setScreen(new GameScreen(pong_game));
+		pong_game.setScreen(new GameScreen(pong_game));*/
 	}
 }

@@ -76,7 +76,7 @@ public class GameRenderer {
 		}
 		if (state == null) {
 			state = lastKnownState;
-			System.out.println("Missed frame to render...");
+			//System.out.println("Missed frame to render...");
 		}
 		else lastKnownState = state;
 
@@ -98,7 +98,12 @@ public class GameRenderer {
 		batcher.begin();
 		//AssetLoader.shadow.draw(batcher, "10", 100, 100);
 		
-		if (timeLeft == 0){
+		if(state.getStatus() == 0) //Waiting for client!
+		{
+			AssetLoader.font.draw(batcher, "Waiting", d.width/2 - 30 , d.height / 2-20);
+			AssetLoader.font.draw(batcher, "Player 2", d.width/2 - 30 , d.height / 2+10);
+		}
+		else if (timeLeft == 0){
 			AssetLoader.font.draw(batcher, "GAME OVER", d.width/2 - 48, d.height / 2 - 40);
 			if (scores[0] > scores[1]) AssetLoader.font.draw(batcher, "YOU WIN", d.width/2 - 40, d.height / 2 - 20);
 			else if (scores[0] < scores[1]) AssetLoader.font.draw(batcher, "YOU LOSE", d.width/2 - 37, d.height / 2 - 20);

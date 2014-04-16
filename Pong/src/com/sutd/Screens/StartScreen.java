@@ -1,6 +1,7 @@
 package com.sutd.Screens;
 
 import com.badlogic.gdx.Screen;
+import com.sutd.Client.GameClient;
 import com.sutd.GameWorld.StartRenderer;
 import com.sutd.GameWorld.StartWorld;
 import com.sutd.Pong.PongGame;
@@ -17,6 +18,7 @@ public class StartScreen implements Screen {
         start_world = new StartWorld(game); 
         start_renderer = new StartRenderer(start_world);
         this.game = game;
+		this.game.client = new GameClient();
     }
 
     @Override
@@ -27,6 +29,12 @@ public class StartScreen implements Screen {
         //Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
         start_world.update();
         start_renderer.render(delta);
+        if (game.client.ready()) {
+        	System.out.print("Ready");
+        	game.client.connectToServer();
+            game.client.startListening();
+            game.setScreen(new GameScreen(game));
+        }
     }
 
     @Override

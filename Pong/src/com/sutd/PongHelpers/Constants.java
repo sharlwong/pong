@@ -27,7 +27,7 @@ public class Constants {
 	 * the paddles must render above and under this padding
 	 */
 	public final static double DISPLAY_HEIGHT = HEIGHT + 2 * BALL_RADIUS + 2 * PADDLE_EFFECTIVE_DEPTH + 2 * EDGE_PADDING;
-	public final static double BALL_SPEED     = 0.001;
+	public final static double BALL_SPEED     = 0.0005;
 
 	/* by default paddle will be one-tenth of the screen
 	 * note though that the screen will have an extra ball-radius at the end, so a bit extra complication there
@@ -48,8 +48,8 @@ public class Constants {
 
 	/* Speed of rendering, gameworld updating and buffer size respectively */
 	public final static int FPS               = 50;
-	public final static int UPDATE_DELTA      = 10;
-	public final static int STATE_BUFFER_SIZE = 50;
+	public final static int UPDATE_DELTA      = 16;
+	public final static int STATE_BUFFER_SIZE = 1;
 
 	public Constants(Dimension dimension) {
 		this.screen = dimension;
