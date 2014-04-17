@@ -25,7 +25,7 @@ public class ClientBroadcaster extends Thread{
 
 		  //Try the 255.255.255.255 first
 		  try {
-		    DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, InetAddress.getByName("172.16.255.255"), 8888);
+		    DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, InetAddress.getByName("255.255.255.255"), 8888);
 		    c.send(sendPacket);
 		    System.out.println(getClass().getName() + ">>> Request packet sent to: 255.255.255.255 (DEFAULT)");
 		  } catch (Exception e) {

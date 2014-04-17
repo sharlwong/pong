@@ -206,10 +206,10 @@ public class GameWorld {
 	
 	public void checkrestart(){
 		if(Gdx.input.justTouched()) {
-			int x = Gdx.input.getX()/2;
+			int x = Gdx.input.getX();
 			int y = Gdx.input.getY();
 			//System.out.println(x+" "+y+" "+Gdx.graphics.getWidth()/2+" "+Gdx.graphics.getHeight());
-			if (x>5 && x<Gdx.graphics.getWidth()/4 && y > Gdx.graphics.getHeight() - 80 && y < Gdx.graphics.getHeight() - 40){
+			if (x>0 && x<Gdx.graphics.getWidth()/3 && y > Gdx.graphics.getHeight()*((float) 164/204) && y < Gdx.graphics.getHeight()*((float) 184/204)){
 				// restart
 				// initialize objects inside game world
 				ticktock = 0;
@@ -227,7 +227,7 @@ public class GameWorld {
 		if(Gdx.input.justTouched()) {
 			int x = Gdx.input.getX()/2;
 			int y = Gdx.input.getY();
-			if (x>Gdx.graphics.getWidth()/4 && x<Gdx.graphics.getWidth()/2 && y > Gdx.graphics.getHeight() - 80 && y < Gdx.graphics.getHeight() - 40){
+			if (x>2*Gdx.graphics.getWidth()/3 && x<Gdx.graphics.getWidth() && y > Gdx.graphics.getHeight()*((float) 164/204) && y < Gdx.graphics.getHeight()*((float) 184/204)){
 				// exit
 				System.out.println("EXIT");
 			}

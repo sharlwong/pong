@@ -1,5 +1,6 @@
 package com.sutd.PongHelpers;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.sutd.GameObjects.Paddle;
 import com.sutd.GameWorld.GameWorld;
@@ -48,7 +49,13 @@ public class InputHandler implements InputProcessor{
 	@Override
 	public boolean touchDragged(int screenX, int screenY, int pointer) {
 		// TODO Auto-generated method stub
-		return false;
+		double relativePos = screenX - calc.getPaddlePixelWidth() / 2;
+		//double relativeMax = game.calc.getHorizontalPixelUnitLength() + 2 * game.calc.getBallPixelRadius() - game.calc.getPaddlePixelWidth();
+		double relativeMax = Gdx.graphics.getWidth()+ calc.getPaddlePixelWidth()/2;
+		relativePos = relativePos < 0 ? 0 : relativePos;
+		relativePos = relativePos > relativeMax ? relativeMax : relativePos;
+		this.player_paddle.setFractionalPosition(relativePos / relativeMax);
+		return true;
 	}
 
 	@Override

@@ -57,13 +57,17 @@ public class StartWorld {
 			Gdx.app.log("MyTag", "Just Touched!");
 			float x = (float) (Gdx.input.getX())/ 2;
 			float y = (float)(Gdx.input.getY()) / 2;
+			System.out.println(x+" "+y);
 			Gdx.app.log("xy", x+","+y);
-			if(start_game_button.contains(x, y)) {
+			if(x>= Gdx.graphics.getWidth()*((float) 10/136) && x<= Gdx.graphics.getWidth()*((float)110/136) && 
+					y>= Gdx.graphics.getHeight()*((float)10/204) && y<=Gdx.graphics.getHeight()*((float)40/204)) {
+				System.out.println("host");
 				//Probably start a server here.
 				initializeServerAndClient();
 			}
 			
-			else if(join_game_button.contains(x, y)) {
+			else if(x>= Gdx.graphics.getWidth()*((float)10/136) && x<= Gdx.graphics.getWidth()*((float)110/136)&&
+					y>= Gdx.graphics.getHeight()*((float)60/204) && y<=Gdx.graphics.getHeight()*((float)90/204)) {
 				intializeClientAndJoinServer();
 			//connect to a server here.
 			}
