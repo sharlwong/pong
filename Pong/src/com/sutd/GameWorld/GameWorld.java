@@ -196,6 +196,7 @@ public class GameWorld {
 
 			for (Ball b : removeThese) balls.remove(b);
 			for (Ball b : addThese) balls.add(b);
+			if(balls.size() == 0) injectRandomBall();
 		}
 	}
 	

@@ -34,9 +34,7 @@ public class ServerBroadcaseter extends Thread {
 				DatagramPacket sendPacket = new DatagramPacket(send_data, send_data.length,packet.getAddress(), packet.getPort());
 				socket.send(sendPacket);
 				System.out.println("SENDING: YES I AM SERVER AT PORT;"+port);
-				break;
 			}
-			socket.close();
 			
 		} catch (SocketException e) {
 			// TODO Auto-generated catch block

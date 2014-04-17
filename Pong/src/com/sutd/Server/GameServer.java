@@ -5,6 +5,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -36,6 +37,17 @@ public class GameServer extends Thread {
 	private BlockingQueue<String> buffer = new ArrayBlockingQueue<String>(50); 
 	private MessageService message_service;
 	private GameWorld game_world;
+	private CountDownLatch started;
+	
+	public GameServer() {}
+	/**
+	 * Precondition: Started must be equal to 1
+	 * @param started: a deterministic way of figuring out if the server is started or not.
+	 */
+	public GameServer(CountDownLatch started) {
+		this.started = started;
+		assert started.getCount() == 1;
+	}
 	
 	/**
 	 * Start the server socket
@@ -44,21 +56,27 @@ public class GameServer extends Thread {
 		game_world = new GameWorld();
 		message_service = new MessageService(this);
 		// Start Server Socket
-		//System.out.println("Server Starting...");
+		System.out.println("Server Starting...");
 		serverSocket = Gdx.net.newServerSocket(Protocol.TCP,port, null);
-		
+			
+		System.out.println("Server started at:");
 		//Start broadcasting presence
 		ServerBroadcaseter broadcaster = new ServerBroadcaseter("lhst", "5000");
 		broadcaster.start();
 		
+		//mark server as started
+		if(started != null) started.countDown();
 		
 		// Accept Two clients to connect.
 		// And start listening to messages from them.
+
 		for(int i = 0 ; i < 2; i ++) {
+			System.out.println("Waiting for client");
 			player_sockets[i] = serverSocket.accept(null);
 			listeners[i] = startListening(player_sockets[i],i);
 			message_service.addSocket(player_sockets[i],i);
 			message_service.sendStateToSocket(game_world.getGameState(), i);
+			System.out.println("Client connected!");
 		}
 		startConsuming();
 		game_world.ready = true; 

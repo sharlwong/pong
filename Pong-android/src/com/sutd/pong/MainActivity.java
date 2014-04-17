@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
+import com.google.gson.Gson;
 import com.sutd.Pong.PongGame;
 
 public class MainActivity extends AndroidApplication {
@@ -13,7 +14,6 @@ public class MainActivity extends AndroidApplication {
         
         AndroidApplicationConfiguration cfg = new AndroidApplicationConfiguration();
         cfg.useGL20 = false;
-        
         initialize(new PongGame(), cfg);
     }
 }
