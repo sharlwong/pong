@@ -55,8 +55,9 @@ public class StartWorld {
 	private void check_if_touched() {
 		if(Gdx.input.justTouched()) {
 			Gdx.app.log("MyTag", "Just Touched!");
-			float x = (float) (Gdx.input.getX())/ 2;
-			float y = (float)(Gdx.input.getY()) / 2;
+			float x = (float) (Gdx.input.getX());
+			float y = (float)(Gdx.input.getY());
+			System.out.println(Gdx.graphics.getWidth()+" "+Gdx.graphics.getHeight());
 			System.out.println(x+" "+y);
 			Gdx.app.log("xy", x+","+y);
 			if(x>= Gdx.graphics.getWidth()*((float) 10/136) && x<= Gdx.graphics.getWidth()*((float)110/136) && 
@@ -68,6 +69,7 @@ public class StartWorld {
 			
 			else if(x>= Gdx.graphics.getWidth()*((float)10/136) && x<= Gdx.graphics.getWidth()*((float)110/136)&&
 					y>= Gdx.graphics.getHeight()*((float)60/204) && y<=Gdx.graphics.getHeight()*((float)90/204)) {
+				System.out.println("join");
 				intializeClientAndJoinServer();
 			//connect to a server here.
 			}
