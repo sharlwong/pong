@@ -23,8 +23,8 @@ public abstract class AssetLoader {
 	
 	public static BitmapFont font, shadow;
 	
-	public static Texture texture;
-	public static TextureRegion salmonSushi, riceCracker, fishCake, octopusSmile, octopusGasp;
+	public static Texture japanese_texture, fruitball_texture, screen_texture;
+	public static TextureRegion watermelon, orange, kiwi, salmonSushi, riceCracker, fishCake, octopusSmile, octopusGasp, splash_screen;
 	public static Animation octopusAnimation;
 	
 	public static void load(){
@@ -33,20 +33,38 @@ public abstract class AssetLoader {
 		shadow = new BitmapFont(Gdx.files.internal("data/shadow.fnt"));
 		shadow.setScale(.25f, -.25f);
 		
-		texture = new Texture(Gdx.files.internal("data/Pong_texture_4.png"));
-		texture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+		fruitball_texture = new Texture(Gdx.files.internal("data/Fruitball_Texture.png"));
+		fruitball_texture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+		
+		screen_texture = new Texture(Gdx.files.internal("data/Splash_screen_wo_strokes_256x512.png"));
+		screen_texture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+				
+		japanese_texture = new Texture(Gdx.files.internal("data/Pong_texture_4.png"));
+		japanese_texture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 	
-		octopusSmile = new TextureRegion(texture, 0, 0, 128, 128);
+		octopusSmile = new TextureRegion(japanese_texture, 0, 0, 128, 128);
 		octopusSmile.flip(false, true);
 		
-		fishCake = new TextureRegion(texture, 128, 0, 128, 128);
+		fishCake = new TextureRegion(japanese_texture, 128, 0, 128, 128);
 		fishCake.flip(false, true);
 		
-		salmonSushi = new TextureRegion(texture, 256, 0, 128, 128);
+		salmonSushi = new TextureRegion(japanese_texture, 256, 0, 128, 128);
 		salmonSushi.flip(false, true);
 		
-		riceCracker = new TextureRegion(texture, 384, 0, 128, 128);
+		riceCracker = new TextureRegion(japanese_texture, 384, 0, 128, 128);
 		riceCracker.flip(false, true);
+		
+		watermelon = new TextureRegion(fruitball_texture, 0, 0, 128, 128);
+		watermelon.flip(false, true);
+		
+		orange = new TextureRegion(fruitball_texture, 128, 0, 128, 128);
+		orange.flip(false, true);
+		
+		kiwi = new TextureRegion(fruitball_texture, 256, 0, 128, 128);
+		kiwi.flip(false, true);
+		
+		splash_screen = new TextureRegion(screen_texture, 0, 0, 256, 512);
+		splash_screen.flip(false, true);
 		
 //		TextureRegion[] octopus = { octopusGasp, octopusSmile };
 //		octopusAnimation = new Animation(0.06f, octopus);
@@ -57,7 +75,7 @@ public abstract class AssetLoader {
 	
 	public void dispose(){
 		font.dispose();
-		texture.dispose();
+		japanese_texture.dispose();
 	}
 
 	public static class LagException extends RuntimeException {

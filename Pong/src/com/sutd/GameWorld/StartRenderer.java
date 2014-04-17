@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.sutd.GameObjects.Ball;
 import com.sutd.GameObjects.Paddle;
+import com.sutd.PongHelpers.AssetLoader;
 import com.sutd.PongHelpers.Assets;
 import com.sutd.PongHelpers.Vector2D;
 
@@ -21,11 +22,14 @@ public class StartRenderer {
     private ShapeRenderer shapeRenderer;
     
     private SpriteBatch batcher;
-	private Texture texture;
+	private TextureRegion splash_screen;
 	private Vector2D screenSize;
 
 	private long totalTime;
-    
+	
+	private void initAssets() {
+		splash_screen = AssetLoader.splash_screen;
+	}
 
     public StartRenderer(StartWorld world) {
         start_world = world;
@@ -37,8 +41,8 @@ public class StartRenderer {
 //        screenSize = new Vector2D(136, 204);
         batcher = new SpriteBatch();
 		batcher.setProjectionMatrix(cam.combined);
-		texture = new Texture(Gdx.files.internal("data/texture.png"));
-		texture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+		
+		initAssets();
 		
 		totalTime = 0;
     }
@@ -108,6 +112,14 @@ public class StartRenderer {
 //                start_world.getStartButton().width, start_world.getStartButton().height);
 //
 //        shapeRenderer.end();
+        
+        batcher.begin();
+        
+     // Draws a rectangle with the bottom left corner at x,y and stretching the region to cover the given width and height.
+        batcher.draw(splash_screen, 0, 0, 136, 204);
+        
+     // End SpriteBatch
+        batcher.end();
     }
     
 
