@@ -143,6 +143,7 @@ public class GameRenderer {
 			AssetLoader.font.draw(batcher, "AGAIN ?", 1 * d.width / 3,
 					d.height - 40);
 			countDown = 3;
+			tick = 23;
 			// AssetLoader.font.draw(batcher, "AGAIN", 5, d.height - 40);
 			// AssetLoader.font.draw(batcher, "EXIT", d.width/2 + 30, d.height -
 			// 40);
