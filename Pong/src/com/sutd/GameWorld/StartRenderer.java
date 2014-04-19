@@ -74,7 +74,7 @@ public class StartRenderer {
         shapeRenderer.begin(ShapeType.Filled);
 
         // Chooses RGB Color of 87, 109, 120 at full opacity
-        shapeRenderer.setColor(87 / 255.0f, 109 / 255.0f, 120 / 255.0f, 0.5f);
+        shapeRenderer.setColor(87 / 255.0f, 109 / 255.0f, 120 / 255.0f, 0.0f);
 
         // Draws the rectangle from start_world (Using ShapeType.Filled)
         shapeRenderer.rect(start_world.getStartButton().x, start_world.getStartButton().y,
@@ -104,7 +104,7 @@ public class StartRenderer {
         shapeRenderer.begin(ShapeType.Filled);
 
         // Chooses RGB Color of 87, 109, 120 at full opacity
-        shapeRenderer.setColor(87 / 255.0f, 109 / 255.0f, 120 / 255.0f, 0.5f);
+        shapeRenderer.setColor(87 / 255.0f, 109 / 255.0f, 120 / 255.0f, 0.0f);
 
         // Draws the rectangle from start_world (Using ShapeType.Filled)
         shapeRenderer.rect(start_world.getJoinButton().x, start_world.getJoinButton().y,
