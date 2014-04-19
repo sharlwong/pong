@@ -34,7 +34,7 @@ public class GameRenderer {
 	int[][] balls;
 	int[] player0;
 	int[] player1;
-	private TextureRegion octopusSmile, fishCake, salmonSushi, riceCracker, watermelon, kiwi, orange;
+	private TextureRegion octopusSmile, fishCake, salmonSushi, riceCracker, watermelon, kiwi, orange, wait_screen, splash_screen;
 	private GameState lastKnownState;
 
 	int[]    scores;
@@ -68,7 +68,8 @@ public class GameRenderer {
 		kiwi = AssetLoader.kiwi;
 		orange = AssetLoader.orange;
 		font = AssetLoader.font;
-		
+		splash_screen = AssetLoader.splash_screen;
+		wait_screen = AssetLoader.wait_screen;
 	}
 
 	public void render(float runTime) {
@@ -111,6 +112,9 @@ public class GameRenderer {
 		{
 			font.draw(batcher, "Waiting", d.width/2 - 30 , d.height / 2-20);
 			font.draw(batcher, "Player 2", d.width/2 - 30 , d.height / 2+10);
+
+	        batcher.draw(wait_screen, 0, 0, 136, 204);
+			
 		}
 		else if (timeLeft == 0){
 			font.draw(batcher, "GAME OVER", d.width/2 - 48, d.height / 2 - 40);
@@ -121,9 +125,32 @@ public class GameRenderer {
 			font.draw(batcher, "AGAIN", 5, d.height - 40);
 			font.draw(batcher, "EXIT", d.width/2 + 30, d.height - 40);	
 		}else{
+			
+			/*** Draw paddles. ****/
+
+			// Tells shapeRenderer to begin drawing filled shapes
+			shapeRenderer.begin(ShapeType.Filled);
+
+	        /*render player 0 at the bottom */
+			shapeRenderer.setColor(Color.BLUE);
+			drawPaddle(player0[0], player0[1]);
+
+	        /* render player 1 at the top */
+			shapeRenderer.setColor(Color.RED);
+			drawPaddle(player1[0], player1[1]);
+
+			/* why is this here ._. it doesn't seem useful */
+			shapeRenderer.setColor(Color.WHITE);
+
+	        // Tells the shapeRenderer to finish rendering
+	        // We MUST do this every time.
+	        shapeRenderer.end();
+			
 			font.draw(batcher, "" + score1, d.width - 20 - (3 * score0.length()), d.height / 2 - 20);
 			font.draw(batcher, "" + score0, d.width - 20 - (3 * score0.length()), d.height / 2);
 			font.draw(batcher, "" + timeLeft, 5, d.height / 2 - 10);
+			
+			
 			 /*
 	         * Draw octopus as a ball.
 	         */
@@ -156,25 +183,7 @@ public class GameRenderer {
         /* Draw normal balls: For testing.*/
 		// for (int[] ball : balls) drawBall(ball[0], ball[1]);
 
-		/*** Draw paddles. ****/
-
-		// Tells shapeRenderer to begin drawing filled shapes
-		shapeRenderer.begin(ShapeType.Filled);
-
-        /*render player 0 at the bottom */
-		shapeRenderer.setColor(Color.BLUE);
-		drawPaddle(player0[0], player0[1]);
-
-        /* render player 1 at the top */
-		shapeRenderer.setColor(Color.RED);
-		drawPaddle(player1[0], player1[1]);
-
-		/* why is this here ._. it doesn't seem useful */
-		shapeRenderer.setColor(Color.WHITE);
-
-        // Tells the shapeRenderer to finish rendering
-        // We MUST do this every time.
-        shapeRenderer.end();
+		
         
         
     }

@@ -120,21 +120,7 @@ public class StartRenderer {
 //        batcher.begin();
 //        AssetLoader.font.draw(batcher, "JOIN", start_world.getJoinButton().x + start_world.getJoinButton().width/2 - 18, start_world.getJoinButton().y+start_world.getJoinButton().height/2 - 7);
 //        batcher.end();
-        /*
-         * 4. We draw the rectangle's outline
-         */
-
-//        // Tells shapeRenderer to draw an outline of the following shapes
-//        shapeRenderer.begin(ShapeType.Line);
-//
-//        // Chooses RGB Color of 255, 109, 120 at full opacity
-//        shapeRenderer.setColor(255 / 255.0f, 109 / 255.0f, 120 / 255.0f, 1);
-//
-//        // Draws the rectangle from start_world (Using ShapeType.Line)
-//        shapeRenderer.rect(start_world.getStartButton().x, start_world.getStartButton().y,
-//                start_world.getStartButton().width, start_world.getStartButton().height);
-//
-//        shapeRenderer.end();
+       
         
 
     }

@@ -23,8 +23,8 @@ public abstract class AssetLoader {
 	
 	public static BitmapFont font, shadow;
 	
-	public static Texture japanese_texture, fruitball_texture, screen_texture;
-	public static TextureRegion watermelon, orange, kiwi, salmonSushi, riceCracker, fishCake, octopusSmile, octopusGasp, splash_screen;
+	public static Texture japanese_texture, fruitball_texture, screen_texture, wait_texture;
+	public static TextureRegion watermelon, orange, kiwi, salmonSushi, riceCracker, fishCake, octopusSmile, octopusGasp, splash_screen, wait_screen;
 	public static Animation octopusAnimation;
 	
 //	public static final String FONT_CHARACTERS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789][_!$%#@|\\/?-+=()*&.;,{}\"´`'<>";
@@ -44,6 +44,9 @@ public abstract class AssetLoader {
 		
 		screen_texture = new Texture(Gdx.files.internal("data/Splash_screen_strokes_2.png"));
 		screen_texture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+		
+		wait_texture = new Texture(Gdx.files.internal("data/Wait_screen.png"));
+		wait_texture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 				
 		japanese_texture = new Texture(Gdx.files.internal("data/Pong_texture_4.png"));
 		japanese_texture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
@@ -71,6 +74,9 @@ public abstract class AssetLoader {
 		
 		splash_screen = new TextureRegion(screen_texture, 0, 0, 256, 512);
 		splash_screen.flip(false, true);
+		
+		wait_screen = new TextureRegion(wait_texture, 0, 0, 256, 512);
+		wait_screen.flip(false, true);
 		
 //		TextureRegion[] octopus = { octopusGasp, octopusSmile };
 //		octopusAnimation = new Animation(0.06f, octopus);
