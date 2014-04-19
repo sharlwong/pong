@@ -14,8 +14,8 @@ import com.sutd.GameObjects.Paddle;
 import com.sutd.PongHelpers.AssetLoader;
 import com.sutd.PongHelpers.Constants;
 import com.sutd.PongHelpers.InputHandler;
+import com.sutd.PongHelpers.Dimension;
 
-import java.awt.Dimension;
 import java.util.concurrent.BlockingQueue;
 
 public class GameRenderer {

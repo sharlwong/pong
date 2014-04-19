@@ -1,6 +1,6 @@
 package com.sutd.PongHelpers;
 
-import java.awt.*;
+import com.sutd.PongHelpers.Dimension;
 import java.util.Collection;
 import com.sutd.GameObjects.GameState;
 
@@ -51,8 +51,8 @@ public class Constants {
 	public final static int UPDATE_DELTA      = 16;
 	public final static int STATE_BUFFER_SIZE = 1;
 
-	public Constants(Dimension dimension) {
-		this.screen = dimension;
+	public Constants(Dimension d) {
+		this.screen = d;
 
 		/* find vertical distances */
 		verticalFractionalPadding = EDGE_PADDING + PADDLE_EFFECTIVE_DEPTH + BALL_RADIUS;

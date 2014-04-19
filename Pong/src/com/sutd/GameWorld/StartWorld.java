@@ -39,7 +39,7 @@ public class StartWorld {
 	
 	public void update() {
 		check_if_touched();
-		check_if_server_clients_created();
+		//check_if_server_clients_created();
 	}
 	
 	/** Checks if start game button and join game button starts.
@@ -52,6 +52,7 @@ public class StartWorld {
 	
 	private void check_if_touched() {
 		if(Gdx.input.justTouched()) {
+			Gdx.app.log("MyTag", "Just Touched!");
 			float x = (float) (Gdx.input.getX());
 			float y = (float)(Gdx.input.getY());
 			if(x>= Gdx.graphics.getWidth()*((float) 20/136) && x<= Gdx.graphics.getWidth()*((float)115/136) && 
