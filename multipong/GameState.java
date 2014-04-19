@@ -1,16 +1,16 @@
-package com.sutd.GameObjects;
+package multipong;
 
 /**
  * Created by avery_000 on 08-Apr-14.
  */
 public class GameState {
 	private double[][] ballsData;
-	private double[] player0Data;
-	private double[] player1Data;
-	private int[] ballsType;
-	private int status;
-	private int timeLeft;
-	private int[] scores;
+	private double[]   player0Data;
+	private double[]   player1Data;
+	private int[]      ballsType;
+	private int        status;
+	private int        timeLeft;
+	private int[]      scores;
 	private double[]   spareVar;
 
 	public double[] getSpareVar() {
@@ -40,7 +40,7 @@ public class GameState {
 	public int[] getScores() {
 		return scores;
 	}
-	
+
 	public int[] getBallsType() {
 		return ballsType;
 	}
@@ -68,11 +68,11 @@ public class GameState {
 	public void setScores(int[] scores) {
 		this.scores = scores;
 	}
-	
-	public void setBallsType(int[] ballsType){
+
+	public void setBallsType(int[] ballsType) {
 		this.ballsType = ballsType;
 	}
-	
+
 	public void setSpareVar(double[] spareVar) {
 		this.spareVar = spareVar;
 	}
@@ -89,16 +89,15 @@ public class GameState {
 		flipped.setStatus(status);
 		flipped.setTimeLeft(timeLeft);
 		flipped.setBallsData(ballsData);
-		flipped.setBallsType(ballsType);
 
 		//flip score
-		flipped.setScores(new int[] {scores[1], scores[0]});
+		flipped.setScores(new int[]{scores[1], scores[0]});
 		//flip paddles
-		flipped.setPlayer1Data(new double[] {1 - player0Data[0], 1});
-		flipped.setPlayer0Data(new double[] {1 - player1Data[0], 0});
+		flipped.setPlayer1Data(new double[]{1 - player0Data[0], 1});
+		flipped.setPlayer0Data(new double[]{1 - player1Data[0], 0});
 		//flip balls
 		double temp[][] = new double[ballsData.length][2];
-		for(int i = 0; i < ballsData.length;i++) {
+		for (int i = 0; i < ballsData.length; i++) {
 			temp[i][0] = 1 - ballsData[i][0];
 			temp[i][1] = 1 - ballsData[i][1];
 		}

@@ -34,7 +34,7 @@ public class ServerReceiveObject {
 
 		System.out.println("Making signature...");
 		rsaPrivate.sendSignature(socket, temp1);
-		verified = rsaPublic.getVerification(socket,temp2);
+		verified = rsaPublic.getVerification(socket, temp2);
 
 		System.out.println("Verified: " + verified);
 

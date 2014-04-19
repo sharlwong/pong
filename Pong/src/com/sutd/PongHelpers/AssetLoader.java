@@ -27,7 +27,13 @@ public abstract class AssetLoader {
 	public static TextureRegion watermelon, orange, kiwi, salmonSushi, riceCracker, fishCake, octopusSmile, octopusGasp, splash_screen;
 	public static Animation octopusAnimation;
 	
+//	public static final String FONT_CHARACTERS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789][_!$%#@|\\/?-+=()*&.;,{}\"´`'<>";
+	
 	public static void load(){
+		
+//		font = TrueTypeFontFactory.createBitmapFont(Gdx.files.internal("font.ttf"), FONT_CHARACTERS, 12.5f, 7.5f, 1.0f, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+//		font.setColor(1f, 0f, 0f, 1f);
+		
 		font = new BitmapFont(Gdx.files.internal("data/text.fnt"));
 		font.setScale(.25f, -.25f);
 		shadow = new BitmapFont(Gdx.files.internal("data/shadow.fnt"));

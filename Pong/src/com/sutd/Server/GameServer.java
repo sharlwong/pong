@@ -47,6 +47,11 @@ public class GameServer extends Thread {
 		//System.out.println("Server Starting...");
 		serverSocket = Gdx.net.newServerSocket(Protocol.TCP,port, null);
 		
+		//Start broadcasting presence
+		ServerBroadcaseter broadcaster = new ServerBroadcaseter("lhst", "5000");
+		broadcaster.start();
+		
+		
 		// Accept Two clients to connect.
 		// And start listening to messages from them.
 		for(int i = 0 ; i < 2; i ++) {

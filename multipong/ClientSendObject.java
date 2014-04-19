@@ -31,11 +31,12 @@ public class ClientSendObject {
 		temp2 = RSATools.nonce();
 
 		System.out.println("Exchanging bits...");
-		temp1 = rsaPrivate.getMessage(socket);;
+		temp1 = rsaPrivate.getMessage(socket);
+		;
 		rsaPublic.sendMessage(socket, temp2);
 
 		System.out.println("Exchanging signatures...");
-		verified = rsaPublic.getVerification(socket,temp1);
+		verified = rsaPublic.getVerification(socket, temp1);
 		rsaPrivate.sendSignature(socket, temp2);
 
 		System.out.println("Verified: " + verified);
@@ -50,7 +51,7 @@ public class ClientSendObject {
 		double[][] a = new double[5][5];
 		for (int i = 0; i < 5; i++) {
 			for (int j = 0; j < 5; j++) {
-				a[i][j] = ((double)i+1)/(j+7);
+				a[i][j] = ((double) i + 1) / (j + 7);
 			}
 		}
 
@@ -58,7 +59,7 @@ public class ClientSendObject {
 		String s = aesHelper.getMessage(socket);
 		System.out.println("Server: " + s);
 
-		aesHelper.sendObject(socket,a);
+		aesHelper.sendObject(socket, a);
 
 		socket.close();
 	}

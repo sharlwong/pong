@@ -13,6 +13,7 @@ import com.sutd.GameObjects.Ball;
 import com.sutd.GameObjects.Paddle;
 import com.sutd.PongHelpers.AssetLoader;
 import com.sutd.PongHelpers.Assets;
+
 import com.sutd.PongHelpers.Vector2D;
 
 public class StartRenderer {
@@ -63,6 +64,9 @@ public class StartRenderer {
          * 2. We draw a start button (filled rectangle).
          */
         
+        
+        
+        
 
         // Tells shapeRenderer to begin drawing filled shapes
         shapeRenderer.begin(ShapeType.Filled);
@@ -77,6 +81,11 @@ public class StartRenderer {
         // Tells the shapeRenderer to finish rendering
         // We MUST do this every time.
         shapeRenderer.end();
+        
+        
+        batcher.begin();
+        AssetLoader.font.draw(batcher, "HOST", start_world.getStartButton().x + start_world.getStartButton().width/2 - 18, start_world.getStartButton().y+start_world.getStartButton().height/2 - 7);
+        batcher.end();
         
         /*
          * 3. We draw a join button (filled rectangle).
@@ -97,6 +106,9 @@ public class StartRenderer {
         // We MUST do this every time.
         shapeRenderer.end();
 
+        batcher.begin();
+        AssetLoader.font.draw(batcher, "JOIN", start_world.getJoinButton().x + start_world.getJoinButton().width/2 - 18, start_world.getJoinButton().y+start_world.getJoinButton().height/2 - 7);
+        batcher.end();
         /*
          * 4. We draw the rectangle's outline
          */
