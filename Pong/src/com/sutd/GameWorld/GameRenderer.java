@@ -54,7 +54,7 @@ public class GameRenderer {
 		cam = new OrthographicCamera();
 		cam.setToOrtho(true, 136, 204);
 		countDown = 3;
-		tick = 13;
+		tick = 23;
 
 		shapeRenderer = new ShapeRenderer();
 		shapeRenderer.setProjectionMatrix(cam.combined);

@@ -53,14 +53,16 @@ public class StartWorld {
 	
 	private void check_if_touched() {
 		if(Gdx.input.justTouched()) {
-			float x = (float) (Gdx.input.getX())/ 2;
-			float y = (float)(Gdx.input.getY()) / 2;
-			if(start_game_button.contains(x, y)) {
+			float x = (float) (Gdx.input.getX());
+			float y = (float)(Gdx.input.getY());
+			if(x>= Gdx.graphics.getWidth()*((float) 20/136) && x<= Gdx.graphics.getWidth()*((float)115/136) && 
+					 					y>= Gdx.graphics.getHeight()*((float)124/204) && y<=Gdx.graphics.getHeight()*((float)149/204)) {
 				//Probably start a server here.
 				initializeServerAndClient();
 			}
 			
-			else if(join_game_button.contains(x, y)) {
+			else if(x>= Gdx.graphics.getWidth()*((float) 20/136) && x<= Gdx.graphics.getWidth()*((float)115/136) && 
+					 					y>= Gdx.graphics.getHeight()*((float)154/204) && y<=Gdx.graphics.getHeight()*((float)179/204)) {
 				intializeClientAndJoinServer();
 			//connect to a server here.
 			}
