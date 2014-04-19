@@ -4,7 +4,6 @@ import java.util.concurrent.BlockingQueue;
 
 import com.google.gson.Gson;
 import com.sutd.GameObjects.GameState;
-import com.sutd.GameWorld.GameWorld;
 import com.sutd.Network.MessageHandler;
 
 public class GameUpdater implements MessageHandler {
