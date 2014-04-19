@@ -149,12 +149,6 @@ public class GameRenderer {
 			// 40);
 		} else {
 			if (countDown == 0) {
-				AssetLoader.font.draw(batcher, "" + score1, d.width - 20
-						- (3 * score0.length()), d.height / 2 - 20);
-				AssetLoader.font.draw(batcher, "" + score0, d.width - 20
-						- (3 * score0.length()), d.height / 2);
-				AssetLoader.font.draw(batcher, "" + timeLeft, 5,
-						d.height / 2 - 10);
 				/*
 				 * Draw octopus as a ball.
 				 */
@@ -181,6 +175,13 @@ public class GameRenderer {
 				// for (int[] ball : balls) drawSalmonSushi(ball[0], ball[1]);
 
 				// End SpriteBatch
+				
+				AssetLoader.font.draw(batcher, "" + score1, d.width - 20
+						- (3 * score0.length()), d.height / 2 - 20);
+				AssetLoader.font.draw(batcher, "" + score0, d.width - 20
+						- (3 * score0.length()), d.height / 2);
+				AssetLoader.font.draw(batcher, "" + timeLeft, 5,
+						d.height / 2 - 10);
 			} else {
 				if (countDown > 1) {
 					AssetLoader.font.draw(batcher, "READY ?", d.width / 3,
