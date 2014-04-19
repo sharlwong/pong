@@ -1,15 +1,16 @@
 package com.sutd.GameWorld;
 
+import java.security.SecureRandom;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.gdx.Gdx;
 import com.sutd.GameObjects.Ball;
 import com.sutd.GameObjects.GameState;
 import com.sutd.GameObjects.Paddle;
+import com.sutd.Pong.PongGame;
 import com.sutd.PongHelpers.Constants;
 import com.sutd.PongHelpers.Vector2D;
-
-import java.security.SecureRandom;
-import java.util.ArrayList;
-import java.util.List;
 
 public class GameWorld {
 	public        long         elapsedTimeMillis;
@@ -21,6 +22,7 @@ public class GameWorld {
 	private       boolean      init;
 	public        boolean      ready;
 	public 		  boolean      gameover;
+	public		  boolean      end;
 	public        int          ticktock;
 	public        int          timeLimit; //maximum time for each round
 
@@ -36,10 +38,11 @@ public class GameWorld {
 		random.setSeed(1234567890);
 		injectBalls = 0;
 		ticktock = 0;
-		timeLimit = 10;    //should be changed later
+		timeLimit = 10 + 5;    //should be changed later // 5 is the countDown time
 		init = true;
 		ready = false;
 		gameover = false;
+		end = false;
 		System.out.println("Game initialized, please wait for start...");
 	}
 
@@ -150,10 +153,10 @@ public class GameWorld {
 		if (!ready) return;
 		if (gameover) {
 			checkrestart();
-			checkexit();
+			//checkexit();
 			return;
 		}
-			
+		
 		long temp = elapsedTimeMillis;
 		/* increment time */
 		long deltaMillis = (long) (delta);
@@ -209,7 +212,7 @@ public class GameWorld {
 			int x = Gdx.input.getX();
 			int y = Gdx.input.getY();
 			//System.out.println(x+" "+y+" "+Gdx.graphics.getWidth()/2+" "+Gdx.graphics.getHeight());
-			if (x>0 && x<Gdx.graphics.getWidth()/3 && y > Gdx.graphics.getHeight()*((float) 164/204) && y < Gdx.graphics.getHeight()*((float) 184/204)){
+			if (x>Gdx.graphics.getWidth()/3 && x<2*Gdx.graphics.getWidth()/3 && y > Gdx.graphics.getHeight()*((float) 164/204) && y < Gdx.graphics.getHeight()*((float) 184/204)){
 				// restart
 				// initialize objects inside game world
 				ticktock = 0;
@@ -223,16 +226,17 @@ public class GameWorld {
 		}
 	}
 	
-	public void checkexit(){
-		if(Gdx.input.justTouched()) {
-			int x = Gdx.input.getX()/2;
-			int y = Gdx.input.getY();
-			if (x>2*Gdx.graphics.getWidth()/3 && x<Gdx.graphics.getWidth() && y > Gdx.graphics.getHeight()*((float) 164/204) && y < Gdx.graphics.getHeight()*((float) 184/204)){
-				// exit
-				System.out.println("EXIT");
-			}
-		}
-	}
+//	public void checkexit(){
+//		if(Gdx.input.justTouched()) {
+//			int x = Gdx.input.getX()/2;
+//			int y = Gdx.input.getY();
+//			if (x>2*Gdx.graphics.getWidth()/3 && x<Gdx.graphics.getWidth() && y > Gdx.graphics.getHeight()*((float) 164/204) && y < Gdx.graphics.getHeight()*((float) 184/204)){
+//				// exit
+//				end = true;
+//				//System.out.println("EXIT");
+//			}
+//		}
+//	}
 
 	public void setP0fractional(double pos) {
 		player0.setFractionalPosition(pos);

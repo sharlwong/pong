@@ -11,6 +11,7 @@ import com.sutd.GameWorld.GameWorld;
 public class InputHandler implements InputProcessor{
 	private final Paddle player_paddle;
 	private final Constants calc;
+	private double previousPosition;
 
 	public InputHandler(Paddle paddle, Constants calc) {
 		this.calc = calc;
@@ -49,13 +50,19 @@ public class InputHandler implements InputProcessor{
 	@Override
 	public boolean touchDragged(int screenX, int screenY, int pointer) {
 		// TODO Auto-generated method stub
-		double relativePos = screenX - calc.getPaddlePixelWidth() / 2;
-		//double relativeMax = game.calc.getHorizontalPixelUnitLength() + 2 * game.calc.getBallPixelRadius() - game.calc.getPaddlePixelWidth();
-		double relativeMax = Gdx.graphics.getWidth()+ calc.getPaddlePixelWidth()/2;
-		relativePos = relativePos < 0 ? 0 : relativePos;
-		relativePos = relativePos > relativeMax ? relativeMax : relativePos;
-		this.player_paddle.setFractionalPosition(relativePos / relativeMax);
-		return true;
+		double relativePos = screenX;
+		if (Math.abs(previousPosition - relativePos) > Gdx.graphics.getWidth() * 0.6){
+			return true;
+		}else{
+			//double relativeMax = game.calc.getHorizontalPixelUnitLength() + 2 * game.calc.getBallPixelRadius() - game.calc.getPaddlePixelWidth();
+			double relativeMax = Gdx.graphics.getWidth();
+			relativePos = relativePos < 0 ? 0 : relativePos;
+			relativePos = relativePos > relativeMax ? relativeMax : relativePos;
+			this.player_paddle.setFractionalPosition(relativePos / relativeMax);
+			previousPosition = screenX;
+			return true;
+		}
+		
 	}
 
 	@Override

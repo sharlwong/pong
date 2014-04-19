@@ -23,7 +23,6 @@ public class GameRenderer {
 	private OrthographicCamera cam;
 	private ShapeRenderer      shapeRenderer;
 	private SpriteBatch        batcher;
-	private Paddle             player_paddle;
 	private TextureRegion      octopusSmile, fishCake, salmonSushi, riceCracker;
 	private GameState lastKnownState;
 
@@ -38,6 +37,7 @@ public class GameRenderer {
 	int[]    ballTypes;
 	double[] ballDoubles;
 	int      timeLeft;
+	int      countDown;
 
 	BlockingQueue<GameState> buffer;
 
@@ -47,10 +47,10 @@ public class GameRenderer {
 		this.buffer = buffer2;
 		cam = new OrthographicCamera();
 		cam.setToOrtho(true, 136, 204);
+		countDown = 5;
 
 		shapeRenderer = new ShapeRenderer();
 		shapeRenderer.setProjectionMatrix(cam.combined);
-		this.player_paddle = paddle;
 		batcher = new SpriteBatch();
 		batcher.setProjectionMatrix(cam.combined);
 		initAssets();
@@ -65,7 +65,6 @@ public class GameRenderer {
 
 	public void render(float runTime) {
 		// This runTime keeps accumulating, can be used by Ball class directly
-
         /* get state */
 		GameState state = buffer.poll();
 
@@ -88,6 +87,10 @@ public class GameRenderer {
 		ballDoubles = state.getSpareVar();
 		ballTypes = state.getBallsType();
 		timeLeft = state.getTimeLeft();
+		
+		if (countDown > 0){
+			countDown = 5 - (int) runTime;
+		}
 
 		/* black background drawn to prevent flickering */
 		Gdx.gl.glClearColor(255, 255, 183, 1);
@@ -109,38 +112,51 @@ public class GameRenderer {
 			else if (scores[0] < scores[1]) AssetLoader.font.draw(batcher, "YOU LOSE", d.width/2 - 37, d.height / 2 - 20);
 			else AssetLoader.font.draw(batcher, "TIE", d.width/2 - 10, d.height / 2 - 20);
 			AssetLoader.font.draw(batcher, score0+":"+score1, d.width/2 - 3 * score0.length() - 10, d.height / 2);
-			AssetLoader.font.draw(batcher, "AGAIN", 5, d.height - 40);
-			AssetLoader.font.draw(batcher, "EXIT", d.width/2 + 30, d.height - 40);	
+			AssetLoader.font.draw(batcher, "AGAIN ?", 1*d.width/3, d.height - 40);
+			countDown = 0;
+			//AssetLoader.font.draw(batcher, "AGAIN", 5, d.height - 40);
+			//AssetLoader.font.draw(batcher, "EXIT", d.width/2 + 30, d.height - 40);	
 		}else{
-			AssetLoader.font.draw(batcher, "" + score1, d.width - 20 - (3 * score0.length()), d.height / 2 - 20);
-			AssetLoader.font.draw(batcher, "" + score0, d.width - 20 - (3 * score0.length()), d.height / 2);
-			AssetLoader.font.draw(batcher, "" + timeLeft, 5, d.height / 2 - 10);
-			 /*
-	         * Draw octopus as a ball.
-	         */
+			if (countDown == 0){
+				AssetLoader.font.draw(batcher, "" + score1, d.width - 20 - (3 * score0.length()), d.height / 2 - 20);
+				AssetLoader.font.draw(batcher, "" + score0, d.width - 20 - (3 * score0.length()), d.height / 2);
+				AssetLoader.font.draw(batcher, "" + timeLeft, 5, d.height / 2 - 10);
+				 /*
+		         * Draw octopus as a ball.
+		         */
 
-			// for (int[] ball : balls) drawOctopus(ball[0], ball[1]);
+				// for (int[] ball : balls) drawOctopus(ball[0], ball[1]);
 
-	        
-	        /*
-	         * Draw fish cake as a ball.
-	         */
+		        
+		        /*
+		         * Draw fish cake as a ball.
+		         */
 
-			//        for (int[] ball : balls) drawFishCake(ball[0], ball[1]);
+				//        for (int[] ball : balls) drawFishCake(ball[0], ball[1]);
 
-	        /*
-	         * Draw rice cracker as a ball.
-	         */
+		        /*
+		         * Draw rice cracker as a ball.
+		         */
 
-			for (int[] ball : balls) drawRiceCracker(ball[0], ball[1]);
-	        
-	        /*
-	         * Draw salmon sushi as a ball.
-	         */
+				for (int[] ball : balls) drawRiceCracker(ball[0], ball[1]);
+		        
+		        /*
+		         * Draw salmon sushi as a ball.
+		         */
 
-			//        for (int[] ball : balls) drawSalmonSushi(ball[0], ball[1]);
+				//        for (int[] ball : balls) drawSalmonSushi(ball[0], ball[1]);
 
-			// End SpriteBatch
+				// End SpriteBatch
+			}else{
+				if (countDown == 2){
+					AssetLoader.font.draw(batcher, "READY ?", d.width/3, d.height / 2 - 20);
+				}else if (countDown == 1){
+					AssetLoader.font.draw(batcher, "GO !", 2 * d.width/5, d.height / 2 - 20);
+				}else{
+					AssetLoader.font.draw(batcher, Integer.toString(countDown - 2), d.width/2 - 5, d.height / 2 - 20);
+				}
+			}
+			
 		}
 		batcher.end();
 

@@ -111,5 +111,4 @@ public class GameServer extends Thread {
 		if(!game_world.ready) return ;
 		game_world.getPaddle(i).setFractionalPosition(fraction);
 	}
-
 }
