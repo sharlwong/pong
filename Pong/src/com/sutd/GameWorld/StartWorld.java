@@ -27,8 +27,8 @@ public class StartWorld {
 	 * Creates the buttons that is shown on the start screen
 	 */
 	private void createButtons() {
-		start_game_button = new Rectangle(10,10,100,30);
-		join_game_button = new Rectangle(10,60,100,30);
+		start_game_button = new Rectangle(20,124,95,25);
+		join_game_button = new Rectangle(20,154,95,25);
 	}
 	
 	public Rectangle getStartButton() {

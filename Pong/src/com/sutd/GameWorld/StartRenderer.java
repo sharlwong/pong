@@ -50,29 +50,31 @@ public class StartRenderer {
 
     public void render(float runTime) {
     	
-    	
         //System.out.println("StartRenderer - render");
         
         /*
-         * 1. We draw a black background. This prevents flickering.
+         * 1. We draw the background containing the title of the game, "Fruitball".
          */
-
-        Gdx.gl.glClearColor(153, 153, 255, 1);
-        Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-
+    	
+    	// Draw the splash screen.
+    	batcher.begin();
+        batcher.draw(splash_screen, 0, 0, 136, 204);
+        batcher.end();
+        
+        
         /*
          * 2. We draw a start button (filled rectangle).
          */
         
-        
-        
-        
+        // Enable transparency
+        Gdx.gl.glEnable(GL10.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
 
         // Tells shapeRenderer to begin drawing filled shapes
         shapeRenderer.begin(ShapeType.Filled);
 
         // Chooses RGB Color of 87, 109, 120 at full opacity
-        shapeRenderer.setColor(87 / 255.0f, 109 / 255.0f, 120 / 255.0f, 1);
+        shapeRenderer.setColor(87 / 255.0f, 109 / 255.0f, 120 / 255.0f, 0.5f);
 
         // Draws the rectangle from start_world (Using ShapeType.Filled)
         shapeRenderer.rect(start_world.getStartButton().x, start_world.getStartButton().y,
@@ -82,21 +84,27 @@ public class StartRenderer {
         // We MUST do this every time.
         shapeRenderer.end();
         
+        //Disable transparency
+        Gdx.gl.glDisable(GL10.GL_BLEND);
         
-        batcher.begin();
-        AssetLoader.font.draw(batcher, "HOST", start_world.getStartButton().x + start_world.getStartButton().width/2 - 18, start_world.getStartButton().y+start_world.getStartButton().height/2 - 7);
-        batcher.end();
         
+//        batcher.begin();
+//        AssetLoader.font.draw(batcher, "HOST", start_world.getStartButton().x + start_world.getStartButton().width/2 - 18, start_world.getStartButton().y+start_world.getStartButton().height/2 - 7);
+//        batcher.end();
+//        
         /*
          * 3. We draw a join button (filled rectangle).
          */
-        
+
+        // Enable transparency
+        Gdx.gl.glEnable(GL10.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
 
         // Tells shapeRenderer to begin drawing filled shapes
         shapeRenderer.begin(ShapeType.Filled);
 
         // Chooses RGB Color of 87, 109, 120 at full opacity
-        shapeRenderer.setColor(87 / 255.0f, 109 / 255.0f, 120 / 255.0f, 1);
+        shapeRenderer.setColor(87 / 255.0f, 109 / 255.0f, 120 / 255.0f, 0.5f);
 
         // Draws the rectangle from start_world (Using ShapeType.Filled)
         shapeRenderer.rect(start_world.getJoinButton().x, start_world.getJoinButton().y,
@@ -105,10 +113,13 @@ public class StartRenderer {
         // Tells the shapeRenderer to finish rendering
         // We MUST do this every time.
         shapeRenderer.end();
+        
+        //Disable transparency
+        Gdx.gl.glDisable(GL10.GL_BLEND);
 
-        batcher.begin();
-        AssetLoader.font.draw(batcher, "JOIN", start_world.getJoinButton().x + start_world.getJoinButton().width/2 - 18, start_world.getJoinButton().y+start_world.getJoinButton().height/2 - 7);
-        batcher.end();
+//        batcher.begin();
+//        AssetLoader.font.draw(batcher, "JOIN", start_world.getJoinButton().x + start_world.getJoinButton().width/2 - 18, start_world.getJoinButton().y+start_world.getJoinButton().height/2 - 7);
+//        batcher.end();
         /*
          * 4. We draw the rectangle's outline
          */
@@ -125,13 +136,7 @@ public class StartRenderer {
 //
 //        shapeRenderer.end();
         
-        batcher.begin();
-        
-     // Draws a rectangle with the bottom left corner at x,y and stretching the region to cover the given width and height.
-        batcher.draw(splash_screen, 0, 0, 136, 204);
-        
-     // End SpriteBatch
-        batcher.end();
+
     }
     
 

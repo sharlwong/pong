@@ -42,7 +42,7 @@ public abstract class AssetLoader {
 		fruitball_texture = new Texture(Gdx.files.internal("data/Fruitball_Texture.png"));
 		fruitball_texture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 		
-		screen_texture = new Texture(Gdx.files.internal("data/Splash_screen_wo_strokes_256x512.png"));
+		screen_texture = new Texture(Gdx.files.internal("data/Splash_screen_strokes_2.png"));
 		screen_texture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 				
 		japanese_texture = new Texture(Gdx.files.internal("data/Pong_texture_4.png"));
