@@ -24,7 +24,7 @@ public class GameClient {
 	private String serverAddress;
 	private int serverPort;
 	private boolean isReady = false;
-	
+
 	/* Pre-condition: We expect a server to be up and running
 	 * and the address should be accessible to the client.
 	 */
@@ -33,17 +33,17 @@ public class GameClient {
 		writer = new PrintWriter(client_socket.getOutputStream());
 		reader = new BufferedReader( new InputStreamReader(client_socket.getInputStream()));
 	}
-	
+
 	public void sendMessage(String message) {
 		writer.println(message);
 		writer.flush();
 	}
-	
+
 	public void startListening() {
 		MessageProducer listener = new MessageProducer(reader, buffer);
 		listener.start();
 	}
-	
+
 	/**
 	 * Start Dealing with the messages
 	 * @param handler the handler that is callbacked after a message is received.

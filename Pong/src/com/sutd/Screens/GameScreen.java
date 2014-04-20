@@ -1,6 +1,5 @@
 package com.sutd.Screens;
 
-import java.awt.Dimension;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -9,9 +8,9 @@ import com.badlogic.gdx.Screen;
 import com.sutd.GameObjects.GameState;
 import com.sutd.GameObjects.Paddle;
 import com.sutd.GameWorld.GameRenderer;
-import com.sutd.GameWorld.GameWorld;
 import com.sutd.Pong.PongGame;
 import com.sutd.PongHelpers.Constants;
+import com.sutd.PongHelpers.Dimension;
 import com.sutd.PongHelpers.GameUpdater;
 import com.sutd.PongHelpers.InputHandler;
 

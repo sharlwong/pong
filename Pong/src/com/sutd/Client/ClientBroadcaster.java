@@ -13,7 +13,7 @@ public class ClientBroadcaster extends Thread{
 	public ClientBroadcaster(GameClient client) {
 		this.client = client;
 	}
-	
+
 	public void run() {
 		// Find the server using UDP broadcast
 		try {
@@ -36,7 +36,7 @@ public class ClientBroadcaster extends Thread{
 		  while (interfaces.hasMoreElements()) {
 		    NetworkInterface networkInterface = (NetworkInterface) interfaces.nextElement();
 
-		    if (networkInterface.isLoopback() || !networkInterface.isUp()) {
+		    if (/*networkInterface.isLoopback() ||*/ !networkInterface.isUp()) {
 		      continue; // Don't want to broadcast to the loopback interface
 		    }
 

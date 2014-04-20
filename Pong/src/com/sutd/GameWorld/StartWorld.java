@@ -1,12 +1,11 @@
 package com.sutd.GameWorld;
 
+import java.util.concurrent.CountDownLatch;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.utils.IntIntMap;
 import com.sutd.Client.ClientBroadcaster;
-import com.sutd.Client.GameClient;
 import com.sutd.Pong.PongGame;
-import com.sutd.Screens.GameScreen;
 import com.sutd.Server.GameServer;
 
 
@@ -40,7 +39,7 @@ public class StartWorld {
 	
 	public void update() {
 		check_if_touched();
-		check_if_server_clients_created();
+		//check_if_server_clients_created();
 	}
 	
 	/** Checks if start game button and join game button starts.
@@ -53,14 +52,17 @@ public class StartWorld {
 	
 	private void check_if_touched() {
 		if(Gdx.input.justTouched()) {
-			float x = (float) (Gdx.input.getX())/ 2;
-			float y = (float)(Gdx.input.getY()) / 2;
-			if(start_game_button.contains(x, y)) {
+			Gdx.app.log("MyTag", "Just Touched!");
+			float x = (float) (Gdx.input.getX());
+			float y = (float)(Gdx.input.getY());
+			if(x>= Gdx.graphics.getWidth()*((float) 20/136) && x<= Gdx.graphics.getWidth()*((float)115/136) && 
+					 					y>= Gdx.graphics.getHeight()*((float)124/204) && y<=Gdx.graphics.getHeight()*((float)149/204)) {
 				//Probably start a server here.
 				initializeServerAndClient();
 			}
 			
-			else if(join_game_button.contains(x, y)) {
+			else if(x>= Gdx.graphics.getWidth()*((float) 20/136) && x<= Gdx.graphics.getWidth()*((float)115/136) && 
+					 					y>= Gdx.graphics.getHeight()*((float)154/204) && y<=Gdx.graphics.getHeight()*((float)179/204)) {
 				intializeClientAndJoinServer();
 			//connect to a server here.
 			}
@@ -83,20 +85,26 @@ public class StartWorld {
 	 */
 	private void initializeServerAndClient() {
 		// Start Server
-		pong_game.server = new GameServer();
+		CountDownLatch start = new CountDownLatch(1);
+		Gdx.app.log("my app","HOST");
+		pong_game.server = new GameServer(start);
 		pong_game.server.start();
-		pong_game.client.setServer("localhost", 5000); //default
-		/*pong_game.client.connectToServer();
-		pong_game.client.startListening();
-		pong_game.player = 0;
-		pong_game.setScreen(new GameScreen(pong_game)); */
+		try {
+			start.await();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		ClientBroadcaster bcaster = new ClientBroadcaster(pong_game.client);
+		bcaster.start();
 	}
-	
+
 	/**
 	 * Start Client Thread
 	 * **/
-	
+
 	private void intializeClientAndJoinServer() {
+		Gdx.app.log("my app","CLIENT");
 		//first set us up as player 1
 		pong_game.player = 1;
 		// broadcast request to join

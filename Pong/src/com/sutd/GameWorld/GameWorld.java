@@ -36,7 +36,7 @@ public class GameWorld {
 		random.setSeed(1234567890);
 		injectBalls = 0;
 		ticktock = 0;
-		timeLimit = 10;    //should be changed later
+		timeLimit = 20 + 3;    //should be changed later
 		init = true;
 		ready = false;
 		gameover = false;
@@ -150,9 +150,10 @@ public class GameWorld {
 		if (!ready) return;
 		if (gameover) {
 			checkrestart();
-			checkexit();
+			//checkexit();
 			return;
 		}
+		
 			
 		long temp = elapsedTimeMillis;
 		/* increment time */
@@ -161,6 +162,7 @@ public class GameWorld {
 		
 		if ((int) elapsedTimeMillis/1000 > (int) temp/1000){
 			ticktock++;
+			if (ticktock <= 3) return;
 			injectRandomBall();
 		}
 		
@@ -208,7 +210,7 @@ public class GameWorld {
 			int x = Gdx.input.getX()/2;
 			int y = Gdx.input.getY();
 			//System.out.println(x+" "+y+" "+Gdx.graphics.getWidth()/2+" "+Gdx.graphics.getHeight());
-			if (x>5 && x<Gdx.graphics.getWidth()/4 && y > Gdx.graphics.getHeight() - 80 && y < Gdx.graphics.getHeight() - 40){
+			if (x>Gdx.graphics.getWidth()/4 && x<2*Gdx.graphics.getWidth()/3 && y > Gdx.graphics.getHeight()*((float) 164/204) && y < Gdx.graphics.getHeight()*((float) 184/204)){
 				// restart
 				// initialize objects inside game world
 				ticktock = 0;
@@ -222,16 +224,16 @@ public class GameWorld {
 		}
 	}
 	
-	public void checkexit(){
-		if(Gdx.input.justTouched()) {
-			int x = Gdx.input.getX()/2;
-			int y = Gdx.input.getY();
-			if (x>Gdx.graphics.getWidth()/4 && x<Gdx.graphics.getWidth()/2 && y > Gdx.graphics.getHeight() - 80 && y < Gdx.graphics.getHeight() - 40){
-				// exit
-				System.out.println("EXIT");
-			}
-		}
-	}
+//	public void checkexit(){
+//		if(Gdx.input.justTouched()) {
+//			int x = Gdx.input.getX()/2;
+//			int y = Gdx.input.getY();
+//			if (x>Gdx.graphics.getWidth()/4 && x<Gdx.graphics.getWidth()/2 && y > Gdx.graphics.getHeight() - 80 && y < Gdx.graphics.getHeight() - 40){
+//				// exit
+//				System.out.println("EXIT");
+//			}
+//		}
+//	}
 
 	public void setP0fractional(double pos) {
 		player0.setFractionalPosition(pos);

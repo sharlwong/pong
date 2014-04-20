@@ -25,6 +25,7 @@ public class StartRenderer {
     private SpriteBatch batcher;
 	private TextureRegion splash_screen, wait_screen, game_screen, instr_screen;
 	private Vector2D screenSize;
+	private Texture texture;
 
 	private long totalTime;
 	
@@ -47,6 +48,8 @@ public class StartRenderer {
 //        screenSize = new Vector2D(136, 204);
         batcher = new SpriteBatch();
 		batcher.setProjectionMatrix(cam.combined);
+		texture = new Texture(Gdx.files.internal("data/texture.png"));
+		texture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 		
 		initAssets();
 		
