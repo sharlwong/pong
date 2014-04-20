@@ -50,6 +50,8 @@ public class Constants {
 	public final static int FPS               = 50;
 	public final static int UPDATE_DELTA      = 16;
 	public final static int STATE_BUFFER_SIZE = 1;
+	public final static int COUNT_DOWN_SECOND = 10;
+	public final static int GAME_TIME = 20;
 
 	public Constants(Dimension d) {
 		this.screen = d;

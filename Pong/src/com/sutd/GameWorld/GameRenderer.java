@@ -55,8 +55,8 @@ public class GameRenderer {
 		this.buffer = buffer2;
 		cam = new OrthographicCamera();
 		cam.setToOrtho(true, 136, 204);
-		countDown = 7;
-		tick = 27;
+		countDown = Constants.COUNT_DOWN_SECOND;
+		tick = Constants.GAME_TIME + Constants.COUNT_DOWN_SECOND;
 
 		shapeRenderer = new ShapeRenderer();
 		shapeRenderer.setProjectionMatrix(cam.combined);
@@ -112,7 +112,7 @@ public class GameRenderer {
 		String score1 = scores[1] + "";
 
 		/* Keep time */
-		if ((timeLeft - tick) < -1){
+		if ((timeLeft - tick) == -1){
 			tick--;
 			System.out.println("Ticks: " + tick);
 			if (countDown > 0) {
@@ -150,8 +150,8 @@ public class GameRenderer {
 					d.width / 2 - 3 * score0.length() - 10, d.height / 2);
 			font.draw(batcher, "AGAIN ?", 1 * d.width / 3,
 					d.height - 40);
-			countDown = 7;
-			tick = 27;
+			countDown = Constants.COUNT_DOWN_SECOND;
+			tick = Constants.GAME_TIME + Constants.COUNT_DOWN_SECOND;
 			// AssetLoader.font.draw(batcher, "AGAIN", 5, d.height - 40);
 			// AssetLoader.font.draw(batcher, "EXIT", d.width/2 + 30, d.height -
 			// 40);

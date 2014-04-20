@@ -36,7 +36,7 @@ public class GameWorld {
 		random.setSeed(1234567890);
 		injectBalls = 0;
 		ticktock = 0;
-		timeLimit = 20 + 7;    //should be changed later
+		timeLimit = Constants.GAME_TIME + Constants.COUNT_DOWN_SECOND;    //should be changed later
 		init = true;
 		ready = false;
 		gameover = false;
@@ -162,7 +162,7 @@ public class GameWorld {
 		
 		if ((int) elapsedTimeMillis/1000 > (int) temp/1000){
 			ticktock++;
-			if (ticktock <= 3) return;
+			if (ticktock <= Constants.COUNT_DOWN_SECOND) return;
 			injectRandomBall();
 		}
 		
