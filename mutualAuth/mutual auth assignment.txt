@@ -1,0 +1,49 @@
+T1:
+a third party could intercept the keys and (optionally) send his own
+then intercept the message, decrypt it, and forward it
+
+T2:
+TestClient2
+TestServer2
+it works because the third party cannot decrypt and re-encrypt the password + nonce message before both halves are sent
+
+T3:
+TestClient3
+TestServer3
+1) a and b exchange (key, nonce) -> nonce means that the verification process can't be repeated
+2) a and b aes-encrypt (the other person's nonce + the password) using the shared password
+3) a and b interlock exchange the above -> third party cannot block or switch the exchanges information
+4) a and b verify the shared password -> if incorrect, they can't reconstruct the original password
+5) a and b generate a random string to build a shared aes key -> so neither of them can 'spoil' the key
+6) a and b exchange these strings, aes-encrypted with the shared password
+7) a and b concatenate these strings into an aes key
+8) speak
+
+T4:
+TestClient4
+TestServer4
+without knowing the data one cannot generate a hash of the data
+this guarantees the data was accurately transmitted
+
+T5:
+TestClient5
+TestServer5
+0) a and b know the necessary public keys, and will be encrypting with these
+0) because i did not want to make a main class, the rsa key exchange remains in the code
+1) a and b generate a random string to build a shared aes key -> so neither of them can 'spoil' the key
+2) a and b exchange these strings
+3) a and b sign their strings and exchange the signatures
+4) a and b verify the strings to come from each other
+5) a and b concatenate these strings into an aes key
+6) speak
+
+T6:
+if there is no knowledge whatsoever, it is impossible to verify anyone or anything
+what players want is the minimal knowledge for authenticating things
+one solution is a trusted server or certificate provider
+the client verifies the server and verifies themselves to the server
+the server, as a proxy, verifies everything else
+
+the code is implemented separately, but a helper class can be found here:
+TestClient6
+TestServer6
