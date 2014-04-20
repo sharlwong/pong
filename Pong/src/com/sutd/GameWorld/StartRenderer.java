@@ -59,6 +59,10 @@ public class StartRenderer {
     public void render(float runTime) {
     	
         //System.out.println("StartRenderer - render");
+    	
+    	/* Black background drawn to prevent flickering - IMPORTANT */
+		Gdx.gl.glClearColor(255, 255, 183, 1);
+		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
         
         /*
          * 1. We draw the background containing the title of the game, "Fruitball".
