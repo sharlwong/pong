@@ -167,7 +167,7 @@ public class GameRenderer {
 			if (countDown == 0) {
 				batcher.draw(game_screen, 0, 0, 136, 204);
 				for(int[] ball: balls){ 
-					drawOrange(ball[0], ball[1]);
+					drawWatermelon(ball[0], ball[1]);
 				}
 
 				 /*

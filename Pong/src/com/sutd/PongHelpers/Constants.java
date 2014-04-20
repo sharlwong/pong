@@ -18,8 +18,8 @@ public class Constants {
 	public final static double BALL_RADIUS = 0.06;
 
 	/* these are the distances for the vertical buffers */
-	public final static double EDGE_PADDING           = 0.03;
-	public final static double PADDLE_EFFECTIVE_DEPTH = 0.03;
+	public final static double EDGE_PADDING           = 0.01; // Previous value: 0.03 (recorded in case)
+	public final static double PADDLE_EFFECTIVE_DEPTH = 0.06; // Previous value:  0.03 (recorded in case)
 
 	/* this is how big the display will be
 	 * because the math treats the ball as a point mass
