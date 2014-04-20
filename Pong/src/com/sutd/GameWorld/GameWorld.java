@@ -162,7 +162,7 @@ public class GameWorld {
 		
 		if ((int) elapsedTimeMillis/1000 > (int) temp/1000){
 			ticktock++;
-			if (ticktock <= Constants.COUNT_DOWN_SECOND) return;
+			if (ticktock <= timeLimit - Constants.GAME_TIME) return;
 			injectRandomBall();
 		}
 		
@@ -207,13 +207,14 @@ public class GameWorld {
 	
 	public void checkrestart(){
 		if(Gdx.input.justTouched()) {
-			int x = Gdx.input.getX()/2;
+			int x = Gdx.input.getX();
 			int y = Gdx.input.getY();
 			//System.out.println(x+" "+y+" "+Gdx.graphics.getWidth()/2+" "+Gdx.graphics.getHeight());
 			if (x>Gdx.graphics.getWidth()/4 && x<2*Gdx.graphics.getWidth()/3 && y > Gdx.graphics.getHeight()*((float) 164/204) && y < Gdx.graphics.getHeight()*((float) 184/204)){
 				// restart
 				// initialize objects inside game world
 				ticktock = 0;
+				timeLimit = Constants.GAME_TIME + Constants.AGAIN_COUNT_DOWN_SECOND;
 				elapsedTimeMillis = 0;
 				ready = true;
 				player0 = new Paddle(0);

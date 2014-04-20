@@ -152,8 +152,8 @@ public class GameRenderer {
 					d.width / 2 - 3 * score0.length() - 10, d.height / 2);
 			font.draw(batcher, "AGAIN ?", 1 * d.width / 3,
 					d.height - 40);
-			countDown = Constants.COUNT_DOWN_SECOND;
-			tick = Constants.GAME_TIME + Constants.COUNT_DOWN_SECOND;
+			countDown = Constants.AGAIN_COUNT_DOWN_SECOND;
+			tick = Constants.GAME_TIME + Constants.AGAIN_COUNT_DOWN_SECOND;
 			
 			chimp_short.play();
 			
