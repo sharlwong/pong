@@ -23,16 +23,11 @@ public abstract class AssetLoader {
 	
 	public static BitmapFont font, shadow;
 	
-	public static Texture japanese_texture, fruitball_texture, screen_texture, wait_texture;
-	public static TextureRegion watermelon, orange, kiwi, salmonSushi, riceCracker, fishCake, octopusSmile, octopusGasp, splash_screen, wait_screen;
+	public static Texture fruitball_texture, screen_texture, wait_texture, paddle_texture, game_texture, instr_texture;
+	public static TextureRegion watermelon, orange, kiwi, splash_screen, wait_screen, game_screen, instr_screen, paddle;
 	public static Animation octopusAnimation;
-	
-//	public static final String FONT_CHARACTERS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789][_!$%#@|\\/?-+=()*&.;,{}\"´`'<>";
-	
-	public static void load(){
 		
-//		font = TrueTypeFontFactory.createBitmapFont(Gdx.files.internal("font.ttf"), FONT_CHARACTERS, 12.5f, 7.5f, 1.0f, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-//		font.setColor(1f, 0f, 0f, 1f);
+	public static void load(){
 		
 		font = new BitmapFont(Gdx.files.internal("data/text.fnt"));
 		font.setScale(.25f, -.25f);
@@ -47,21 +42,15 @@ public abstract class AssetLoader {
 		
 		wait_texture = new Texture(Gdx.files.internal("data/Wait_screen.png"));
 		wait_texture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
-				
-		japanese_texture = new Texture(Gdx.files.internal("data/Pong_texture_4.png"));
-		japanese_texture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
-	
-		octopusSmile = new TextureRegion(japanese_texture, 0, 0, 128, 128);
-		octopusSmile.flip(false, true);
 		
-		fishCake = new TextureRegion(japanese_texture, 128, 0, 128, 128);
-		fishCake.flip(false, true);
+		paddle_texture = new Texture(Gdx.files.internal("data/Banana.png"));
+		paddle_texture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 		
-		salmonSushi = new TextureRegion(japanese_texture, 256, 0, 128, 128);
-		salmonSushi.flip(false, true);
-		
-		riceCracker = new TextureRegion(japanese_texture, 384, 0, 128, 128);
-		riceCracker.flip(false, true);
+		game_texture = new Texture(Gdx.files.internal("data/Game_screen.png"));
+		game_texture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+
+		instr_texture = new Texture(Gdx.files.internal("data/Instructions_screen.png"));
+		instr_texture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 		
 		watermelon = new TextureRegion(fruitball_texture, 0, 0, 128, 128);
 		watermelon.flip(false, true);
@@ -77,6 +66,15 @@ public abstract class AssetLoader {
 		
 		wait_screen = new TextureRegion(wait_texture, 0, 0, 256, 512);
 		wait_screen.flip(false, true);
+
+		game_screen = new TextureRegion(game_texture, 0, 0, 256, 512);
+		game_screen.flip(false, true);
+
+		instr_screen = new TextureRegion(instr_texture, 0, 0, 256, 512);
+		instr_screen.flip(false, true);
+		
+		paddle = new TextureRegion(paddle_texture, 0, 0, 128, 41);
+		paddle.flip(false, true);
 		
 //		TextureRegion[] octopus = { octopusGasp, octopusSmile };
 //		octopusAnimation = new Animation(0.06f, octopus);
@@ -87,7 +85,12 @@ public abstract class AssetLoader {
 	
 	public void dispose(){
 		font.dispose();
-		japanese_texture.dispose();
+		fruitball_texture.dispose();
+		screen_texture.dispose();
+		paddle_texture.dispose();
+		wait_texture.dispose();
+		game_texture.dispose();
+		instr_texture.dispose();
 	}
 
 	public static class LagException extends RuntimeException {

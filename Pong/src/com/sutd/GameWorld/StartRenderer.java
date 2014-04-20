@@ -23,13 +23,18 @@ public class StartRenderer {
     private ShapeRenderer shapeRenderer;
     
     private SpriteBatch batcher;
-	private TextureRegion splash_screen;
+	private TextureRegion splash_screen, wait_screen, game_screen, instr_screen;
 	private Vector2D screenSize;
 
 	private long totalTime;
 	
 	private void initAssets() {
 		splash_screen = AssetLoader.splash_screen;
+		
+		/* Screens for Sharlene to do testing on phone */
+		wait_screen = AssetLoader.wait_screen;
+		game_screen = AssetLoader.game_screen;
+		instr_screen = AssetLoader.instr_screen;
 	}
 
     public StartRenderer(StartWorld world) {
@@ -58,7 +63,12 @@ public class StartRenderer {
     	
     	// Draw the splash screen.
     	batcher.begin();
-        batcher.draw(splash_screen, 0, 0, 136, 204);
+    	
+    	/* For Sharlene to do testing on phone */
+    	batcher.draw(splash_screen, 0, 0, 136, 204);
+//        batcher.draw(instr_screen, 0, 0, 136, 204);
+     
+//        batcher.draw(wait_screen, 0, 0, 136, 204);
         batcher.end();
         
         

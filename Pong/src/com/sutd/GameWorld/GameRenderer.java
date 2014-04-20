@@ -16,6 +16,7 @@ import com.sutd.PongHelpers.Constants;
 import com.sutd.PongHelpers.InputHandler;
 
 import java.awt.Dimension;
+import java.util.Random;
 import java.util.concurrent.BlockingQueue;
 
 
@@ -34,11 +35,11 @@ public class GameRenderer {
 	int[][] balls;
 	int[] player0;
 	int[] player1;
-	private TextureRegion octopusSmile, fishCake, salmonSushi, riceCracker, watermelon, kiwi, orange, wait_screen, splash_screen;
+	private TextureRegion watermelon, kiwi, orange, wait_screen, splash_screen, game_screen, paddle;
 	private GameState lastKnownState;
 
 	int[]    scores;
-	int[]    ballTypes;
+	int[]    ballsType;
 	double[] ballDoubles;
 	int      timeLeft;
 
@@ -60,16 +61,14 @@ public class GameRenderer {
 	}
 
 	private void initAssets() {
-		octopusSmile = AssetLoader.octopusSmile;
-		fishCake = AssetLoader.fishCake;
-		riceCracker = AssetLoader.riceCracker;
-		salmonSushi = AssetLoader.salmonSushi;
 		watermelon = AssetLoader.watermelon;
 		kiwi = AssetLoader.kiwi;
 		orange = AssetLoader.orange;
 		font = AssetLoader.font;
 		splash_screen = AssetLoader.splash_screen;
 		wait_screen = AssetLoader.wait_screen;
+		paddle = AssetLoader.paddle;
+		game_screen = AssetLoader.game_screen;
 	}
 
 	public void render(float runTime) {
@@ -96,36 +95,48 @@ public class GameRenderer {
 
 		scores = state.getScores();
 		ballDoubles = state.getSpareVar();
-		ballTypes = state.getBallsType();
+		ballsType = state.getBallsType();
 		timeLeft = state.getTimeLeft();
+		
+		
 
-		/* black background drawn to prevent flickering */
+		/* Black background drawn to prevent flickering - IMPORTANT */
 		Gdx.gl.glClearColor(255, 255, 183, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+		
 		String score0 = scores[0] + "";
 		String score1 = scores[1] + "";
-
+		
 		batcher.begin();
+		
 		//AssetLoader.shadow.draw(batcher, "10", 100, 100);
 		
 		if(state.getStatus() == 0) //Waiting for client!
 		{
-			font.draw(batcher, "Waiting", d.width/2 - 30 , d.height / 2-20);
-			font.draw(batcher, "Player 2", d.width/2 - 30 , d.height / 2+10);
+//			font.draw(batcher, "Waiting", d.width/2 - 30 , d.height / 2-20);
+//			font.draw(batcher, "Player 2", d.width/2 - 30 , d.height / 2+10);
 
 	        batcher.draw(wait_screen, 0, 0, 136, 204);
 			
 		}
 		else if (timeLeft == 0){
+			
+			batcher.draw(game_screen, 0, 0, 136, 204);
+			
 			font.draw(batcher, "GAME OVER", d.width/2 - 48, d.height / 2 - 40);
+			
 			if (scores[0] > scores[1]) font.draw(batcher, "YOU WIN", d.width/2 - 40, d.height / 2 - 20);
 			else if (scores[0] < scores[1]) font.draw(batcher, "YOU LOSE", d.width/2 - 37, d.height / 2 - 20);
 			else font.draw(batcher, "TIE", d.width/2 - 10, d.height / 2 - 20);
+			
 			font.draw(batcher, score0+":"+score1, d.width/2 - 3 * score0.length() - 10, d.height / 2);
+			
 			font.draw(batcher, "AGAIN", 5, d.height - 40);
 			font.draw(batcher, "EXIT", d.width/2 + 30, d.height - 40);	
+		
 		}else{
-			
+			 batcher.draw(game_screen, 0, 0, 136, 204);
+			 
 			/*** Draw paddles. ****/
 
 			// Tells shapeRenderer to begin drawing filled shapes
@@ -150,31 +161,28 @@ public class GameRenderer {
 			font.draw(batcher, "" + score0, d.width - 20 - (3 * score0.length()), d.height / 2);
 			font.draw(batcher, "" + timeLeft, 5, d.height / 2 - 10);
 			
-			
+			for(int[] ball: balls){ 
+				drawOrange(ball[0], ball[1]);
+			}
+
 			 /*
-	         * Draw octopus as a ball.
+	         * Draw watermelon as a ball.
 	         */
 
-			// for (int[] ball : balls) drawOctopus(ball[0], ball[1]);
+			// for (int[] ball : balls) drawWatermelon(ball[0], ball[1]);
 
 	        
 	        /*
-	         * Draw fish cake as a ball.
+	         * Draw kiwi as a ball.
 	         */
 
-			//        for (int[] ball : balls) drawFishCake(ball[0], ball[1]);
+			//        for (int[] ball : balls) drawKiwi(ball[0], ball[1]);
 
 	        /*
-	         * Draw rice cracker as a ball.
+	         * Draw orange as a ball.
 	         */
 
-			for (int[] ball : balls) drawRiceCracker(ball[0], ball[1]);
-	        
-	        /*
-	         * Draw salmon sushi as a ball.
-	         */
-
-			//        for (int[] ball : balls) drawSalmonSushi(ball[0], ball[1]);
+			// for (int[] ball : balls) drawOrange(ball[0], ball[1]);
 
 			// End SpriteBatch
 		}
@@ -183,18 +191,8 @@ public class GameRenderer {
         /* Draw normal balls: For testing.*/
 		// for (int[] ball : balls) drawBall(ball[0], ball[1]);
 
-		
-        
-        
     }
     
-    private void drawFruitBall(int centerX, int centerY) {
-		int radius = (int) calc.getBallPixelRadius();
-				
-		// The octopus needs transparency, so we enable that.
-        batcher.enableBlending();
-        batcher.draw(watermelon, centerX - radius, centerY - radius, 2*radius, 2*radius);
-	}
     
     private void drawWatermelon(int centerX, int centerY) {
 		int radius = (int) calc.getBallPixelRadius();
@@ -219,55 +217,37 @@ public class GameRenderer {
         batcher.enableBlending();
         batcher.draw(kiwi, centerX - radius, centerY - radius, 2*radius, 2*radius);
 	}
-    
-    private void drawRiceCracker(int centerX, int centerY) {
-		int radius = (int) calc.getBallPixelRadius();
-
-		// The octopus needs transparency, so we enable that.
-		batcher.enableBlending();
-		batcher.draw(riceCracker, centerX - radius, centerY - radius, 2 * radius, 2 * radius);
-	}
-
-	private void drawSalmonSushi(int centerX, int centerY) {
-		int radius = (int) calc.getBallPixelRadius();
-
-		// The octopus needs transparency, so we enable that.
-		batcher.enableBlending();
-		batcher.draw(salmonSushi, centerX - radius, centerY - radius, 2 * radius, 2 * radius);
-	}
-
-	private void drawFishCake(int centerX, int centerY) {
-		int radius = (int) calc.getBallPixelRadius();
-
-		// The octopus needs transparency, so we enable that.
-		batcher.enableBlending();
-		batcher.draw(fishCake, centerX - radius, centerY - radius, 2 * radius, 2 * radius);
-	}
-
-	// for draw function, the x and y parameters indicates the bottom left corner
-	private void drawOctopus(int centerX, int centerY) {
-		int radius = (int) calc.getBallPixelRadius();
-
-		// The octopus needs transparency, so we enable that.
-		batcher.enableBlending();
-		batcher.draw(octopusSmile, centerX - radius, centerY - radius, 2 * radius, 2 * radius);
-	}
-
-	private void drawTwoOctopus(int centerX, int centerY, float runTime) {
-		int radius = (int) calc.getBallPixelRadius();
-		//		shapeRenderer.circle(centerX - radius, centerY - radius, 2 * radius);
-
-		// The octopus needs transparency, so we enable that.
-		batcher.enableBlending();
-
-		// Draw bird at its coordinates. Retrieve the Animation object from AssetLoader
-		// Pass in the runTime variable to get the current frame.
-		batcher.draw(AssetLoader.octopusAnimation.getKeyFrame(runTime), centerX - radius, centerY - radius, 2 * radius, 2 * radius);
-	}
 
 	private void drawPaddle(int centerX, int centerY) {
 		int width = (int) calc.getPaddlePixelWidth();
 		int height = (int) calc.getPaddlePixelDepth();
-		shapeRenderer.rect(centerX - width / 2, centerY - height / 2, width, height);
+		
+		batcher.enableBlending();
+        batcher.draw(paddle, centerX - width / 2, centerY - height / 2, width, height);
+		
+		//shapeRenderer.rect(centerX - width / 2, centerY - height / 2, width, height);
 	}
+
+
+	/*
+	 * Returns a pseudo-random number between min(inclusive) and max (inclusive).
+	 *
+	 * @param min Minimum value
+	 * @param max Maximum value.  Must be greater than min.
+	 * @return Integer between min and max.
+	 * @see java.util.Random#nextInt(int)
+	 */
+
+	private static int randInt(int min, int max) {
+
+	    // Usually this can be a field rather than a method variable
+	    Random rand = new Random();
+
+	    // nextInt is normally exclusive of the top value,
+	    // so add 1 to make it inclusive
+	    int randomNum = rand.nextInt((max - min) + 1) + min;
+
+	    return randomNum;
+	}
+
 }
