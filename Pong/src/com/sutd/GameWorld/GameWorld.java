@@ -36,7 +36,7 @@ public class GameWorld {
 		random.setSeed(1234567890);
 		injectBalls = 0;
 		ticktock = 0;
-		timeLimit = 20 + 3;    //should be changed later
+		timeLimit = 20 + 7;    //should be changed later
 		init = true;
 		ready = false;
 		gameover = false;
@@ -121,7 +121,7 @@ public class GameWorld {
 		/* starting position */
 		Vector2D position = new Vector2D(Constants.WIDTH / 2, Constants.HEIGHT / 2);
 
-		/* randomize starting velocity within 45° */
+		/* randomize starting velocity within 45�� */
 		double speed1 = random.nextDouble() - 0.5;
 		double speed2 = random.nextDouble() - 0.5;
 		Vector2D speed;

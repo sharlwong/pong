@@ -55,8 +55,8 @@ public class GameRenderer {
 		this.buffer = buffer2;
 		cam = new OrthographicCamera();
 		cam.setToOrtho(true, 136, 204);
-		countDown = 6;
-		tick = 23;
+		countDown = 7;
+		tick = 27;
 
 		shapeRenderer = new ShapeRenderer();
 		shapeRenderer.setProjectionMatrix(cam.combined);
@@ -124,13 +124,15 @@ public class GameRenderer {
 
 		batcher.begin();
 
-		if (state.getStatus() == 0) // Waiting for client!
+		/* Wait for second client to join server */
+		if (state.getStatus() == 0) 
 		{
-			font.draw(batcher, "Waiting", d.width / 2 - 30, d.height / 2 - 20);
-			font.draw(batcher, "Player 2", d.width / 2 - 30, d.height / 2 + 10);
+//			font.draw(batcher, "Waiting", d.width / 2 - 30, d.height / 2 - 20);
+//			font.draw(batcher, "Player 2", d.width / 2 - 30, d.height / 2 + 10);
 
 			batcher.draw(wait_screen, 0, 0, 136, 204);
-
+		
+		/* Game over */			
 		} else if (timeLeft == 0) {
 
 			batcher.draw(game_screen, 0, 0, 136, 204);
@@ -148,11 +150,13 @@ public class GameRenderer {
 					d.width / 2 - 3 * score0.length() - 10, d.height / 2);
 			font.draw(batcher, "AGAIN ?", 1 * d.width / 3,
 					d.height - 40);
-			countDown = 3;
-			tick = 23;
+			countDown = 7;
+			tick = 27;
 			// AssetLoader.font.draw(batcher, "AGAIN", 5, d.height - 40);
 			// AssetLoader.font.draw(batcher, "EXIT", d.width/2 + 30, d.height -
 			// 40);
+		
+		/* Game continues */
 		} else {
 
 			if (countDown == 0) {
@@ -208,11 +212,15 @@ public class GameRenderer {
 
 
 			} else {
-				if (countDown > 1) {
+				
+				if (countDown > 2) {
 					batcher.draw(instr_screen, 0, 0, 136, 204);
-					
-//					font.draw(batcher, "READY ?", d.width / 3,
-//							d.height / 2 - 20);
+				}
+				
+				else if (countDown == 2) {
+					batcher.draw(game_screen, 0, 0, 136, 204);
+					font.draw(batcher, "READY ?", d.width / 3,
+							d.height / 2 - 20);
 				} else if (countDown == 1) {
 					
 					batcher.draw(game_screen, 0, 0, 136, 204);
