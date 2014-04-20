@@ -40,6 +40,7 @@ public class StartWorld {
 	
 	public void update() {
 		AssetLoader.music.play();
+		AssetLoader.music.setLooping(true);
 		check_if_touched();
 		//check_if_server_clients_created();
 	}
