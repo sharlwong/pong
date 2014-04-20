@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.sutd.GameObjects.Ball;
 import com.sutd.GameObjects.GameState;
 import com.sutd.GameObjects.Paddle;
+import com.sutd.PongHelpers.AssetLoader;
 import com.sutd.PongHelpers.Constants;
 import com.sutd.PongHelpers.Vector2D;
 
@@ -153,7 +154,6 @@ public class GameWorld {
 			//checkexit();
 			return;
 		}
-		
 			
 		long temp = elapsedTimeMillis;
 		/* increment time */

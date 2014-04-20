@@ -1,6 +1,8 @@
 package com.sutd.PongHelpers;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -26,6 +28,8 @@ public abstract class AssetLoader {
 	public static Texture fruitball_texture, screen_texture, wait_texture, paddle_texture, game_texture, instr_texture;
 	public static TextureRegion watermelon, orange, kiwi, splash_screen, wait_screen, game_screen, instr_screen, paddle;
 	public static Animation octopusAnimation;
+	
+	public static Music music;
 		
 	public static void load(){
 		
@@ -33,6 +37,8 @@ public abstract class AssetLoader {
 		font.setScale(.25f, -.25f);
 		shadow = new BitmapFont(Gdx.files.internal("data/shadow.fnt"));
 		shadow.setScale(.25f, -.25f);
+		
+		music = Gdx.audio.newMusic(Gdx.files.internal("data/Jungle Music.mp3"));
 		
 		fruitball_texture = new Texture(Gdx.files.internal("data/Fruitball_Texture.png"));
 		fruitball_texture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);

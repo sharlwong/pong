@@ -6,6 +6,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
 import com.sutd.Client.ClientBroadcaster;
 import com.sutd.Pong.PongGame;
+import com.sutd.PongHelpers.AssetLoader;
 import com.sutd.Server.GameServer;
 
 
@@ -38,6 +39,7 @@ public class StartWorld {
 	}
 	
 	public void update() {
+		AssetLoader.music.play();
 		check_if_touched();
 		//check_if_server_clients_created();
 	}
