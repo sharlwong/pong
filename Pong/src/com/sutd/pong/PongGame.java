@@ -15,6 +15,8 @@ public class PongGame extends Game {
 		System.out.println("Game Created!");
 		initializeNetwork();
 		AssetLoader.load();
+		AssetLoader.music.play();
+		AssetLoader.music.setLooping(true);
         setScreen(new StartScreen(this));
 //        setScreen(new GameScreen());
 	}

@@ -3,6 +3,7 @@ package com.sutd.GameWorld;
 import java.util.concurrent.CountDownLatch;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.math.Rectangle;
 import com.sutd.Client.ClientBroadcaster;
 import com.sutd.Pong.PongGame;
@@ -18,9 +19,12 @@ public class StartWorld {
 	private Boolean client2_created = false;
 	private PongGame pong_game;
 	
+	private Music chimp_short;
+	
 	public StartWorld(PongGame pong_game) {
 		createButtons();
 		this.pong_game = pong_game;
+		this.chimp_short = AssetLoader.chimp_short;
 	}
 	
 	/**
@@ -39,8 +43,6 @@ public class StartWorld {
 	}
 	
 	public void update() {
-		AssetLoader.music.play();
-		AssetLoader.music.setLooping(true);
 		check_if_touched();
 		//check_if_server_clients_created();
 	}
@@ -62,11 +64,13 @@ public class StartWorld {
 					 					y>= Gdx.graphics.getHeight()*((float)124/204) && y<=Gdx.graphics.getHeight()*((float)149/204)) {
 				//Probably start a server here.
 				initializeServerAndClient();
+				chimp_short.play();
 			}
 			
 			else if(x>= Gdx.graphics.getWidth()*((float) 20/136) && x<= Gdx.graphics.getWidth()*((float)115/136) && 
 					 					y>= Gdx.graphics.getHeight()*((float)154/204) && y<=Gdx.graphics.getHeight()*((float)179/204)) {
 				intializeClientAndJoinServer();
+				chimp_short.play();
 			//connect to a server here.
 			}
 		}

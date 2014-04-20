@@ -29,16 +29,24 @@ public abstract class AssetLoader {
 	public static TextureRegion watermelon, orange, kiwi, splash_screen, wait_screen, game_screen, instr_screen, paddle;
 	public static Animation octopusAnimation;
 	
-	public static Music music;
+	public static Music music, chimp_long, chimp_short;
 		
 	public static void load(){
+		
+		/** Fonts **/
 		
 		font = new BitmapFont(Gdx.files.internal("data/text.fnt"));
 		font.setScale(.25f, -.25f);
 		shadow = new BitmapFont(Gdx.files.internal("data/shadow.fnt"));
 		shadow.setScale(.25f, -.25f);
 		
+		/** Music and sounds **/
+		
 		music = Gdx.audio.newMusic(Gdx.files.internal("data/Jungle Music.mp3"));
+		chimp_long = Gdx.audio.newMusic(Gdx.files.internal("data/Excited Chimp.mp3"));
+		chimp_short = Gdx.audio.newMusic(Gdx.files.internal("data/Chimp.mp3"));
+		
+		/** Graphics **/
 		
 		fruitball_texture = new Texture(Gdx.files.internal("data/Fruitball_Texture.png"));
 		fruitball_texture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
@@ -97,6 +105,9 @@ public abstract class AssetLoader {
 		wait_texture.dispose();
 		game_texture.dispose();
 		instr_texture.dispose();
+		music.dispose();
+		chimp_long.dispose();
+		chimp_short.dispose();
 	}
 
 	public static class LagException extends RuntimeException {

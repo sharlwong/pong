@@ -1,6 +1,7 @@
 package com.sutd.GameWorld;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -37,6 +38,7 @@ public class GameRenderer {
 	
 	private TextureRegion watermelon, kiwi, orange, wait_screen, instr_screen, game_screen, paddle;
 	private GameState lastKnownState;
+	private Music chimp_long, chimp_short;
 
 	int[]    scores;
 	int[]    ballsType;
@@ -75,6 +77,8 @@ public class GameRenderer {
 		wait_screen = AssetLoader.wait_screen;
 		paddle = AssetLoader.paddle;
 		game_screen = AssetLoader.game_screen;
+		chimp_long = AssetLoader.chimp_long;
+		chimp_short = AssetLoader.chimp_short;
 	}
 
 	public void render(float runTime) {
@@ -134,9 +138,7 @@ public class GameRenderer {
 		
 		/* Game over */			
 		} else if (timeLeft == 0) {
-
 			batcher.draw(game_screen, 0, 0, 136, 204);
-			
 			font.draw(batcher, "GAME OVER", d.width / 2 - 48, d.height / 2 - 40);
 			if (scores[0] > scores[1])
 				font.draw(batcher, "YOU WIN", d.width / 2 - 40,
@@ -152,6 +154,9 @@ public class GameRenderer {
 					d.height - 40);
 			countDown = Constants.COUNT_DOWN_SECOND;
 			tick = Constants.GAME_TIME + Constants.COUNT_DOWN_SECOND;
+			
+			chimp_short.play();
+			
 			// AssetLoader.font.draw(batcher, "AGAIN", 5, d.height - 40);
 			// AssetLoader.font.draw(batcher, "EXIT", d.width/2 + 30, d.height -
 			// 40);
@@ -210,7 +215,7 @@ public class GameRenderer {
 				font.draw(batcher, "" + score0, d.width - 20 - (3 * score0.length()), d.height / 2);
 				font.draw(batcher, "" + timeLeft, 5, d.height / 2 - 10);
 
-
+				chimp_long.play();
 			} else {
 				
 				if (countDown > 2) {
@@ -218,6 +223,7 @@ public class GameRenderer {
 				}
 				
 				else if (countDown == 2) {
+					chimp_short.play();
 					batcher.draw(game_screen, 0, 0, 136, 204);
 					font.draw(batcher, "READY ?", d.width / 3,
 							d.height / 2 - 20);
