@@ -69,7 +69,6 @@ public class GameRenderer {
 		cam.setToOrtho(true, 136, 204);
 		countDown = Constants.COUNT_DOWN_SECOND;
 		tick = Constants.GAME_TIME + Constants.COUNT_DOWN_SECOND;
-		ballCounter = 1;
 
 		shapeRenderer = new ShapeRenderer();
 		shapeRenderer.setProjectionMatrix(cam.combined);
@@ -168,6 +167,7 @@ public class GameRenderer {
 			countDown = Constants.AGAIN_COUNT_DOWN_SECOND;
 			tick = Constants.GAME_TIME + Constants.AGAIN_COUNT_DOWN_SECOND;
 
+			/* Play short chimp call to signal start of another new game. */
 			chimp_short.play();
 
 		}
@@ -177,45 +177,25 @@ public class GameRenderer {
 			/* Game play starts */			
 			if (countDown == 0) {
 				batcher.draw(game_screen, 0, 0, 136, 204);
-
-				
-				for(int[] ball: balls){ 
-//					if (ballsType[ballCounter] == 1){
-//						drawOrange(ball[0], ball[1]);
-//					} else if (ballsType[ballCounter] == 0){
-//						drawKiwi(ball[0], ball[1]);
-//					} else if (ballsType[ballCounter] == 0){
-//						drawWatermelon(ball[0], ball[1]);
-//					}
-//					
-					ballCounter++;
+			
+				/* Draw fruitballs. */
+				for(int i = 0; i< balls.length; i++){
+					int[] ball = balls[i];
 					
-					System.out.println("Ball counter: "+ ballCounter);
-					
-					drawOrange(ball[0], ball[1]);
+					/* If type of ball = 0, draw orange as a ball. */
+					if(ballsType[i] == 0){
+						drawOrange(ball[0], ball[1]);
+						
+					/* If type of ball = 1, draw kiwi as a ball. */	
+					} else if (ballsType[i] == 1){
+						drawKiwi(ball[0], ball[1]);
+						
+					/* If type of ball = 2, draw watermelon as a ball. */
+					} else if (ballsType[i] == 2){
+						drawWatermelon(ball[0], ball[1]);
+					}	
 				}
-
-				 /*
-			     * Draw watermelon as a ball.
-		         */
-
-				// for (int[] ball : balls) drawWatermelon(ball[0], ball[1]);
-
 		        
-		        /*
-		         * Draw kiwi as a ball.
-		         */
-
-				//        for (int[] ball : balls) drawKiwi(ball[0], ball[1]);
-
-		        /*
-		         * Draw orange as a ball.
-		         */
-
-				// for (int[] ball : balls) drawOrange(ball[0], ball[1]);
-
-				// End SpriteBatch
-
 				/* Draw paddles. Render player 0 at the bottom, render player 1 at the top. */
 				drawBottomPaddle(player0[0], player0[1]);
 				drawTopPaddle(player1[0], player1[1]);
@@ -234,8 +214,7 @@ public class GameRenderer {
 
 				/* Load instructions screen. */
 				if (countDown > 2) {
-					batcher.draw(instr_screen, 0, 0, 136, 204);
-					
+					batcher.draw(instr_screen, 0, 0, 136, 204);	
 				}
 
 				/* Load the words: READY? GO! */
