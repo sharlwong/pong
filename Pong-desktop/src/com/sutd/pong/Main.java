@@ -13,9 +13,8 @@ public class Main {
 		cfg.foregroundFPS = Constants.FPS;
 		cfg.width = 272; // Previous value: 272
 		cfg.height = 408; // Previous value: 408
-		
 		PongGame pong_game = new PongGame();
-		
+
 		new LwjglApplication(pong_game, cfg);
 	}
 }

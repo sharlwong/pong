@@ -23,35 +23,35 @@ import java.util.concurrent.BlockingQueue;
 public class GameRenderer {
 
 	private OrthographicCamera cam;
-	private ShapeRenderer shapeRenderer;
-	private SpriteBatch batcher;
-	private BitmapFont font;
+	private ShapeRenderer      shapeRenderer;
+	private SpriteBatch        batcher;
+	private BitmapFont         font;
 
-	Dimension d;
+	Dimension    d;
 	InputHandler inputHandler;
-	Constants calc;
+	Constants    calc;
 
 	private Paddle player_paddle;
 	int[][] balls;
+
 	int[] player0;
 	int[] player1;
 	
 	private TextureRegion watermelon, kiwi, orange, wait_screen, instr_screen, game_screen, paddle_top, paddle_bottom;
 	private GameState lastKnownState;
-	private Music chimp_long, chimp_short;
+	private Music     chimp_long, chimp_short;
 
-	int[]    scores;
-	int[]    ballsType;
+	int[] scores;
+	int[] ballsType;
 
 	double[] ballDoubles;
-	int timeLeft;
-	int countDown;
-	int tick;
+	int      timeLeft;
+	int      countDown;
+	int      tick;
 
 	BlockingQueue<GameState> buffer;
 
-	public GameRenderer(Paddle paddle, BlockingQueue<GameState> buffer2,
-			Dimension d) {
+	public GameRenderer(Paddle paddle, BlockingQueue<GameState> buffer2, Dimension d) {
 		this.d = d;
 		calc = new Constants(d);
 		this.buffer = buffer2;
@@ -96,8 +96,8 @@ public class GameRenderer {
 		if (state == null) {
 			state = lastKnownState;
 			// System.out.println("Missed frame to render...");
-		} else
-			lastKnownState = state;
+		}
+		else lastKnownState = state;
 
 		/* Make things to render */
 		balls = calc.makeBallXYs(state.getBallsData());
@@ -112,67 +112,61 @@ public class GameRenderer {
 		/* Black background drawn to prevent flickering - IMPORTANT */
 		Gdx.gl.glClearColor(255, 255, 183, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-		
+
 		String score0 = scores[0] + "";
 		String score1 = scores[1] + "";
 
 		/* Keep time */
-		if ((timeLeft - tick) == -1){
+		if ((timeLeft - tick) == -1) {
 			tick--;
 			System.out.println("Ticks: " + tick);
 			if (countDown > 0) {
-				countDown --;
+				countDown--;
 				System.out.println("Countdown: " + countDown);
 			}
-
 		}
 
 		batcher.begin();
 
 		/* Wait for second client to join server */
-		if (state.getStatus() == 0) 
-		{
-//			font.draw(batcher, "Waiting", d.width / 2 - 30, d.height / 2 - 20);
-//			font.draw(batcher, "Player 2", d.width / 2 - 30, d.height / 2 + 10);
+		if (state.getStatus() == 0) {
+			//			font.draw(batcher, "Waiting", d.width / 2 - 30, d.height / 2 - 20);
+			//			font.draw(batcher, "Player 2", d.width / 2 - 30, d.height / 2 + 10);
 
 			batcher.draw(wait_screen, 0, 0, 136, 204);
 		
-		/* Game over */			
-		} else if (timeLeft == 0) {
+		/* Game over */
+		}
+		else if (timeLeft == 0) {
 			batcher.draw(game_screen, 0, 0, 136, 204);
 			font.draw(batcher, "GAME OVER", d.width / 2 - 48, d.height / 2 - 40);
-			if (scores[0] > scores[1])
-				font.draw(batcher, "YOU WIN", d.width / 2 - 40,
-						d.height / 2 - 20);
-			else if (scores[0] < scores[1])
-				font.draw(batcher, "YOU LOSE", d.width / 2 - 37,
-						d.height / 2 - 20);
-			else
-				font.draw(batcher, "TIE", d.width / 2 - 10, d.height / 2 - 20);
-			font.draw(batcher, score0 + ":" + score1,
-					d.width / 2 - 3 * score0.length() - 10, d.height / 2);
-			font.draw(batcher, "AGAIN ?", 1 * d.width / 3,
-					d.height - 40);
+			if (scores[0] > scores[1]) font.draw(batcher, "YOU WIN", d.width / 2 - 40, d.height / 2 - 20);
+			else if (scores[0] < scores[1]) font.draw(batcher, "YOU LOSE", d.width / 2 - 37, d.height / 2 - 20);
+			else font.draw(batcher, "TIE", d.width / 2 - 10, d.height / 2 - 20);
+			font.draw(batcher, score0 + ":" + score1, d.width / 2 - 3 * score0.length() - 10, d.height / 2);
+			font.draw(batcher, "AGAIN ?", 1 * d.width / 3, d.height - 40);
 			countDown = Constants.AGAIN_COUNT_DOWN_SECOND;
 			tick = Constants.GAME_TIME + Constants.AGAIN_COUNT_DOWN_SECOND;
-			
+
 			chimp_short.play();
-			
+
 			// AssetLoader.font.draw(batcher, "AGAIN", 5, d.height - 40);
 			// AssetLoader.font.draw(batcher, "EXIT", d.width/2 + 30, d.height -
 			// 40);
 		
 		/* Game continues */
-		} else {
+		}
+		else {
 
 			if (countDown == 0) {
 				batcher.draw(game_screen, 0, 0, 136, 204);
+
 				for(int[] ball: balls){ 
 					drawKiwi(ball[0], ball[1]);
 				}
 
 				 /*
-		         * Draw watermelon as a ball.
+			     * Draw watermelon as a ball.
 		         */
 
 				// for (int[] ball : balls) drawWatermelon(ball[0], ball[1]);
@@ -191,7 +185,7 @@ public class GameRenderer {
 				// for (int[] ball : balls) drawOrange(ball[0], ball[1]);
 
 				// End SpriteBatch
-				 
+
 				/*** Draw paddles. ****/
 
 				// Tells shapeRenderer to begin drawing filled shapes
@@ -208,43 +202,41 @@ public class GameRenderer {
 				/* why is this here ._. it doesn't seem useful */
 				shapeRenderer.setColor(Color.WHITE);
 
-		        // Tells the shapeRenderer to finish rendering
-		        // We MUST do this every time.
-		        shapeRenderer.end();
-				
+				// Tells the shapeRenderer to finish rendering
+				// We MUST do this every time.
+				shapeRenderer.end();
+
 				font.draw(batcher, "" + score1, d.width - 20 - (3 * score0.length()), d.height / 2 - 20);
 				font.draw(batcher, "" + score0, d.width - 20 - (3 * score0.length()), d.height / 2);
 				font.draw(batcher, "" + timeLeft, 5, d.height / 2 - 10);
 
 				chimp_long.play();
-			} else {
-				
+			}
+			else {
+
 				if (countDown > 2) {
 					batcher.draw(instr_screen, 0, 0, 136, 204);
 				}
-				
+
 				else if (countDown == 2) {
 					chimp_short.play();
 					batcher.draw(game_screen, 0, 0, 136, 204);
-					font.draw(batcher, "READY ?", d.width / 3,
-							d.height / 2 - 20);
-				} else if (countDown == 1) {
-					
+					font.draw(batcher, "READY ?", d.width / 3, d.height / 2 - 20);
+				}
+				else if (countDown == 1) {
+
 					batcher.draw(game_screen, 0, 0, 136, 204);
-					font.draw(batcher, "GO !", 2 * d.width / 5,
-							d.height / 2 - 20);
+					font.draw(batcher, "GO !", 2 * d.width / 5, d.height / 2 - 20);
 				}
 			}
-
 		}
 		batcher.end();
 
 		/* Draw normal balls: For testing. */
 		// for (int[] ball : balls) drawBall(ball[0], ball[1]);
-    }
-    
-    
-    private void drawWatermelon(int centerX, int centerY) {
+	}
+
+	private void drawWatermelon(int centerX, int centerY) {
 		int radius = (int) calc.getBallPixelRadius();
 
 		// The watermelon needs transparency, so we enable that.
@@ -267,6 +259,7 @@ public class GameRenderer {
 
 		// The kiwi needs transparency, so we enable that.
 		batcher.enableBlending();
+
 		batcher.draw(kiwi, centerX - radius, centerY - radius, 2 * radius * 7/6,
 				2 * radius * 7/6);
 	}
@@ -274,7 +267,7 @@ public class GameRenderer {
 	private void drawTopPaddle(int centerX, int centerY) {
 		int width = (int) calc.getPaddlePixelWidth();
 		int height = (int) calc.getPaddlePixelDepth();
-		
+
 		batcher.enableBlending();
         batcher.draw(paddle_top, centerX - width / 2, centerY - height / 2, width, height);
 		
@@ -304,12 +297,12 @@ public class GameRenderer {
 
 	private static int randInt(int min, int max) {
 
-	    // Usually this can be a field rather than a method variable
-	    Random rand = new Random();
+		// Usually this can be a field rather than a method variable
+		Random rand = new Random();
 
-	    // nextInt is normally exclusive of the top value,
-	    // so add 1 to make it inclusive
-	    int randomNum = rand.nextInt((max - min) + 1) + min;
-	    return randomNum;
+		// nextInt is normally exclusive of the top value,
+		// so add 1 to make it inclusive
+		int randomNum = rand.nextInt((max - min) + 1) + min;
+		return randomNum;
 	}
 }
