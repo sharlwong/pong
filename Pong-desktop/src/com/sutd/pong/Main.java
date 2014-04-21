@@ -11,8 +11,8 @@ public class Main {
 		cfg.title = "Pong";
 		cfg.useGL20 = false;
 		cfg.foregroundFPS = Constants.FPS;
-		cfg.width = 272;
-		cfg.height = 408;
+		cfg.width = 272; // Previous value: 272
+		cfg.height = 408; // Previous value: 408
 		
 		PongGame pong_game = new PongGame();
 		

@@ -168,7 +168,7 @@ public class GameRenderer {
 			if (countDown == 0) {
 				batcher.draw(game_screen, 0, 0, 136, 204);
 				for(int[] ball: balls){ 
-					drawWatermelon(ball[0], ball[1]);
+					drawKiwi(ball[0], ball[1]);
 				}
 
 				 /*
@@ -247,28 +247,28 @@ public class GameRenderer {
     private void drawWatermelon(int centerX, int centerY) {
 		int radius = (int) calc.getBallPixelRadius();
 
-		// The octopus needs transparency, so we enable that.
+		// The watermelon needs transparency, so we enable that.
 		batcher.enableBlending();
 		batcher.draw(watermelon, centerX - radius, centerY - radius,
-				2 * radius, 2*radius);
+				2 * radius * 7/6, 2 * radius * 7/6);
 	}
 
 	private void drawOrange(int centerX, int centerY) {
 		int radius = (int) calc.getBallPixelRadius();
 
-		// The octopus needs transparency, so we enable that.
+		// The orange needs transparency, so we enable that.
 		batcher.enableBlending();
-		batcher.draw(orange, centerX - radius, centerY - radius, 2 * radius,
-				2 * radius);
+		batcher.draw(orange, centerX - radius, centerY - radius, 2 * radius  * 7/6,
+				2 * radius  * 7/6);
 	}
 
 	private void drawKiwi(int centerX, int centerY) {
 		int radius = (int) calc.getBallPixelRadius();
 
-		// The octopus needs transparency, so we enable that.
+		// The kiwi needs transparency, so we enable that.
 		batcher.enableBlending();
-		batcher.draw(kiwi, centerX - radius, centerY - radius, 2 * radius,
-				2 * radius);
+		batcher.draw(kiwi, centerX - radius, centerY - radius, 2 * radius * 7/6,
+				2 * radius * 7/6);
 	}
 
 	private void drawTopPaddle(int centerX, int centerY) {
