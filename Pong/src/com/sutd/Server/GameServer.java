@@ -14,9 +14,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Net.Protocol;
 import com.badlogic.gdx.net.ServerSocket;
 import com.badlogic.gdx.net.Socket;
+import com.sutd.Client.MutualAuthClient;
 import com.sutd.GameWorld.GameWorld;
 import com.sutd.Network.MessageConsumer;
 import com.sutd.Network.MessageProducer;
+import com.sutd.Network.RSATools;
+import com.sutd.Network.RSATools.AESHelper;
 import com.sutd.PongHelpers.Constants;
 
 
@@ -70,8 +73,19 @@ public class GameServer extends Thread {
 		for(int i = 0 ; i < 2; i ++) {
 			System.out.println("Waiting for client");
 			player_sockets[i] = serverSocket.accept(null);
-			listeners[i] = startListening(player_sockets[i],i);
-			message_service.addSocket(player_sockets[i],i);
+			// Authenticate the client
+			AESHelper aes = null;
+			try {
+				aes = MutualAuthServer.authenticate(player_sockets[i]);
+				if (aes == null) {
+					i--;
+					continue;
+				}
+			} catch (Exception e) {
+
+			}
+			listeners[i] = startListening(player_sockets[i],i,aes);
+			message_service.addSocket(player_sockets[i],i,aes);
 			message_service.sendStateToSocket(game_world.getGameState(), i);
 			System.out.println("Client connected!");
 		}
@@ -88,9 +102,9 @@ public class GameServer extends Thread {
 	 * @param socket: The socket to start listening to.
 	 * @return the actual object that handles message production.
 	 */
-	public MessageProducer startListening(Socket socket,int id) {
+	public MessageProducer startListening(Socket socket,int id, AESHelper aes) {
 		BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-		MessageProducer producer = new MessageProducer(reader, buffer, id);
+		MessageProducer producer = new MessageProducer(reader, buffer, id, aes);
 		producer.start();
 		return producer;
 	}

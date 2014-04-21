@@ -5,7 +5,8 @@ import java.math.BigInteger;
 /**
  * Created by avery_000 on 10-Apr-14.
  */
-public class TestServer6 {
+
+public class MutualAuthServer {
 	public static void main(String[] args) throws Exception {
 		int i = 0;
 		try {

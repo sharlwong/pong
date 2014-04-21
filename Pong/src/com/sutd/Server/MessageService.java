@@ -6,6 +6,7 @@ import com.badlogic.gdx.net.Socket;
 import com.google.gson.Gson;
 import com.sutd.GameObjects.GameState;
 import com.sutd.Network.MessageHandler;
+import com.sutd.Network.RSATools.AESHelper;
 
 /**
  * It helps to manage all client sockets.
@@ -16,15 +17,17 @@ class MessageService implements MessageHandler {
 	GameServer server;
 	Socket[] clients = new Socket[2];
 	PrintWriter[] out = new PrintWriter[2];
+	AESHelper [] aesHelpers = new AESHelper[2];
 
 	public MessageService(GameServer gameServer) {
 		// TODO Auto-generated constructor stub
 		this.server = gameServer;
 	}
 
-	public synchronized void addSocket(Socket client, int index) {
+	public synchronized void addSocket(Socket client, int index, AESHelper aes) {
 		clients[index] = client;
 		out[index]  = new PrintWriter(client.getOutputStream());
+		aesHelpers[index] = aes;
 	}
 
 	//Handle requests.
@@ -40,7 +43,9 @@ class MessageService implements MessageHandler {
 	public synchronized void send(String message, int ignore) {
 		for(int i = 0 ; i < out.length; i++) {
 			if(i == ignore) continue; // don't send message to the sender!
-			out[i].println(message);
+			String temp = aesHelpers[i].encrypt(message);
+			System.out.println("Server sending:"+temp);
+			out[i].println(temp);
 			out[i].flush();
 		}
 	}
@@ -54,7 +59,9 @@ class MessageService implements MessageHandler {
 	}
 
 	public synchronized void sendStateToSocket(GameState gameState, int i) {
-		out[i].println("game_update;"+getJSONfromState(gameState));
+		String message = aesHelpers[i].encrypt("game_update;"+getJSONfromState(gameState));
+		System.out.println("Server sending: "+message);
+		out[i].println(message);
 		out[i].flush();
 	}
 

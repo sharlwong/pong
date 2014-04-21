@@ -17,8 +17,9 @@ public class ServerBroadcaseter extends Thread {
 	}
 
 	public void run() {
+		DatagramSocket socket = null;
 		try {
-			DatagramSocket socket =  new DatagramSocket(8888, InetAddress.getByName("0.0.0.0"));
+			socket =  new DatagramSocket(8888, InetAddress.getByName("0.0.0.0"));
 			socket.setBroadcast(true);
 
 			while(true) {
@@ -45,6 +46,9 @@ public class ServerBroadcaseter extends Thread {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+		finally {
+			if(socket!=null) socket.close();
 		}
 	}
 

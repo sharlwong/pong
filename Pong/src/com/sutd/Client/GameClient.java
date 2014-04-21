@@ -12,6 +12,7 @@ import com.badlogic.gdx.net.Socket;
 import com.sutd.Network.MessageConsumer;
 import com.sutd.Network.MessageHandler;
 import com.sutd.Network.MessageProducer;
+import com.sutd.Network.RSATools;
 
 // TODO: Make this  thread safe
 // It is accessed by both ClientBroadcaster and StartWorld
@@ -24,6 +25,7 @@ public class GameClient {
 	private String serverAddress;
 	private int serverPort;
 	private boolean isReady = false;
+	private RSATools.AESHelper AESHelper;
 
 	/* Pre-condition: We expect a server to be up and running
 	 * and the address should be accessible to the client.
@@ -32,15 +34,29 @@ public class GameClient {
 		client_socket = Gdx.net.newClientSocket(Protocol.TCP,serverAddress , serverPort, null);
 		writer = new PrintWriter(client_socket.getOutputStream());
 		reader = new BufferedReader( new InputStreamReader(client_socket.getInputStream()));
+		System.out.println("Authenticating...");
+		try {
+			AESHelper = MutualAuthClient.authenticate(client_socket);
+			if(AESHelper == null) {
+				System.out.println("Error Authenticating!");
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
-
+	
 	public void sendMessage(String message) {
+		System.out.println("message:" +message);
+		message = AESHelper.encrypt(message);
+		message=message.replace("\r","").replace("\n","");
+		System.out.println("Client Sending: "+message);
 		writer.println(message);
 		writer.flush();
 	}
 
 	public void startListening() {
-		MessageProducer listener = new MessageProducer(reader, buffer);
+		MessageProducer listener = new MessageProducer(reader, buffer,AESHelper);
 		listener.start();
 	}
 
@@ -56,12 +72,12 @@ public class GameClient {
 	/*
 	 * Initialize server details.
 	 */
-	public void setServer(String address, int port) {
+	public synchronized void setServer(String address, int port) {
 		this.serverAddress = address;
 		this.serverPort = port;
 		this.isReady = true;
 	}
-	public boolean ready() {
+	public synchronized boolean ready() {
 		return this.isReady;
 	}
 }
