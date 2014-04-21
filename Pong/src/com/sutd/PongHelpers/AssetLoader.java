@@ -2,7 +2,6 @@ package com.sutd.PongHelpers;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -10,8 +9,10 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 /**
- * Created by avery_000 on 25-Mar-14.
- */
+ * AssetLoader is a special LibGDX class that is responsible for loading all assets needed in this
+ * game. There are several types of assets that our game uses, which are Music, Texture, BitmapFont and 
+ * Animation.  
+ * ***/
 public abstract class AssetLoader {
 	public final static double BALL_SPEED             = 0.003; // distance-units per millisecond
 	public final static double BALL_RADIUS            = 0.02; // distance units
@@ -30,6 +31,10 @@ public abstract class AssetLoader {
 	public static Animation octopusAnimation;
 
 	public static Music music, chimp_long, chimp_short, bounce;
+	
+	/**
+	 * Load assets needed for the game.
+	 * **/
 
 	public static void load() {
 
@@ -99,14 +104,11 @@ public abstract class AssetLoader {
 		
 		sound_icon = new TextureRegion(sound_texture, 0, 0, 32, 32);
 		sound_icon.flip(false, true);
-		
-//		TextureRegion[] octopus = { octopusGasp, octopusSmile };
-//		octopusAnimation = new Animation(0.06f, octopus);
-//		octopusAnimation.setPlayMode(Animation.LOOP_PINGPONG);
-		
-	
 	}
 
+	/**
+	 * Dispose of all assets once the application closes.
+	 * **/
 	public void dispose() {
 		font.dispose();
 		fruitball_texture.dispose();
