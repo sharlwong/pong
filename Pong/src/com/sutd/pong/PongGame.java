@@ -9,21 +9,22 @@ import com.sutd.Client.*;
 public class PongGame extends Game {
 	public GameServer server;
 	public GameClient client;
-	public int player;
+	public int        player;
+
 	@Override
-	public void create() {		
+	public void create() {
 		System.out.println("Game Created!");
 		initializeNetwork();
 		AssetLoader.load();
 		AssetLoader.music.play();
 		AssetLoader.music.setLooping(true);
-        setScreen(new StartScreen(this));
-//        setScreen(new GameScreen());
+		setScreen(new StartScreen(this));
+		//        setScreen(new GameScreen());
 	}
 
 	@Override
 	public void dispose() {
-		
+
 	}
 
 	@Override
@@ -37,8 +38,8 @@ public class PongGame extends Game {
 	@Override
 	public void resume() {
 	}
+
 	private void initializeNetwork() {
-		
+
 	}
-	
 }

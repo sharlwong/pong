@@ -1,8 +1,8 @@
 package com.sutd.PongHelpers;
 
 public class Vector2D {
-	public static final Vector2D X = new Vector2D(1, 0);
-	public static final Vector2D Y = new Vector2D(0, 1);
+	public static final Vector2D X    = new Vector2D(1, 0);
+	public static final Vector2D Y    = new Vector2D(0, 1);
 	public static final Vector2D ZERO = new Vector2D(0, 0);
 	public double x;
 	public double y;

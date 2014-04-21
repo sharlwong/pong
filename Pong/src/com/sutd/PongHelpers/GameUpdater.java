@@ -14,8 +14,9 @@ public class GameUpdater implements MessageHandler {
 		this.stateBuffer = buffer;
 		this.player = player;
 	}
+
 	public void handle(int id, String type, String message) {
-		if(!type.equals("game_update")) return;
+		if (!type.equals("game_update")) return;
 		Gson gson = new Gson();
 		GameState state = gson.fromJson(message, GameState.class);
 		if (player == 1) state = state.flip();
