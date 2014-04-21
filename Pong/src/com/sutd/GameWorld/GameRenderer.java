@@ -36,7 +36,7 @@ public class GameRenderer {
 	int[] player0;
 	int[] player1;
 	
-	private TextureRegion watermelon, kiwi, orange, wait_screen, instr_screen, game_screen, paddle;
+	private TextureRegion watermelon, kiwi, orange, wait_screen, instr_screen, game_screen, paddle_top, paddle_bottom;
 	private GameState lastKnownState;
 	private Music chimp_long, chimp_short;
 
@@ -75,7 +75,8 @@ public class GameRenderer {
 		font = AssetLoader.font;
 		instr_screen = AssetLoader.instr_screen;
 		wait_screen = AssetLoader.wait_screen;
-		paddle = AssetLoader.paddle;
+		paddle_top = AssetLoader.paddle_top;
+		paddle_bottom = AssetLoader.paddle_bottom;
 		game_screen = AssetLoader.game_screen;
 		chimp_long = AssetLoader.chimp_long;
 		chimp_short = AssetLoader.chimp_short;
@@ -198,11 +199,11 @@ public class GameRenderer {
 
 		        /*render player 0 at the bottom */
 				shapeRenderer.setColor(Color.BLUE);
-				drawPaddle(player0[0], player0[1]);
+				drawBottomPaddle(player0[0], player0[1]);
 
 		        /* render player 1 at the top */
 				shapeRenderer.setColor(Color.RED);
-				drawPaddle(player1[0], player1[1]);
+				drawTopPaddle(player1[0], player1[1]);
 
 				/* why is this here ._. it doesn't seem useful */
 				shapeRenderer.setColor(Color.WHITE);
@@ -249,7 +250,7 @@ public class GameRenderer {
 		// The octopus needs transparency, so we enable that.
 		batcher.enableBlending();
 		batcher.draw(watermelon, centerX - radius, centerY - radius,
-				2 * radius, 2 * radius);
+				2 * radius, 2*radius);
 	}
 
 	private void drawOrange(int centerX, int centerY) {
@@ -270,12 +271,22 @@ public class GameRenderer {
 				2 * radius);
 	}
 
-	private void drawPaddle(int centerX, int centerY) {
+	private void drawTopPaddle(int centerX, int centerY) {
 		int width = (int) calc.getPaddlePixelWidth();
 		int height = (int) calc.getPaddlePixelDepth();
 		
 		batcher.enableBlending();
-        batcher.draw(paddle, centerX - width / 2, centerY - height / 2, width, height);
+        batcher.draw(paddle_top, centerX - width / 2, centerY - height / 2, width, height);
+		
+		//shapeRenderer.rect(centerX - width / 2, centerY - height / 2, width, height);
+	}
+
+	private void drawBottomPaddle(int centerX, int centerY) {
+		int width = (int) calc.getPaddlePixelWidth();
+		int height = (int) calc.getPaddlePixelDepth();
+		
+		batcher.enableBlending();
+        batcher.draw(paddle_bottom, centerX - width / 2, centerY - height / 2, width, height);
 		
 		//shapeRenderer.rect(centerX - width / 2, centerY - height / 2, width, height);
 	}

@@ -26,7 +26,7 @@ public abstract class AssetLoader {
 	public static BitmapFont font, shadow;
 	
 	public static Texture fruitball_texture, screen_texture, wait_texture, paddle_texture, game_texture, instr_texture;
-	public static TextureRegion watermelon, orange, kiwi, splash_screen, wait_screen, game_screen, instr_screen, paddle;
+	public static TextureRegion watermelon, orange, kiwi, splash_screen, wait_screen, game_screen, instr_screen, paddle_top, paddle_bottom;
 	public static Animation octopusAnimation;
 	
 	public static Music music, chimp_long, chimp_short;
@@ -87,8 +87,11 @@ public abstract class AssetLoader {
 		instr_screen = new TextureRegion(instr_texture, 0, 0, 256, 512);
 		instr_screen.flip(false, true);
 		
-		paddle = new TextureRegion(paddle_texture, 0, 0, 128, 41);
-		paddle.flip(false, true);
+		paddle_top = new TextureRegion(paddle_texture, 0, 0, 128, 41);
+		paddle_top.flip(false, false);
+
+		paddle_bottom = new TextureRegion(paddle_texture, 0, 0, 128, 41);
+		paddle_bottom.flip(false, true);
 		
 //		TextureRegion[] octopus = { octopusGasp, octopusSmile };
 //		octopusAnimation = new Animation(0.06f, octopus);
