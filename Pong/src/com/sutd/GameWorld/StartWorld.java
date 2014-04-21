@@ -47,7 +47,6 @@ public class StartWorld {
 	
 	public void update() {
 		check_if_touched();
-		//check_if_server_clients_created();
 	}
 	
 	/** Checks if start game button and join game button starts.
@@ -94,16 +93,6 @@ public class StartWorld {
 	}
 	
 
-	/**
-	 * Checks if server and clients are created successfully.
-	 * If they are, the screen is changed to GameScreen. 
-	 * */
-	
-	private void check_if_server_clients_created(){
-		if(server_created == true && client1_created == true && client2_created == true){
-		}
-	}
-	
 	/**
 	 * Starts Server Thread
 	 * And immediately connects to it as a client

@@ -8,9 +8,9 @@ import com.sutd.GameObjects.Paddle;
  * Created by avery_000 on 01-Apr-14.
  */
 public class InputHandler implements InputProcessor {
-	private final Paddle player_paddle;
+	private final Paddle    player_paddle;
 	private final Constants calc;
-	private double previousPosition;
+	private       double    previousPosition;
 
 	public InputHandler(Paddle paddle, Constants calc) {
 		this.calc = calc;
@@ -51,7 +51,8 @@ public class InputHandler implements InputProcessor {
 		double relativePos = screenX;
 		if (Math.abs(previousPosition - relativePos) > Gdx.graphics.getWidth() * 0.6) {
 			return true;
-		} else {
+		}
+		else {
 			// double relativeMax = game.calc.getHorizontalPixelUnitLength() + 2
 			// * game.calc.getBallPixelRadius() -
 			// game.calc.getPaddlePixelWidth();
@@ -70,8 +71,7 @@ public class InputHandler implements InputProcessor {
 		double relativePos = screenX - calc.getPaddlePixelWidth() / 2;
 		// double relativeMax = game.calc.getHorizontalPixelUnitLength() + 2 *
 		// game.calc.getBallPixelRadius() - game.calc.getPaddlePixelWidth();
-		double relativeMax = calc.getHorizontalPixelUnitLength()
-				+ calc.getPaddlePixelWidth() / 2;
+		double relativeMax = calc.getHorizontalPixelUnitLength() + calc.getPaddlePixelWidth() / 2;
 		relativePos = relativePos < 0 ? 0 : relativePos;
 		relativePos = relativePos > relativeMax ? relativeMax : relativePos;
 		this.player_paddle.setFractionalPosition(relativePos / relativeMax);
@@ -83,5 +83,4 @@ public class InputHandler implements InputProcessor {
 		// TODO Auto-generated method stub
 		return false;
 	}
-
 }
