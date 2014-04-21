@@ -136,6 +136,11 @@ public class GameRenderer {
 			//			font.draw(batcher, "Player 2", d.width / 2 - 30, d.height / 2 + 10);
 
 			batcher.draw(wait_screen, 0, 0, 136, 204);
+			String password = state.getOtp();
+			if(password !=null) {
+				font.draw(batcher, password, d.width / 2 - 30, d.height / 2 - 60);
+				
+			}
 		
 		/* Game over */
 		}

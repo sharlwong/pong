@@ -5,8 +5,7 @@ import com.sutd.Network.RSATools;
 
 public class MutualAuthServer {
 
-	public static RSATools.AESHelper authenticate(Socket socket) throws Exception {
-		String password = "1234567";
+	public static RSATools.AESHelper authenticate(Socket socket, String password) throws Exception {
 		final int port = 3344;
 		String serverNonce = RSATools.nonce();
 		String clientNonce;

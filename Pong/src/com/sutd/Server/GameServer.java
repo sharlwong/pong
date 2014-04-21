@@ -3,6 +3,7 @@ package com.sutd.Server;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.Random;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CountDownLatch;
@@ -14,11 +15,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Net.Protocol;
 import com.badlogic.gdx.net.ServerSocket;
 import com.badlogic.gdx.net.Socket;
-import com.sutd.Client.MutualAuthClient;
+import com.sutd.GameObjects.GameState;
 import com.sutd.GameWorld.GameWorld;
 import com.sutd.Network.MessageConsumer;
 import com.sutd.Network.MessageProducer;
-import com.sutd.Network.RSATools;
 import com.sutd.Network.RSATools.AESHelper;
 import com.sutd.PongHelpers.Constants;
 
@@ -41,6 +41,7 @@ public class GameServer extends Thread {
 	private MessageService message_service;
 	private GameWorld game_world;
 	private CountDownLatch started;
+	public String[] password;
 
 	public GameServer() {}
 	/**
@@ -50,6 +51,11 @@ public class GameServer extends Thread {
 	public GameServer(CountDownLatch started) {
 		this.started = started;
 		assert started.getCount() == 1;
+		Random rand = new Random();
+		//build password
+		int  n = rand.nextInt(90000);
+		int passcode = 10000 + n; 
+		password = new String[] {"98398", ""+passcode };
 	}
 
 	/**
@@ -63,7 +69,7 @@ public class GameServer extends Thread {
 		serverSocket = Gdx.net.newServerSocket(Protocol.TCP,port, null);
 		System.out.println("Server started at:");
 		//Start broadcasting presence
-		ServerBroadcaseter broadcaster = new ServerBroadcaseter("lhst", "5000");
+		ServerBroadcaster broadcaster = new ServerBroadcaster("lhst", "5000");
 		broadcaster.start();
 		//mark server as started
 		if(started != null) started.countDown();
@@ -76,7 +82,7 @@ public class GameServer extends Thread {
 			// Authenticate the client
 			AESHelper aes = null;
 			try {
-				aes = MutualAuthServer.authenticate(player_sockets[i]);
+				aes = MutualAuthServer.authenticate(player_sockets[i],password[i]);
 				if (aes == null) {
 					i--;
 					continue;
@@ -86,7 +92,13 @@ public class GameServer extends Thread {
 			}
 			listeners[i] = startListening(player_sockets[i],i,aes);
 			message_service.addSocket(player_sockets[i],i,aes);
-			message_service.sendStateToSocket(game_world.getGameState(), i);
+			GameState state = game_world.getGameState();
+			if(i == 0) {
+				// Special server properties
+				state.setOtp(password[1]);
+			}
+
+			message_service.sendStateToSocket(state, i);
 			System.out.println("Client connected!");
 		}
 		startConsuming();

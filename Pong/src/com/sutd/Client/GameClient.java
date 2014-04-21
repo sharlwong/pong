@@ -26,6 +26,7 @@ public class GameClient {
 	private int serverPort;
 	private boolean isReady = false;
 	private RSATools.AESHelper AESHelper;
+	private String password;
 
 	/* Pre-condition: We expect a server to be up and running
 	 * and the address should be accessible to the client.
@@ -36,7 +37,7 @@ public class GameClient {
 		reader = new BufferedReader( new InputStreamReader(client_socket.getInputStream()));
 		System.out.println("Authenticating...");
 		try {
-			AESHelper = MutualAuthClient.authenticate(client_socket);
+			AESHelper = MutualAuthClient.authenticate(client_socket,password);
 			if(AESHelper == null) {
 				System.out.println("Error Authenticating!");
 			}
@@ -78,6 +79,9 @@ public class GameClient {
 		this.isReady = true;
 	}
 	public synchronized boolean ready() {
-		return this.isReady;
+		return this.isReady && (this.password != null);
+	}
+	public synchronized void setPassword(String password) {
+		this.password = password;
 	}
 }

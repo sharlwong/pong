@@ -12,6 +12,15 @@ public class GameState {
 	private int        timeLeft;
 	private int[]      scores;
 	private double[]   spareVar;
+	private String	   otp;
+
+	public String getOtp() {
+		return otp;
+	}
+
+	public void setOtp(String otp) {
+		this.otp = otp;
+	}
 
 	public double[] getSpareVar() {
 		return spareVar;

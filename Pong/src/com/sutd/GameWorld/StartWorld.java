@@ -8,15 +8,13 @@ import com.badlogic.gdx.math.Rectangle;
 import com.sutd.Client.ClientBroadcaster;
 import com.sutd.Pong.PongGame;
 import com.sutd.PongHelpers.AssetLoader;
+import com.sutd.PongHelpers.PasswordListener;
 import com.sutd.Server.GameServer;
 
 
 public class StartWorld {
 	private Rectangle start_game_button;
 	private Rectangle join_game_button;
-	private Boolean server_created = false;
-	private Boolean client1_created = false;
-	private Boolean client2_created = false;
 	private PongGame pong_game;
 	
 	private Music chimp_short;
@@ -91,6 +89,9 @@ public class StartWorld {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		//Set OTP
+		pong_game.client.setPassword("98398"); //Default server password
+		//Start Broadcasting for server
 		ClientBroadcaster bcaster = new ClientBroadcaster(pong_game.client);
 		bcaster.start();
 	}
@@ -103,10 +104,12 @@ public class StartWorld {
 		Gdx.app.log("my app","CLIENT");
 		//first set us up as player 1
 		pong_game.player = 1;
+		//Set OTP password
+		Gdx.input.getTextInput(new PasswordListener(pong_game.client), "Enter Password", "");
 		// broadcast request to join
+
 		ClientBroadcaster bcaster = new ClientBroadcaster(pong_game.client);
 		bcaster.start();
-		//once discovered, we can start:
 		/*pong_game.client = new GameClient();
 		pong_game.client.connectToServer("localhost");
 		pong_game.client.startListening();

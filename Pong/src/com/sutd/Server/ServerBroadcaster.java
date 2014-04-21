@@ -7,11 +7,11 @@ import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 
-public class ServerBroadcaseter extends Thread {
+public class ServerBroadcaster extends Thread {
 	String address = "";
 	String port = "";
 
-	public ServerBroadcaseter(String address, String port) {
+	public ServerBroadcaster(String address, String port) {
 		this.address = address;
 		this.port = port;
 	}
