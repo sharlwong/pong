@@ -29,7 +29,7 @@ public abstract class AssetLoader {
 	public static TextureRegion watermelon, orange, kiwi, splash_screen, wait_screen, game_screen, instr_screen, paddle_top, paddle_bottom, sound_icon;
 	public static Animation octopusAnimation;
 
-	public static Music music, chimp_long, chimp_short;
+	public static Music music, chimp_long, chimp_short, bounce;
 
 	public static void load() {
 
@@ -45,6 +45,7 @@ public abstract class AssetLoader {
 		music = Gdx.audio.newMusic(Gdx.files.internal("data/Jungle Music.mp3"));
 		chimp_long = Gdx.audio.newMusic(Gdx.files.internal("data/Excited Chimp.mp3"));
 		chimp_short = Gdx.audio.newMusic(Gdx.files.internal("data/Chimp.mp3"));
+		bounce = Gdx.audio.newMusic(Gdx.files.internal("data/Spring Bounce.mp3"));
 
 		/** Graphics **/
 

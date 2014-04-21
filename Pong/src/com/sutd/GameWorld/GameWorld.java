@@ -1,6 +1,7 @@
 package com.sutd.GameWorld;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.sutd.GameObjects.Ball;
 import com.sutd.GameObjects.GameState;
 import com.sutd.GameObjects.Paddle;
@@ -24,6 +25,7 @@ public class GameWorld {
 	public 		  boolean      gameover;
 	public        int          ticktock;
 	public        int          timeLimit; //maximum time for each round
+	private		  Music		   bounce;
 
 	/* simulation variable */
 	private final static double frameDrop = 0;
@@ -41,6 +43,7 @@ public class GameWorld {
 		init = true;
 		ready = false;
 		gameover = false;
+		bounce = AssetLoader.bounce;
 		System.out.println("Game initialized, please wait for start...");
 	}
 
@@ -116,7 +119,7 @@ public class GameWorld {
 		init = false;
 
 		/* ball type and other data */
-		double randomValue = random.nextDouble() * 14;
+		double randomValue = random.nextDouble() * 3;
 		int ballType = (int) randomValue;
 
 		/* starting position */
@@ -184,10 +187,12 @@ public class GameWorld {
 				if (player1.collisionCheck(b)) {
 					addThese.add(player1.bounce(b, elapsedTimeMillis));
 					removeThese.add(b);
+					bounce.play();
 				}
 				if (player0.collisionCheck(b)) {
 					addThese.add(player0.bounce(b, elapsedTimeMillis));
 					removeThese.add(b);
+					bounce.play();
 				}
 				if (!b.inGame()) {
 					removeThese.add(b);
