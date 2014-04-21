@@ -198,6 +198,7 @@ public class GameWorld {
 
 			for (Ball b : removeThese) balls.remove(b);
 			for (Ball b : addThese) balls.add(b);
+			if(balls.size() == 0) injectRandomBall();
 		}
 	}
 	
@@ -210,6 +211,7 @@ public class GameWorld {
 			int x = Gdx.input.getX();
 			int y = Gdx.input.getY();
 			//System.out.println(x+" "+y+" "+Gdx.graphics.getWidth()/2+" "+Gdx.graphics.getHeight());
+
 			if (x>Gdx.graphics.getWidth()/4 && x<2*Gdx.graphics.getWidth()/3 && y > Gdx.graphics.getHeight()*((float) 164/204) && y < Gdx.graphics.getHeight()*((float) 184/204)){
 				// restart
 				// initialize objects inside game world
