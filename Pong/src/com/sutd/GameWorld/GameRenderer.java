@@ -50,6 +50,7 @@ public class GameRenderer {
 	int      timeLeft;
 	int      countDown;
 	int      tick;
+	int		 ballCounter;
 
 	BlockingQueue<GameState> buffer;
 
@@ -61,6 +62,7 @@ public class GameRenderer {
 		cam.setToOrtho(true, 136, 204);
 		countDown = Constants.COUNT_DOWN_SECOND;
 		tick = Constants.GAME_TIME + Constants.COUNT_DOWN_SECOND;
+		ballCounter = 1;
 
 		shapeRenderer = new ShapeRenderer();
 		shapeRenderer.setProjectionMatrix(cam.combined);
@@ -70,6 +72,8 @@ public class GameRenderer {
 		initAssets();
 	}
 
+	/*** Initialize assets needed for this class. ***/
+	
 	private void initAssets() {
 		watermelon = AssetLoader.watermelon;
 		kiwi = AssetLoader.kiwi;
@@ -111,7 +115,7 @@ public class GameRenderer {
 		ballsType = state.getBallsType();
 		timeLeft = state.getTimeLeft();
 		
-		/* Black background drawn to prevent flickering - IMPORTANT */
+		/* Black background drawn to prevent flickering - IMPORTANT. */
 		Gdx.gl.glClearColor(255, 255, 183, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
@@ -130,40 +134,57 @@ public class GameRenderer {
 
 		batcher.begin();
 
-		/* Wait for second client to join server */
+		/* Wait for second client to join server. */
 		if (state.getStatus() == 0) {
 			//			font.draw(batcher, "Waiting", d.width / 2 - 30, d.height / 2 - 20);
 			//			font.draw(batcher, "Player 2", d.width / 2 - 30, d.height / 2 + 10);
 
 			batcher.draw(wait_screen, 0, 0, 136, 204);
+		}
 		
 		/* Game over */
-		}
 		else if (timeLeft == 0) {
+			
 			batcher.draw(game_screen, 0, 0, 136, 204);
 			font.draw(batcher, "GAME OVER", d.width / 2 - 48, d.height / 2 - 40);
+			
+			/* Handle conclusion of game - whether there is a winner or not, and if the player is the winner. */
 			if (scores[0] > scores[1]) font.draw(batcher, "YOU WIN", d.width / 2 - 40, d.height / 2 - 20);
 			else if (scores[0] < scores[1]) font.draw(batcher, "YOU LOSE", d.width / 2 - 37, d.height / 2 - 20);
 			else font.draw(batcher, "TIE", d.width / 2 - 10, d.height / 2 - 20);
+			
+			/* Show final scores of both players. */
 			font.draw(batcher, score0 + ":" + score1, d.width / 2 - 3 * score0.length() - 10, d.height / 2);
+			
+			/* Play again? If so, instantiate countDown and tick to original values. */
 			font.draw(batcher, "AGAIN ?", 1 * d.width / 3, d.height - 40);
 			countDown = Constants.AGAIN_COUNT_DOWN_SECOND;
 			tick = Constants.GAME_TIME + Constants.AGAIN_COUNT_DOWN_SECOND;
 
 			chimp_short.play();
 
-			// AssetLoader.font.draw(batcher, "AGAIN", 5, d.height - 40);
-			// AssetLoader.font.draw(batcher, "EXIT", d.width/2 + 30, d.height -
-			// 40);
-		
-		/* Game continues */
 		}
-		else {
 
+		else {
+			
+			/* Game play starts */			
 			if (countDown == 0) {
 				batcher.draw(game_screen, 0, 0, 136, 204);
 
+				
 				for(int[] ball: balls){ 
+//					if (ballsType[ballCounter] == 1){
+//						drawOrange(ball[0], ball[1]);
+//					} else if (ballsType[ballCounter] == 0){
+//						drawKiwi(ball[0], ball[1]);
+//					} else if (ballsType[ballCounter] == 0){
+//						drawWatermelon(ball[0], ball[1]);
+//					}
+//					
+					ballCounter++;
+					
+					System.out.println("Ball counter: "+ ballCounter);
+					
 					drawOrange(ball[0], ball[1]);
 				}
 
@@ -188,42 +209,35 @@ public class GameRenderer {
 
 				// End SpriteBatch
 
-				/*** Draw paddles. ****/
-
-				// Tells shapeRenderer to begin drawing filled shapes
-				shapeRenderer.begin(ShapeType.Filled);
-
-		        /*render player 0 at the bottom */
-				shapeRenderer.setColor(Color.BLUE);
+				/* Draw paddles. Render player 0 at the bottom, render player 1 at the top. */
 				drawBottomPaddle(player0[0], player0[1]);
-
-		        /* render player 1 at the top */
-				shapeRenderer.setColor(Color.RED);
 				drawTopPaddle(player1[0], player1[1]);
 
-				/* why is this here ._. it doesn't seem useful */
-				shapeRenderer.setColor(Color.WHITE);
-
-				// Tells the shapeRenderer to finish rendering
-				// We MUST do this every time.
-				shapeRenderer.end();
-
+				/* Draw scores on the right and time left in the game on the left. */
 				font.draw(batcher, "" + score1, d.width - 20 - (3 * score0.length()), d.height / 2 - 20);
 				font.draw(batcher, "" + score0, d.width - 20 - (3 * score0.length()), d.height / 2);
 				font.draw(batcher, "" + timeLeft, 5, d.height / 2 - 10);
 
+				/* Play long chimp call sound to signal end of game. */
 				chimp_long.play();
 			}
+			
+			/* Game is loading. */
 			else {
 
+				/* Load instructions screen. */
 				if (countDown > 2) {
 					batcher.draw(instr_screen, 0, 0, 136, 204);
+					
 				}
 
+				/* Load the words: READY? GO! */
 				else if (countDown == 2) {
-					chimp_short.play();
 					batcher.draw(game_screen, 0, 0, 136, 204);
 					font.draw(batcher, "READY ?", d.width / 3, d.height / 2 - 20);
+					
+					/* Play short chimp call to signal start of game. */
+					chimp_short.play();
 				}
 				else if (countDown == 1) {
 
@@ -238,6 +252,10 @@ public class GameRenderer {
 		// for (int[] ball : balls) drawBall(ball[0], ball[1]);
 	}
 
+	/** Use SpriteBatch to draw a watermelon as a ball.
+	 * @param int centerX, x-coordinate of center point of ball 
+	 * @param int centerY, y-coordinate of center point of ball
+	 * */
 	private void drawWatermelon(int centerX, int centerY) {
 		int radius = (int) calc.getBallPixelRadius();
 
@@ -246,7 +264,11 @@ public class GameRenderer {
 		batcher.draw(watermelon, centerX - radius, centerY - radius,
 				2 * radius * 7/6, 2 * radius * 7/6);
 	}
-
+	
+	/** Use SpriteBatch to draw an orange as a ball.
+	 * @param int centerX, x-coordinate of center point of ball 
+	 * @param int centerY, y-coordinate of center point of ball
+	 * */
 	private void drawOrange(int centerX, int centerY) {
 		int radius = (int) calc.getBallPixelRadius();
 
@@ -256,6 +278,10 @@ public class GameRenderer {
 				2 * radius  * 7/6);
 	}
 
+	/** Use SpriteBatch to draw a kiwi as a ball.
+	 * @param int centerX, x-coordinate of center point of ball 
+	 * @param int centerY, y-coordinate of center point of ball
+	 * */
 	private void drawKiwi(int centerX, int centerY) {
 		int radius = (int) calc.getBallPixelRadius();
 
@@ -265,6 +291,11 @@ public class GameRenderer {
 		batcher.draw(kiwi, centerX - radius, centerY - radius, 2 * radius * 7/6,
 				2 * radius * 7/6);
 	}
+	
+	/** Use SpriteBatch to draw an inverted banana as a top paddle.
+	 * @param int centerX, x-coordinate of center point of paddle 
+	 * @param int centerY, y-coordinate of center point of paddle
+	 * */
 
 	private void drawTopPaddle(int centerX, int centerY) {
 		int width = (int) calc.getPaddlePixelWidth();
@@ -275,6 +306,11 @@ public class GameRenderer {
 		
 		//shapeRenderer.rect(centerX - width / 2, centerY - height / 2, width, height);
 	}
+	
+	/** Use SpriteBatch to draw a banana as a bottom paddle.
+	 * @param int centerX, x-coordinate of center point of paddle 
+	 * @param int centerY, y-coordinate of center point of paddle
+	 * */
 
 	private void drawBottomPaddle(int centerX, int centerY) {
 		int width = (int) calc.getPaddlePixelWidth();
