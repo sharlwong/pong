@@ -12,8 +12,7 @@ import com.sutd.Server.GameServer;
 
 
 public class StartWorld {
-	private Rectangle start_game_button;
-	private Rectangle join_game_button;
+	private Rectangle start_game_button, join_game_button, music_button;
 	private Boolean server_created = false;
 	private Boolean client1_created = false;
 	private Boolean client2_created = false;
@@ -33,6 +32,7 @@ public class StartWorld {
 	private void createButtons() {
 		start_game_button = new Rectangle(20,124,95,25);
 		join_game_button = new Rectangle(20,154,95,25);
+		music_button = new Rectangle(119,187,12,12);
 	}
 	
 	public Rectangle getStartButton() {
@@ -40,6 +40,9 @@ public class StartWorld {
 	}
 	public Rectangle getJoinButton() {
 		return new Rectangle(join_game_button);
+	}
+	public Rectangle getMusicButton() {
+		return new Rectangle(music_button);
 	}
 	
 	public void update() {
@@ -55,27 +58,42 @@ public class StartWorld {
 	 * If join game button is touched, a new client is created and connected to the server too.*
 	 * */
 	
+	
 	private void check_if_touched() {
 		if(Gdx.input.justTouched()) {
 			Gdx.app.log("MyTag", "Just Touched!");
 			float x = (float) (Gdx.input.getX());
 			float y = (float)(Gdx.input.getY());
+			
+			/* Check if touch happened within the dimensions of the Start Game button */
 			if(x>= Gdx.graphics.getWidth()*((float) 20/136) && x<= Gdx.graphics.getWidth()*((float)115/136) && 
-					 					y>= Gdx.graphics.getHeight()*((float)124/204) && y<=Gdx.graphics.getHeight()*((float)149/204)) {
+					 					y>= Gdx.graphics.getHeight()*((float)124/204) && y<=Gdx.graphics.getHeight()*((float)144/204)) {
 				//Probably start a server here.
 				initializeServerAndClient();
 				chimp_short.play();
 			}
 			
+			/* Check if touch happened within the dimensions of the Join Game button */
 			else if(x>= Gdx.graphics.getWidth()*((float) 20/136) && x<= Gdx.graphics.getWidth()*((float)115/136) && 
-					 					y>= Gdx.graphics.getHeight()*((float)154/204) && y<=Gdx.graphics.getHeight()*((float)179/204)) {
+					 					y>= Gdx.graphics.getHeight()*((float)154/204) && y<=Gdx.graphics.getHeight()*((float)174/204)) {
 				intializeClientAndJoinServer();
 				chimp_short.play();
 			//connect to a server here.
 			}
+			
+			/* Check if touch happened within the dimensions of the Music Button */
+			else if(x>= Gdx.graphics.getWidth()*((float) 116/136) && x<= Gdx.graphics.getWidth()*((float)131/136) && 
+ 					y>= Gdx.graphics.getHeight()*((float)184/204) && y<=Gdx.graphics.getHeight()*((float)199/204)){
+				stop_music();
+			}
 		}
 	}
 	
+	private void stop_music(){
+		AssetLoader.music.stop();
+	}
+	
+
 	/**
 	 * Checks if server and clients are created successfully.
 	 * If they are, the screen is changed to GameScreen. 

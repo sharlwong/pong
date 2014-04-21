@@ -25,8 +25,8 @@ public abstract class AssetLoader {
 
 	public static BitmapFont font, shadow;
 
-	public static Texture fruitball_texture, screen_texture, wait_texture, paddle_texture, game_texture, instr_texture;
-	public static TextureRegion watermelon, orange, kiwi, splash_screen, wait_screen, game_screen, instr_screen, paddle_top, paddle_bottom;
+	public static Texture fruitball_texture, screen_texture, wait_texture, paddle_texture, game_texture, instr_texture, sound_texture;
+	public static TextureRegion watermelon, orange, kiwi, splash_screen, wait_screen, game_screen, instr_screen, paddle_top, paddle_bottom, sound_icon;
 	public static Animation octopusAnimation;
 
 	public static Music music, chimp_long, chimp_short;
@@ -50,6 +50,9 @@ public abstract class AssetLoader {
 
 		fruitball_texture = new Texture(Gdx.files.internal("data/Fruitball_Texture.png"));
 		fruitball_texture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+		
+		sound_texture = new Texture(Gdx.files.internal("data/Mute_icon.png"));
+		sound_texture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 
 		screen_texture = new Texture(Gdx.files.internal("data/Splash_screen_strokes_2.png"));
 		screen_texture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
@@ -92,6 +95,9 @@ public abstract class AssetLoader {
 
 		paddle_bottom = new TextureRegion(paddle_texture, 0, 0, 128, 41);
 		paddle_bottom.flip(false, true);
+		
+		sound_icon = new TextureRegion(sound_texture, 0, 0, 32, 32);
+		sound_icon.flip(false, true);
 		
 //		TextureRegion[] octopus = { octopusGasp, octopusSmile };
 //		octopusAnimation = new Animation(0.06f, octopus);

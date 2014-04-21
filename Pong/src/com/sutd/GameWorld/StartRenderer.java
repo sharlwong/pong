@@ -23,7 +23,7 @@ public class StartRenderer {
     private ShapeRenderer shapeRenderer;
     
     private SpriteBatch batcher;
-	private TextureRegion splash_screen, wait_screen, game_screen, instr_screen;
+	private TextureRegion splash_screen, wait_screen, game_screen, instr_screen, sound_icon;
 	private Vector2D screenSize;
 	private Texture texture;
 
@@ -36,6 +36,7 @@ public class StartRenderer {
 		wait_screen = AssetLoader.wait_screen;
 		game_screen = AssetLoader.game_screen;
 		instr_screen = AssetLoader.instr_screen;
+		sound_icon = AssetLoader.sound_icon;
 	}
 
     public StartRenderer(StartWorld world) {
@@ -131,8 +132,38 @@ public class StartRenderer {
         // We MUST do this every time.
         shapeRenderer.end();
         
-        //Disable transparency
-        Gdx.gl.glDisable(GL10.GL_BLEND);
+        
+        /*
+         * 3. We draw a music button (filled rectangle).
+         */
+        
+        batcher.begin(); 
+        batcher.enableBlending();
+        batcher.draw(sound_icon, start_world.getMusicButton().x, start_world.getMusicButton().y,
+                start_world.getMusicButton().width, start_world.getMusicButton().height);
+        batcher.end();
+        
+//        // Enable transparency
+//        Gdx.gl.glEnable(GL10.GL_BLEND);
+//        Gdx.gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
+//        
+//        // Tells shapeRenderer to begin drawing filled shapes
+//        shapeRenderer.begin(ShapeType.Filled);
+//
+//        // Chooses RGB Color of 87, 109, 120 at full opacity
+//        shapeRenderer.setColor(87 / 255.0f, 109 / 255.0f, 120 / 255.0f, 1.0f);
+//        
+//        
+//        // Draws the rectangle from start_world (Using ShapeType.Filled)
+//        shapeRenderer.rect(start_world.getMusicButton().x, start_world.getMusicButton().y,
+//                start_world.getMusicButton().width, start_world.getMusicButton().height);
+//
+//        // Tells the shapeRenderer to finish rendering
+//        // We MUST do this every time.
+//        shapeRenderer.end();
+//        
+//        //Disable transparency
+//        Gdx.gl.glDisable(GL10.GL_BLEND);
 
 //        batcher.begin();
 //        AssetLoader.font.draw(batcher, "JOIN", start_world.getJoinButton().x + start_world.getJoinButton().width/2 - 18, start_world.getJoinButton().y+start_world.getJoinButton().height/2 - 7);

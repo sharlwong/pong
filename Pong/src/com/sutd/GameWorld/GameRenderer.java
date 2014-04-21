@@ -162,7 +162,7 @@ public class GameRenderer {
 				batcher.draw(game_screen, 0, 0, 136, 204);
 
 				for(int[] ball: balls){ 
-					drawKiwi(ball[0], ball[1]);
+					drawOrange(ball[0], ball[1]);
 				}
 
 				 /*
