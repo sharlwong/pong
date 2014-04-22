@@ -9,18 +9,19 @@ import java.awt.event.MouseEvent;
  * Created by avery_000 on 01-Apr-14.
  */
 public class Renderer extends JPanel implements Runnable {
-	double[]     ballDoubles;
-	int[]        ballTypes;
-	int[][]      balls;
-	Constants    calc;
-	Dimension    dim;
 	GameWorld    game;
 	InputHandler inputHandler;
-	GameState    lastKnownState;
-	int[]        player0;
-	int[]        player1;
-	int[]        scores;
 	Thread       thread;
+	Dimension    dim;
+	Constants    calc;
+	GameState    lastKnownState;
+
+	int[][]  balls;
+	int[]    player0;
+	int[]    player1;
+	int[]    scores;
+	int[]    ballTypes;
+	double[] ballDoubles;
 
 	public Renderer(Dimension d) {
 		dim = d;
@@ -32,17 +33,6 @@ public class Renderer extends JPanel implements Runnable {
 		this.setPreferredSize(d);
 
 		thread.start();
-	}
-
-	private void drawBall(Graphics g, int centerX, int centerY) {
-		int radius = (int) calc.getBallPixelRadius();
-		g.fillOval(centerX - radius, centerY - radius, 2 * radius, 2 * radius);
-	}
-
-	private void drawPaddle(Graphics g, int centerX, int centerY) {
-		int width = (int) calc.getPaddlePixelWidth();
-		int height = (int) calc.getPaddlePixelDepth();
-		g.fillRect(centerX - width / 2, centerY - height / 2, width, height);
 	}
 
 	public void keyPressed(KeyEvent e) {
@@ -147,6 +137,17 @@ public class Renderer extends JPanel implements Runnable {
 		g.setColor(Color.RED);
 		drawPaddle(g, player1[0], player1[1]);
 		g.drawString("Player 1: " + scores[1], dim.width / 10, (int) (dim.height * 0.02));
+	}
+
+	private void drawBall(Graphics g, int centerX, int centerY) {
+		int radius = (int) calc.getBallPixelRadius();
+		g.fillOval(centerX - radius, centerY - radius, 2 * radius, 2 * radius);
+	}
+
+	private void drawPaddle(Graphics g, int centerX, int centerY) {
+		int width = (int) calc.getPaddlePixelWidth();
+		int height = (int) calc.getPaddlePixelDepth();
+		g.fillRect(centerX - width / 2, centerY - height / 2, width, height);
 	}
 
 	@Override

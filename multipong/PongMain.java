@@ -7,8 +7,8 @@ import java.awt.event.*;
 public class PongMain extends JFrame {
 
 	final static Dimension dim          = new Dimension(1000, 600);
-	private      Renderer  gameRenderer = null;
 	private      JPanel    jContentPane = null;
+	private      Renderer  gameRenderer = null;
 
 	public PongMain() {
 
@@ -57,16 +57,16 @@ public class PongMain extends JFrame {
 			public void mouseClicked(MouseEvent e) { }
 
 			@Override
-			public void mouseEntered(MouseEvent e) { gameRenderer.mouseAt(e); }
-
-			@Override
-			public void mouseExited(MouseEvent e) { gameRenderer.mouseAt(e); }
-
-			@Override
 			public void mousePressed(MouseEvent e) { gameRenderer.mouseDown(); }
 
 			@Override
 			public void mouseReleased(MouseEvent e) { gameRenderer.mouseUp(); }
+
+			@Override
+			public void mouseEntered(MouseEvent e) { gameRenderer.mouseAt(e); }
+
+			@Override
+			public void mouseExited(MouseEvent e) { gameRenderer.mouseAt(e); }
 		});
 	}
 

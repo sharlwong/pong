@@ -1,9 +1,9 @@
-package archived.security_lab.mutualAuth;
+package multipong;
 
 import java.net.InetAddress;
 import java.net.Socket;
 
-public class TestClient2 {
+public class TestClient3 {
 
 	public static void main(String[] args) throws Exception {
 		String password = "1234567";
@@ -22,11 +22,11 @@ public class TestClient2 {
 
 		System.out.println("Exchanging keys...");
 		/* send client public key */
-		RSATools.RSADecryption decryption = new RSATools.RSADecryption();
+		RSATools.RSAPrivate decryption = new RSATools.RSAPrivate();
 		decryption.sendKey(socket);
 
 		/* get server public key */
-		RSATools.RSAEncryption encryption = new RSATools.RSAEncryption();
+		RSATools.RSAPublic encryption = new RSATools.RSAPublic();
 		encryption.getKey(socket);
 
 		System.out.println("Exchanging nonsense...");
@@ -37,7 +37,7 @@ public class TestClient2 {
 		serverNonce = decryption.getMessage(socket);
 
 		/* encrypt server nonce ++ password */
-		String encryptedTemp = passwordAuthenticate.encrypt(serverNonce + password);
+		String encryptedTemp = passwordAuthenticate.encryptString(serverNonce + password);
 
 		System.out.println("Interlock start...");
 		/* split into halves */
@@ -58,7 +58,7 @@ public class TestClient2 {
 		temp2 = decryption.getMessage(socket);
 
 		/* decode */
-		String received = passwordAuthenticate.decrypt(temp1 + temp2);
+		String received = passwordAuthenticate.decryptString(temp1 + temp2);
 
 		/* verification */
 		temp = clientNonce.length();
@@ -75,8 +75,28 @@ public class TestClient2 {
 		/* DONE WITH MUTUAL AUTHENTICATION */
 		/***********************************/
 
+		System.out.println("Exchanging AES key parts...");
+		/* make key part 2 */
+		temp2 = RSATools.nonce();
+
+		/* get part 1 */
+		temp1 = decryption.getMessage(socket);
+		temp1 = passwordAuthenticate.decryptString(temp1);
+
+		/* send part 2 */
+		encryption.sendMessage(socket, passwordAuthenticate.encryptString(temp2));
+
+		/* combine */
+		RSATools.AESHelper aesHelper = new RSATools.AESHelper(temp1 + temp2);
+
+		System.out.println("AES key now shared!\n");
+
+		/*************************/
+		/* CREATED SYMMETRIC KEY */
+		/*************************/
+
 		/* listen */
-		String s = decryption.getMessage(socket);
+		String s = aesHelper.getMessage(socket);
 		System.out.println("Server: " + s);
 
 		socket.close();

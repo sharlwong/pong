@@ -4,10 +4,13 @@
 // Decompiler options: packfields(3) packimports(3) splitstr(64) radix(10) lradix(10) 
 // Source File Name:   CharacterDecoder.java
 
-package archived.security_lab.mutualAuth;
+package sun.misc;
 
 import java.io.*;
 import java.nio.ByteBuffer;
+
+// Referenced classes of package sun.misc:
+//            CEStreamExhausted
 
 public abstract class CharacterDecoder {
 
@@ -18,8 +21,31 @@ public abstract class CharacterDecoder {
 
 	protected abstract int bytesPerLine();
 
+	protected void decodeBufferPrefix(PushbackInputStream pushbackinputstream, OutputStream outputstream) throws IOException {
+	}
+
+	protected void decodeBufferSuffix(PushbackInputStream pushbackinputstream, OutputStream outputstream) throws IOException {
+	}
+
+	protected int decodeLinePrefix(PushbackInputStream pushbackinputstream, OutputStream outputstream) throws IOException {
+		return bytesPerLine();
+	}
+
+	protected void decodeLineSuffix(PushbackInputStream pushbackinputstream, OutputStream outputstream) throws IOException {
+	}
+
 	protected void decodeAtom(PushbackInputStream pushbackinputstream, OutputStream outputstream, int i) throws IOException {
-		throw new sun.misc.CEStreamExhausted();
+		throw new CEStreamExhausted();
+	}
+
+	protected int readFully(InputStream inputstream, byte abyte0[], int i, int j) throws IOException {
+		for (int k = 0; k < j; k++) {
+			int l = inputstream.read();
+			if (l == -1) return k != 0 ? k : -1;
+			abyte0[k + i] = (byte) l;
+		}
+
+		return j;
 	}
 
 	public void decodeBuffer(InputStream inputstream, OutputStream outputstream) throws IOException {
@@ -45,7 +71,7 @@ public abstract class CharacterDecoder {
 				}
 				decodeLineSuffix(pushbackinputstream, outputstream);
 			} while (true);
-		} catch (sun.misc.CEStreamExhausted cestreamexhausted) {
+		} catch (CEStreamExhausted cestreamexhausted) {
 			decodeBufferSuffix(pushbackinputstream, outputstream);
 		}
 	}
@@ -65,34 +91,11 @@ public abstract class CharacterDecoder {
 		return bytearrayoutputstream.toByteArray();
 	}
 
-	protected void decodeBufferPrefix(PushbackInputStream pushbackinputstream, OutputStream outputstream) throws IOException {
-	}
-
-	protected void decodeBufferSuffix(PushbackInputStream pushbackinputstream, OutputStream outputstream) throws IOException {
-	}
-
 	public ByteBuffer decodeBufferToByteBuffer(String s) throws IOException {
 		return ByteBuffer.wrap(decodeBuffer(s));
 	}
 
 	public ByteBuffer decodeBufferToByteBuffer(InputStream inputstream) throws IOException {
 		return ByteBuffer.wrap(decodeBuffer(inputstream));
-	}
-
-	protected int decodeLinePrefix(PushbackInputStream pushbackinputstream, OutputStream outputstream) throws IOException {
-		return bytesPerLine();
-	}
-
-	protected void decodeLineSuffix(PushbackInputStream pushbackinputstream, OutputStream outputstream) throws IOException {
-	}
-
-	protected int readFully(InputStream inputstream, byte abyte0[], int i, int j) throws IOException {
-		for (int k = 0; k < j; k++) {
-			int l = inputstream.read();
-			if (l == -1) return k != 0 ? k : -1;
-			abyte0[k + i] = (byte) l;
-		}
-
-		return j;
 	}
 }

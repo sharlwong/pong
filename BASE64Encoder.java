@@ -4,16 +4,15 @@
 // Decompiler options: packfields(3) packimports(3) splitstr(64) radix(10) lradix(10) 
 // Source File Name:   BASE64Encoder.java
 
-package archived.security_lab.mutualAuth;
-
-import sun.misc.CharacterEncoder;
+package sun.misc;
 
 import java.io.IOException;
 import java.io.OutputStream;
 
-public class BASE64Encoder extends CharacterEncoder {
+// Referenced classes of package sun.misc:
+//            CharacterEncoder
 
-	private static final char pem_array[] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '+', '/'};
+public class BASE64Encoder extends CharacterEncoder {
 
 	public BASE64Encoder() {
 	}
@@ -55,4 +54,6 @@ public class BASE64Encoder extends CharacterEncoder {
 			outputstream.write(pem_array[byte5 & 63]);
 		}
 	}
+
+	private static final char pem_array[] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '+', '/'};
 }

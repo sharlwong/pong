@@ -20,9 +20,9 @@ public class TestServer5 {
 		socket = server.accept();
 
 		/* part 0 */
-		RSATools.RSAPublic encryption = new RSATools.RSAPublic();
+		RSATools.RSAEncryption encryption = new RSATools.RSAEncryption();
 		encryption.getKey(socket);
-		RSATools.RSAPrivate decryption = new RSATools.RSAPrivate();
+		RSATools.RSADecryption decryption = new RSATools.RSADecryption();
 		decryption.sendKey(socket);
 
 		System.out.println("Generating randomness...");
@@ -33,8 +33,10 @@ public class TestServer5 {
 		temp2 = decryption.getMessage(socket);
 
 		System.out.println("Making signature...");
-		decryption.sendSignature(socket, temp1);
-		verified = encryption.getVerification(socket, temp2);
+		RSATools.RSASign rsaSign = new RSATools.RSASign(decryption);
+		RSATools.RSAVerify rsaVerify = new RSATools.RSAVerify(encryption);
+		rsaSign.sendMessage(socket,temp1);
+		verified = rsaVerify.getVerification(socket,temp2);
 
 		System.out.println("Verified: " + verified);
 

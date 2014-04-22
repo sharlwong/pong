@@ -4,28 +4,16 @@
 // Decompiler options: packfields(3) packimports(3) splitstr(64) radix(10) lradix(10) 
 // Source File Name:   BASE64Decoder.java
 
-package archived.security_lab.mutualAuth;
-
-import sun.misc.CEFormatException;
-import sun.misc.CEStreamExhausted;
+package sun.misc;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PushbackInputStream;
 
-public class BASE64Decoder extends sun.misc.CharacterDecoder {
+// Referenced classes of package sun.misc:
+//            CharacterDecoder, CEFormatException, CEStreamExhausted
 
-	private static final char pem_array[] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '+', '/'};
-	private static final byte pem_convert_array[];
-	byte decode_buffer[];
-	static {
-		pem_convert_array = new byte[256];
-		for (int i = 0; i < 255; i++)
-			pem_convert_array[i] = -1;
-
-		for (int j = 0; j < pem_array.length; j++)
-			pem_convert_array[pem_array[j]] = (byte) j;
-	}
+public class BASE64Decoder extends CharacterDecoder {
 
 	public BASE64Decoder() {
 		decode_buffer = new byte[4];
@@ -48,7 +36,7 @@ public class BASE64Decoder extends sun.misc.CharacterDecoder {
 		int j;
 		do {
 			j = pushbackinputstream.read();
-			if (j == -1) throw new sun.misc.CEStreamExhausted();
+			if (j == -1) throw new CEStreamExhausted();
 		} while (j == 10 || j == 13);
 		decode_buffer[0] = (byte) j;
 		j = readFully(pushbackinputstream, decode_buffer, 1, i - 1);
@@ -88,5 +76,18 @@ public class BASE64Decoder extends sun.misc.CharacterDecoder {
 				}
 				break;
 		}
+	}
+
+	private static final char pem_array[] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '+', '/'};
+	private static final byte pem_convert_array[];
+	byte decode_buffer[];
+
+	static {
+		pem_convert_array = new byte[256];
+		for (int i = 0; i < 255; i++)
+			pem_convert_array[i] = -1;
+
+		for (int j = 0; j < pem_array.length; j++)
+			pem_convert_array[pem_array[j]] = (byte) j;
 	}
 }

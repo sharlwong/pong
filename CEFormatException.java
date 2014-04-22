@@ -2,14 +2,15 @@
 // Decompiled by Jad v1.5.8g. Copyright 2001 Pavel Kouznetsov.
 // Jad home page: http://www.kpdus.com/jad.html
 // Decompiler options: packfields(3) packimports(3) splitstr(64) radix(10) lradix(10) 
-// Source File Name:   CEStreamExhausted.java
+// Source File Name:   CEFormatException.java
 
-package archived.security_lab.mutualAuth;
+package sun.misc;
 
 import java.io.IOException;
 
-public class CEStreamExhausted extends IOException {
+public class CEFormatException extends IOException {
 
-	public CEStreamExhausted() {
+	public CEFormatException(String s) {
+		super(s);
 	}
 }

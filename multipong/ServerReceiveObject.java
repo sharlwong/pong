@@ -40,7 +40,7 @@ public class ServerReceiveObject {
 
 		System.out.println("AES key now shared!\n");
 		RSATools.AESHelper aesHelper = new RSATools.AESHelper(temp1 + temp2);
-		//		System.out.println(RSATools.base64(aesHelper.keySpec.getEncoded()));
+		System.out.println(RSATools.base64(aesHelper.keySpec.getEncoded()));
 
 		/*************************/
 		/* CREATED SYMMETRIC KEY */
@@ -52,13 +52,12 @@ public class ServerReceiveObject {
 		Object o = aesHelper.getObject(socket);
 		double[][] a = (double[][]) o;
 
-		boolean received = true;
-		for (int i = 0; i < 5; i++) {
-			for (int j = 0; j < 5; j++) {
-				received &= a[i][j] == ((double) i + 1) / (j + 7);
+		for (int i = 0; i < a.length; i++) {
+			for (int j = 0; j < a[0].length; j++) {
+				System.out.print(a[i][j] + " ");
 			}
+			System.out.print("\n");
 		}
-		System.out.println("Received correctly: " + received);
 
 		socket.close();
 		server.close();
