@@ -79,16 +79,18 @@ public class GameServer extends Thread {
 		for(int i = 0 ; i < 2; i ++) {
 			System.out.println("Waiting for client");
 			player_sockets[i] = serverSocket.accept(null);
+			System.out.println("Milgaya");
 			// Authenticate the client
 			AESHelper aes = null;
 			try {
 				aes = MutualAuthServer.authenticate(player_sockets[i],password[i]);
 				if (aes == null) {
+					System.out.println("FAILED :O");
 					i--;
 					continue;
 				}
 			} catch (Exception e) {
-
+				e.printStackTrace();
 			}
 			listeners[i] = startListening(player_sockets[i],i,aes);
 			message_service.addSocket(player_sockets[i],i,aes);

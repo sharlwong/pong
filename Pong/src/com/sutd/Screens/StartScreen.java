@@ -4,6 +4,7 @@ import com.badlogic.gdx.Screen;
 import com.sutd.Client.GameClient;
 import com.sutd.GameWorld.StartRenderer;
 import com.sutd.GameWorld.StartWorld;
+import com.sutd.Network.UnauthenticatedException;
 import com.sutd.Pong.PongGame;
 
 
@@ -31,7 +32,14 @@ public class StartScreen implements Screen {
         start_renderer.render(delta);
         if (game.client.ready()) {
         	System.out.print("Ready");
-        	game.client.connectToServer();
+        	try {
+        		game.client.connectToServer();
+        	}
+        	catch (UnauthenticatedException e) {
+        		System.out.println("Wrong password!");
+        		game.client.setPassword(null);
+        		return;
+        	}
             game.client.startListening();
             game.setScreen(new GameScreen(game));
         }

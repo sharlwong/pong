@@ -13,9 +13,8 @@ public class MutualAuthClient {
 	 * Authenticate server
 	 * @param socket The socket between the client and the server
 	 * @return null if authentication failed, the AES key otherwise.
-	 * @throws Exception
 	 */
-	public static AESHelper authenticate(Socket socket, String password) throws Exception{
+	public static AESHelper authenticate(Socket socket, String password) {
 		final int port = 3344;
 		String clientNonce = RSATools.nonce();
 		String serverNonce;
@@ -66,6 +65,10 @@ public class MutualAuthClient {
 
 		/* decode */
 		String received = passwordAuthenticate.decrypt(temp1 + temp2);
+		if (received == null) {
+			System.out.println("Verification failed, exiting...");
+			return null;
+		}
 
 		/* verification */
 		temp = clientNonce.length();

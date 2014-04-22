@@ -13,6 +13,7 @@ import com.sutd.Network.MessageConsumer;
 import com.sutd.Network.MessageHandler;
 import com.sutd.Network.MessageProducer;
 import com.sutd.Network.RSATools;
+import com.sutd.Network.UnauthenticatedException;
 
 // TODO: Make this  thread safe
 // It is accessed by both ClientBroadcaster and StartWorld
@@ -31,19 +32,17 @@ public class GameClient {
 	/* Pre-condition: We expect a server to be up and running
 	 * and the address should be accessible to the client.
 	 */
-	public void connectToServer() {
+	public void connectToServer() throws UnauthenticatedException {
 		client_socket = Gdx.net.newClientSocket(Protocol.TCP,serverAddress , serverPort, null);
 		writer = new PrintWriter(client_socket.getOutputStream());
 		reader = new BufferedReader( new InputStreamReader(client_socket.getInputStream()));
 		System.out.println("Authenticating...");
-		try {
-			AESHelper = MutualAuthClient.authenticate(client_socket,password);
-			if(AESHelper == null) {
-				System.out.println("Error Authenticating!");
-			}
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		AESHelper = MutualAuthClient.authenticate(client_socket,password);
+		if(AESHelper == null) {
+			System.out.println("Error Authenticating!");
+			isReady = false;
+			password = null;
+			throw new UnauthenticatedException();
 		}
 	}
 	

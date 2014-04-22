@@ -51,6 +51,7 @@ public class MutualAuthServer {
 
 		/* decode */
 		String received = passwordAuthenticate.decrypt(temp1 + temp2);
+		if (received == null) { return null;}
 
 
 		/* verification */

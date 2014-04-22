@@ -32,7 +32,6 @@ import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 
 import com.badlogic.gdx.net.Socket;
-
 /**
  * THIS IS AN OLD VERSION
  */
