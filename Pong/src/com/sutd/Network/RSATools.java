@@ -1,14 +1,21 @@
-package archived.security_lab.mutualAuth;
+package multipong;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
+import javax.sound.midi.MidiSystem;
+import javax.sound.midi.Sequence;
+import javax.sound.midi.Sequencer;
 import java.io.*;
-import java.net.Socket;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.net.*;
 import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
 import java.security.*;
 import java.security.spec.X509EncodedKeySpec;
-import java.util.Arrays;
-import java.util.Random;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Tools for crypto
@@ -169,7 +176,9 @@ public abstract class RSATools {
 	}
 
 	/**
-	 * Created by avery_000 on 07-Apr-14.
+	 * a convenient exception class
+	 * inherits runtime-exception
+	 * so no declarations are necessary
 	 */
 	public static class RSAPrivate {
 		private final int RSAKeySize = 2048;
@@ -179,7 +188,7 @@ public abstract class RSATools {
 			KeyPairGenerator RSAKeyGen = null;
 			try {
 				RSAKeyGen = KeyPairGenerator.getInstance("RSA");
-			} catch (Exception e) { }
+			} catch (Exception ignored) { }
 			SecureRandom random = new SecureRandom();
 			assert RSAKeyGen != null;
 			RSAKeyGen.initialize(RSAKeySize, random);
@@ -212,7 +221,7 @@ public abstract class RSATools {
 				socket.getOutputStream().write(bb.array());
 				socket.getOutputStream().write(encodedKey);
 				socket.getOutputStream().flush();
-			} catch (Exception e) { }
+			} catch (IOException e) { }
 		}
 
 		public void sendSignature(Socket socket, String message) {
@@ -234,14 +243,11 @@ public abstract class RSATools {
 
 				/* done now return */
 				return base64(generatedSignature);
-			} catch (Exception e) { }
+			} catch (Exception ignored) { }
 			return "";
 		}
 	}
 
-	/**
-	 * Created by avery_000 on 07-Apr-14.
-	 */
 	public static class RSAPublic {
 		private PublicKey publicKey;
 
@@ -271,7 +277,7 @@ public abstract class RSATools {
 				encodedPublicKey = new byte[len];
 				len = socket.getInputStream().read(encodedPublicKey);
 				if (len == 0) return;
-			} catch (Exception e) { }
+			} catch (Exception ignored) { }
 			setPublicKey(encodedPublicKey);
 		}
 
@@ -290,7 +296,7 @@ public abstract class RSATools {
 				X509EncodedKeySpec pubKeySpec = new X509EncodedKeySpec(encodedPublicKey);
 				KeyFactory keyFactory = KeyFactory.getInstance("RSA");
 				publicKey = keyFactory.generatePublic(pubKeySpec);
-			} catch (Exception e) { }
+			} catch (Exception ignored) { }
 		}
 
 		public boolean verify(String originalData, String signature) {
@@ -305,7 +311,7 @@ public abstract class RSATools {
 
 				/* done */
 				return sig.verify(base64(signature));
-			} catch (Exception e) { }
+			} catch (Exception ignored) { }
 			return false;
 		}
 	}

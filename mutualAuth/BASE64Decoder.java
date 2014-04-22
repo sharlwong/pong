@@ -15,18 +15,6 @@ import java.io.PushbackInputStream;
 
 public class BASE64Decoder extends sun.misc.CharacterDecoder {
 
-	private static final char pem_array[] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '+', '/'};
-	private static final byte pem_convert_array[];
-	byte decode_buffer[];
-	static {
-		pem_convert_array = new byte[256];
-		for (int i = 0; i < 255; i++)
-			pem_convert_array[i] = -1;
-
-		for (int j = 0; j < pem_array.length; j++)
-			pem_convert_array[pem_array[j]] = (byte) j;
-	}
-
 	public BASE64Decoder() {
 		decode_buffer = new byte[4];
 	}
@@ -88,5 +76,18 @@ public class BASE64Decoder extends sun.misc.CharacterDecoder {
 				}
 				break;
 		}
+	}
+
+	private static final char pem_array[] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '+', '/'};
+	private static final byte pem_convert_array[];
+	byte decode_buffer[];
+
+	static {
+		pem_convert_array = new byte[256];
+		for (int i = 0; i < 255; i++)
+			pem_convert_array[i] = -1;
+
+		for (int j = 0; j < pem_array.length; j++)
+			pem_convert_array[pem_array[j]] = (byte) j;
 	}
 }
