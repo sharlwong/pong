@@ -5,77 +5,13 @@ package multipong;
  */
 public class GameState {
 	private double[][] ballsData;
+	private int[]      ballsType;
 	private double[]   player0Data;
 	private double[]   player1Data;
-	private int[]      ballsType;
-	private int        status;
-	private int        timeLeft;
 	private int[]      scores;
 	private double[]   spareVar;
-
-	public double[] getSpareVar() {
-		return spareVar;
-	}
-
-	public double[][] getBallsData() {
-		return ballsData;
-	}
-
-	public double[] getPlayer0Data() {
-		return player0Data;
-	}
-
-	public double[] getPlayer1Data() {
-		return player1Data;
-	}
-
-	public int getStatus() {
-		return status;
-	}
-
-	public int getTimeLeft() {
-		return timeLeft;
-	}
-
-	public int[] getScores() {
-		return scores;
-	}
-
-	public int[] getBallsType() {
-		return ballsType;
-	}
-
-	public void setBallsData(double[][] ballsData) {
-		this.ballsData = ballsData;
-	}
-
-	public void setPlayer0Data(double[] player0Data) {
-		this.player0Data = player0Data;
-	}
-
-	public void setPlayer1Data(double[] player1Data) {
-		this.player1Data = player1Data;
-	}
-
-	public void setStatus(int status) {
-		this.status = status;
-	}
-
-	public void setTimeLeft(int timeLeft) {
-		this.timeLeft = timeLeft;
-	}
-
-	public void setScores(int[] scores) {
-		this.scores = scores;
-	}
-
-	public void setBallsType(int[] ballsType) {
-		this.ballsType = ballsType;
-	}
-
-	public void setSpareVar(double[] spareVar) {
-		this.spareVar = spareVar;
-	}
+	private int        status;
+	private int        timeLeft;
 
 	/**
 	 * Returns the image of GameState
@@ -89,7 +25,6 @@ public class GameState {
 		flipped.setStatus(status);
 		flipped.setTimeLeft(timeLeft);
 		flipped.setBallsData(ballsData);
-		flipped.setBallsType(ballsType);
 
 		//flip score
 		flipped.setScores(new int[]{scores[1], scores[0]});
@@ -104,5 +39,69 @@ public class GameState {
 		}
 		flipped.setBallsData(temp);
 		return flipped;
+	}
+
+	public double[][] getBallsData() {
+		return ballsData;
+	}
+
+	public void setBallsData(double[][] ballsData) {
+		this.ballsData = ballsData;
+	}
+
+	public int[] getBallsType() {
+		return ballsType;
+	}
+
+	public void setBallsType(int[] ballsType) {
+		this.ballsType = ballsType;
+	}
+
+	public double[] getPlayer0Data() {
+		return player0Data;
+	}
+
+	public void setPlayer0Data(double[] player0Data) {
+		this.player0Data = player0Data;
+	}
+
+	public double[] getPlayer1Data() {
+		return player1Data;
+	}
+
+	public void setPlayer1Data(double[] player1Data) {
+		this.player1Data = player1Data;
+	}
+
+	public int[] getScores() {
+		return scores;
+	}
+
+	public void setScores(int[] scores) {
+		this.scores = scores;
+	}
+
+	public double[] getSpareVar() {
+		return spareVar;
+	}
+
+	public void setSpareVar(double[] spareVar) {
+		this.spareVar = spareVar;
+	}
+
+	public int getStatus() {
+		return status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
+	}
+
+	public int getTimeLeft() {
+		return timeLeft;
+	}
+
+	public void setTimeLeft(int timeLeft) {
+		this.timeLeft = timeLeft;
 	}
 }

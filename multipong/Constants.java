@@ -2,54 +2,49 @@ package multipong;
 
 import java.awt.*;
 
+/**
+ * Created by avery_000 on 25-Mar-14.
+ */
 public class Constants {
 
-	/* this is the square unit-length board on which the point-mass balls move about */
-	public final static double HEIGHT = 1;
-	public final static double WIDTH  = 1;
-
 	/* some number of balls fit vertically, but not necessarily sideways, due to XY scaling */
-	public final static double BALL_RADIUS = 0.06;
-
+	public final static double BALL_RADIUS            = 0.02;
+	public final static double BALL_SPEED             = 0.001;
 	/* these are the distances for the vertical buffers */
-	public final static double EDGE_PADDING           = 0.01; // Previous value: 0.03 (recorded in case)
-	public final static double PADDLE_EFFECTIVE_DEPTH = 0.06; // Previous value:  0.03 (recorded in case)
-
+	public final static double EDGE_PADDING           = 0.03;
+	/* Speed of rendering, gameworld updating and buffer size respectively */
+	public final static int    FPS                    = 50;
+	/* this is the square unit-length board on which the point-mass balls move about */
+	public final static double HEIGHT                 = 1;
+	public final static double PADDLE_EFFECTIVE_DEPTH = 0.03;
 	/* this is how big the display will be
 	 * because the math treats the ball as a point mass
 	 * one ball-radius is added to each edge
 	 * the paddles must render above and under this padding
 	 */
-	public final static double DISPLAY_HEIGHT = HEIGHT + 2 * BALL_RADIUS + 2 * PADDLE_EFFECTIVE_DEPTH + 2 * EDGE_PADDING;
-	public final static double BALL_SPEED     = 0.0005;
-
+	public final static double DISPLAY_HEIGHT         = HEIGHT + 2 * BALL_RADIUS + 2 * PADDLE_EFFECTIVE_DEPTH + 2 * EDGE_PADDING;
 	/* by default paddle will be one-tenth of the screen
 	 * note though that the screen will have an extra ball-radius at the end, so a bit extra complication there
 	 */
-	public final static double PADDLE_WIDTH = 0.3;
+	public final static double PADDLE_WIDTH           = 0.3;
 
 	/* delay appearance of first ball by this much to give the user time to prepare */
-	public final static double START_GAME_DELAY = 300;
+	public final static double START_GAME_DELAY  = 300;
+	public final static int    STATE_BUFFER_SIZE = 50;
+	public final static int    UPDATE_DELTA      = 10;
+	public final static double WIDTH             = 1;
+	private final double    ballPixelRadius;
+	private final double    edgePixelPadding;
+	private final double    horizontalFractionalPadding;
+	private final double    horizontalPixelUnitLength;
+	private final double    paddlePixelDepth;
+	private final double    paddlePixelWidth;
 	private final Dimension screen;
 	private final double    verticalFractionalPadding;
-	private final double    horizontalFractionalPadding;
 	private final double    verticalPixelUnitLength;
-	private final double    horizontalPixelUnitLength;
-	private final double    ballPixelRadius;
-	private final double    paddlePixelWidth;
-	private final double    paddlePixelDepth;
-	private final double    edgePixelPadding;
 
-	/* Speed of rendering, gameworld updating and buffer size respectively */
-	public final static int FPS               = 50;
-	public final static int UPDATE_DELTA            = 16;
-	public final static int STATE_BUFFER_SIZE       = 1;
-	public final static int COUNT_DOWN_SECOND       = 10;
-	public final static int AGAIN_COUNT_DOWN_SECOND = 2;
-	public final static int GAME_TIME               = 20;
-
-	public Constants(Dimension d) {
-		this.screen = d;
+	public Constants(Dimension dimension) {
+		this.screen = dimension;
 
 		/* find vertical distances */
 		verticalFractionalPadding = EDGE_PADDING + PADDLE_EFFECTIVE_DEPTH + BALL_RADIUS;
@@ -64,6 +59,30 @@ public class Constants {
 		paddlePixelWidth = PADDLE_WIDTH * horizontalPixelUnitLength;
 	}
 
+	public double getBallPixelRadius() {
+		return ballPixelRadius;
+	}
+
+	public double getEdgePixelPadding() {
+		return edgePixelPadding;
+	}
+
+	public double getHorizontalFractionalPadding() {
+		return horizontalFractionalPadding;
+	}
+
+	public double getHorizontalPixelUnitLength() {
+		return horizontalPixelUnitLength;
+	}
+
+	public double getPaddlePixelDepth() {
+		return paddlePixelDepth;
+	}
+
+	public double getPaddlePixelWidth() {
+		return paddlePixelWidth;
+	}
+
 	public Dimension getScreen() {
 		return screen;
 	}
@@ -72,32 +91,28 @@ public class Constants {
 		return verticalFractionalPadding;
 	}
 
-	public double getHorizontalFractionalPadding() {
-		return horizontalFractionalPadding;
-	}
-
 	public double getVerticalPixelUnitLength() {
 		return verticalPixelUnitLength;
 	}
 
-	public double getHorizontalPixelUnitLength() {
-		return horizontalPixelUnitLength;
+	public int[][] makeBallXYs(double[][] ballsData) {
+		int[][] out = new int[ballsData.length][2];
+		for (int i = 0; i < ballsData.length; i++) {
+			Dimension temp = translateBallReferenceFrame(ballsData[i]);
+			out[i][0] = temp.width;
+			out[i][1] = temp.height;
+		}
+		return out;
 	}
 
-	public double getBallPixelRadius() {
-		return ballPixelRadius;
-	}
+	public int[] makePaddleXY(double[] paddle, int player) {
+		int[] out = new int[2];
+		Dimension temp = translateBallReferenceFrame(paddle);
+		out[0] = temp.width;
+		out[1] = (int) (getEdgePixelPadding() + getPaddlePixelDepth() / 2);
+		if (player == 0) out[1] = screen.height - out[1];
 
-	public double getPaddlePixelWidth() {
-		return paddlePixelWidth;
-	}
-
-	public double getPaddlePixelDepth() {
-		return paddlePixelDepth;
-	}
-
-	public double getEdgePixelPadding() {
-		return edgePixelPadding;
+		return out;
 	}
 
 	private Dimension translateBallReferenceFrame(double[] ball) {
@@ -124,25 +139,5 @@ public class Constants {
 
 		/* convert to dimension */
 		return new Dimension((int) x, (int) y);
-	}
-
-	public int[][] makeBallXYs(double[][] ballsData) {
-		int[][] out = new int[ballsData.length][2];
-		for (int i = 0; i < ballsData.length; i++) {
-			Dimension temp = translateBallReferenceFrame(ballsData[i]);
-			out[i][0] = temp.width;
-			out[i][1] = temp.height;
-		}
-		return out;
-	}
-
-	public int[] makePaddleXY(double[] paddle, int player) {
-		int[] out = new int[2];
-		Dimension temp = translateBallReferenceFrame(paddle);
-		out[0] = temp.width;
-		out[1] = (int) (getEdgePixelPadding() + getPaddlePixelDepth() / 2);
-		if (player == 0) out[1] = screen.height - out[1];
-
-		return out;
 	}
 }

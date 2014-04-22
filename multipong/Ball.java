@@ -1,12 +1,12 @@
 package multipong;
 
 public class Ball {
-	private double   uselessVar;
-	private long     initTime;
-	private Vector2D velocity;
-	private Vector2D initialPosition;
+	int type;
 	private Vector2D currentPosition;
-	private int type;
+	private long     initTime;
+	private Vector2D initialPosition;
+	private double   uselessVar;
+	private Vector2D velocity;
 
 	public Ball(Vector2D startPosition, Vector2D startVelocity, long startTimeMillis, double unusedVariable, int type) {
 		this.initialPosition = startPosition;
@@ -39,28 +39,16 @@ public class Ball {
 		updateCurrentTime(startTimeMillis);
 	}
 
+	public Vector2D getCurrentPosition() {
+		return currentPosition;
+	}
+
 	public int getType() {
 		return type;
 	}
 
 	public double getUnusedVariable() {
 		return uselessVar;
-	}
-
-	public Vector2D getCurrentPosition() {
-		return currentPosition;
-	}
-
-	public void updateCurrentTime(long currentTimeMillis) {
-		long timeTravelled = currentTimeMillis - initTime;
-		timeTravelled = timeTravelled < 0 ? 0 : timeTravelled;
-		Vector2D youAreHere = new Vector2D(initialPosition);
-		youAreHere.add(velocity.cpy().multiply(timeTravelled));
-		while (youAreHere.x < 0 || youAreHere.x > Constants.WIDTH) {
-			if (youAreHere.x < 0) youAreHere.x = 0 - youAreHere.x;
-			if (youAreHere.x > Constants.WIDTH) youAreHere.x = 2 * Constants.WIDTH - youAreHere.x;
-		}
-		currentPosition = youAreHere;
 	}
 
 	public boolean inGame() {
@@ -73,5 +61,17 @@ public class Ball {
 
 	public boolean isMovingUp() {
 		return velocity.y > 0;
+	}
+
+	public void updateCurrentTime(long currentTimeMillis) {
+		long timeTravelled = currentTimeMillis - initTime;
+		timeTravelled = timeTravelled < 0 ? 0 : timeTravelled;
+		Vector2D youAreHere = new Vector2D(initialPosition);
+		youAreHere.add(velocity.cpy().multiply(timeTravelled));
+		while (youAreHere.x < 0 || youAreHere.x > Constants.WIDTH) {
+			if (youAreHere.x < 0) youAreHere.x = 0 - youAreHere.x;
+			if (youAreHere.x > Constants.WIDTH) youAreHere.x = 2 * Constants.WIDTH - youAreHere.x;
+		}
+		currentPosition = youAreHere;
 	}
 }

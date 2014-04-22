@@ -5,17 +5,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GameWorld {
-	public        long         elapsedTimeMillis;
+	/* simulation variable */
+	private final static double frameDrop = 0.0;
 	private final List<Ball>   balls;
+	public        long         elapsedTimeMillis;
+	public        boolean      ready;
+	private       boolean      init;
+	private       long         injectBalls;
 	private       Paddle       player0;
 	private       Paddle       player1;
 	private       SecureRandom random;
-	private       long         injectBalls;
-	private       boolean      init;
-	public        boolean      ready;
-
-	/* simulation variable */
-	private final static double frameDrop = 0.0;
 
 	public GameWorld() {
 		elapsedTimeMillis = 0;
@@ -82,15 +81,6 @@ public class GameWorld {
 		return out;
 	}
 
-	public void setInjectBalls() {
-		injectBalls = elapsedTimeMillis + 100;
-		injectRandomBall();
-	}
-
-	public void stopInjectBalls() {
-		injectBalls = 0;
-	}
-
 	/**
 	 * must not be synced with balls when used elsewhere because synced inside
 	 */
@@ -116,6 +106,23 @@ public class GameWorld {
 
 		/* make new ball */
 		synchronized (balls) { balls.add(new Ball(position, speed, elapsedTimeMillis, randomValue, ballType));}
+	}
+
+	public void setInjectBalls() {
+		injectBalls = elapsedTimeMillis + 100;
+		injectRandomBall();
+	}
+
+	public void setP0fractional(double pos) {
+		player0.setFractionalPosition(pos);
+	}
+
+	public void setP1fractional(double pos) {
+		player1.setFractionalPosition(pos);
+	}
+
+	public void stopInjectBalls() {
+		injectBalls = 0;
 	}
 
 	public void updateDeltaTime(long deltaMillis) {
@@ -156,13 +163,5 @@ public class GameWorld {
 			for (Ball b : removeThese) balls.remove(b);
 			for (Ball b : addThese) balls.add(b);
 		}
-	}
-
-	public void setP0fractional(double pos) {
-		player0.setFractionalPosition(pos);
-	}
-
-	public void setP1fractional(double pos) {
-		player1.setFractionalPosition(pos);
 	}
 }
