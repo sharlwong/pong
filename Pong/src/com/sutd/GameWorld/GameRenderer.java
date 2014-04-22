@@ -4,23 +4,18 @@ import java.util.concurrent.BlockingQueue;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.sutd.GameObjects.GameState;
-import com.sutd.GameObjects.Paddle;
 import com.sutd.PongHelpers.AssetLoader;
 import com.sutd.PongHelpers.Constants;
 import com.sutd.PongHelpers.Dimension;
 import com.sutd.PongHelpers.InputHandler;
-import com.sutd.PongHelpers.Dimension;
 import java.util.Random;
-import java.util.concurrent.BlockingQueue;
 
 /**
  * GameRenderer is responsible for rendering all the objects onscreen.
@@ -40,7 +35,6 @@ public class GameRenderer {
 	InputHandler inputHandler;
 	Constants    calc;
 
-	private Paddle player_paddle;
 	int[][] balls;
 
 	int[] player0;
@@ -61,7 +55,7 @@ public class GameRenderer {
 
 	BlockingQueue<GameState> buffer;
 
-	public GameRenderer(Paddle paddle, BlockingQueue<GameState> buffer2, Dimension d) {
+	public GameRenderer(BlockingQueue<GameState> buffer2, Dimension d) {
 		this.d = d;
 		calc = new Constants(d);
 		this.buffer = buffer2;
@@ -72,7 +66,6 @@ public class GameRenderer {
 
 		shapeRenderer = new ShapeRenderer();
 		shapeRenderer.setProjectionMatrix(cam.combined);
-		this.player_paddle = paddle;
 		batcher = new SpriteBatch();
 		batcher.setProjectionMatrix(cam.combined);
 		initAssets();

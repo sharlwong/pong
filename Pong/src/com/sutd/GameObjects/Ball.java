@@ -3,12 +3,20 @@ package com.sutd.GameObjects;
 import com.sutd.PongHelpers.Constants;
 import com.sutd.PongHelpers.Vector2D;
 
+/**
+ * Ball is a game object. It will be rendered as fruit during the game play.
+ * Its attributes includes initialTime, initialVelocity, initialPosition, currentPosition and ballType.
+ * For the ease of communication, the moving track of each ball will be calculated locally within the
+ * constraint of synchronization. 
+ * ballType determines the way it will be rendered and it's score value.
+ */
+
 public class Ball {
-	private long     initTime;
-	private Vector2D velocity;
-	private Vector2D initialPosition;
-	private Vector2D currentPosition;
-	private int type;
+	private 	long     	initTime;
+	private 	Vector2D 	velocity;
+	private 	Vector2D 	initialPosition;
+	private 	Vector2D 	currentPosition;
+	private 	int 		type;
 
 	public Ball(Vector2D startPosition, Vector2D startVelocity, long startTimeMillis, int type) {
 		this.initialPosition = startPosition;
@@ -39,19 +47,12 @@ public class Ball {
 		/* setup ball at time zero */
 		updateCurrentTime(startTimeMillis);
 	}
-
-	public int getType() {
-		return type;
-	}
 	
-	public int getScore() {
-		return type + 1;
-	}
-
-	public Vector2D getCurrentPosition() {
-		return currentPosition;
-	}
-
+	/**
+	 * Update ball's position and velocity after the input amount of time.
+	 * @param currentTimeMillis		After this amount of time, the position and velocity of the ball
+	 * 								will be calculated.
+	 */
 	public void updateCurrentTime(long currentTimeMillis) {
 		long timeTravelled = currentTimeMillis - initTime;
 		timeTravelled = timeTravelled < 0 ? 0 : timeTravelled;
@@ -63,7 +64,12 @@ public class Ball {
 		}
 		currentPosition = youAreHere;
 	}
-
+	
+	/**
+	 * Check this ball is still in game or not. 
+	 * "In Game" is defined as moving within the game (screen) region.
+	 * @return		true if the ball is still in game, false otherwise.
+	 */
 	public boolean inGame() {
 		if (currentPosition.y < (0 - Constants.PADDLE_EFFECTIVE_DEPTH - Constants.EDGE_PADDING) && velocity.y < 0)
 			return false;
@@ -71,8 +77,32 @@ public class Ball {
 			return false;
 		return true;
 	}
-
+	
+	/**
+	 * Check if the ball is moving upwards (actually downwards as it is shown on the screen)
+	 * @return	true if the ball is moving upward (y value is increasing)
+	 */
 	public boolean isMovingUp() {
 		return velocity.y > 0;
+	}
+	
+	/**
+	 * 
+	 * @return	Ball Type (Integer, 0, 1, or 2)
+	 */
+	public int getType() {
+		return type;
+	}
+	
+	/**
+	 * 
+	 * @return  Score of the ball (Integer, 1, 2, or 3)
+	 */
+	public int getScore() {
+		return type + 1;
+	}
+
+	public Vector2D getCurrentPosition() {
+		return currentPosition;
 	}
 }
