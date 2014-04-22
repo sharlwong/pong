@@ -154,15 +154,15 @@ public class GameRenderer {
 			font.draw(batcher, "GAME OVER", d.width / 2 - 48, d.height / 2 - 40);
 			
 			/* Handle conclusion of game - whether there is a winner or not, and if the player is the winner. */
-			if (scores[0] > scores[1]) font.draw(batcher, "YOU WIN", d.width / 2 - 40, d.height / 2 - 20);
+			if (scores[0] > scores[1]) font.draw(batcher, "YOU WIN !", d.width / 2 - 40, d.height / 2 - 20);
 			else if (scores[0] < scores[1]) font.draw(batcher, "YOU LOSE", d.width / 2 - 37, d.height / 2 - 20);
 			else font.draw(batcher, "TIE", d.width / 2 - 10, d.height / 2 - 20);
 			
 			/* Show final scores of both players. */
-			font.draw(batcher, score0 + ":" + score1, d.width / 2 - 3 * score0.length() - 10, d.height / 2);
+			font.draw(batcher, score0 + " : " + score1, d.width / 2 - 3 * ( score0.length() + 5), d.height / 2);
 			
 			/* Play again? If so, instantiate countDown and tick to original values. */
-			font.draw(batcher, "AGAIN ?", 1 * d.width / 3, d.height - 40);
+			font.draw(batcher, "AGAIN ?", 2 * d.width / 7, d.height - 40);
 			countDown = Constants.AGAIN_COUNT_DOWN_SECOND;
 			tick = Constants.GAME_TIME + Constants.AGAIN_COUNT_DOWN_SECOND;
 
@@ -219,7 +219,7 @@ public class GameRenderer {
 				/* Load the words: READY? GO! */
 				else if (countDown == 2) {
 					batcher.draw(game_screen, 0, 0, 136, 204);
-					font.draw(batcher, "READY ?", d.width / 3, d.height / 2 - 20);
+					font.draw(batcher, "READY ?", d.width / 4, d.height / 2 - 20);
 					
 					/* Play short chimp call to signal start of game. */
 					chimp_short.play();

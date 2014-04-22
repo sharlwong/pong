@@ -210,7 +210,7 @@ public class GameWorld {
 			int y = Gdx.input.getY();
 			//System.out.println(x+" "+y+" "+Gdx.graphics.getWidth()/2+" "+Gdx.graphics.getHeight());
 
-			if (x>Gdx.graphics.getWidth()/4 && x<2*Gdx.graphics.getWidth()/3 && y > Gdx.graphics.getHeight()*((float) 164/204) && y < Gdx.graphics.getHeight()*((float) 184/204)){
+			if (x>Gdx.graphics.getWidth()/7 && x<6*Gdx.graphics.getWidth()/7 && y > Gdx.graphics.getHeight()*((float) 164/204) && y < Gdx.graphics.getHeight()*((float) 184/204)){
 				// restart
 				// initialize objects inside game world
 				ticktock = 0;
