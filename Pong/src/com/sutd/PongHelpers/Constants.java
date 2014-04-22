@@ -2,13 +2,6 @@ package com.sutd.PongHelpers;
 
 import com.sutd.PongHelpers.Dimension;
 
-import java.util.Collection;
-
-import com.sutd.GameObjects.GameState;
-
-/**
- * Created by avery_000 on 25-Mar-14.
- */
 public class Constants {
 
 	/* this is the square unit-length board on which the point-mass balls move about */
@@ -71,7 +64,7 @@ public class Constants {
 		paddlePixelWidth = PADDLE_WIDTH * horizontalPixelUnitLength;
 	}
 
-	public Dimension getDim() {
+	public Dimension getScreen() {
 		return screen;
 	}
 
@@ -106,10 +99,6 @@ public class Constants {
 	public double getEdgePixelPadding() {
 		return edgePixelPadding;
 	}
-
-	//	public Dimension translateBallReferenceFrame(Vector2D v) {
-	//		return translateBallReferenceFrame(new double[]{v.x, v.y});
-	//	}
 
 	private Dimension translateBallReferenceFrame(double[] ball) {
 		/* note that v is in small square reference frame of point-mass balls; do not modify v */
@@ -156,12 +145,4 @@ public class Constants {
 
 		return out;
 	}
-
-	//	public int[] makeScores(double[][] state) {
-	//		double[] temp = state[state.length - 1];
-	//		return new int[]{(int) temp[0], (int) temp[1]};
-	//	}
-
-	//	public static class LagException extends RuntimeException {
-	//	}
 }

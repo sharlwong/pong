@@ -122,7 +122,7 @@ public class GameWorld {
 		/* starting position */
 		Vector2D position = new Vector2D(Constants.WIDTH / 2, Constants.HEIGHT / 2);
 
-		/* randomize starting velocity within 45�� */
+		/* randomize starting velocity within 45 degrees */
 		double speed1 = random.nextDouble() - 0.5;
 		double speed2 = random.nextDouble() - 0.5;
 		Vector2D speed;

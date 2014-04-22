@@ -36,8 +36,12 @@ public class Paddle {
 		return paddleCenter;
 	}
 
-	public double getFractionalPosition() {
-		return (paddleCenter.x - min) / (max - min);
+	public int getScore() {
+		return (int) Math.floor(score);
+	}
+
+	public void incrementScore(Ball b) {
+		score += b.getType();
 	}
 
 	public void setFractionalPosition(double fraction) {
@@ -45,12 +49,8 @@ public class Paddle {
 		setPosition(min + fraction * (max - min));
 	}
 
-	public int getScore() {
-		return (int) Math.floor(score);
-	}
-
-	public void incrementScore(Ball b) {
-		score += b.getType();
+	public double getFractionalPosition() {
+		return (paddleCenter.x - min) / (max - min);
 	}
 
 	private void setPosition(double xValue) {
