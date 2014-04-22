@@ -39,7 +39,7 @@ public class GameWorld {
 		random.setSeed(1234567890);
 		injectBalls = 0;
 		ticktock = 0;
-		timeLimit = Constants.GAME_TIME + Constants.COUNT_DOWN_SECOND;    //should be changed later
+		timeLimit = Constants.GAME_TIME + Constants.COUNT_DOWN_SECOND;
 		init = true;
 		ready = false;
 		gameover = false;
@@ -63,7 +63,6 @@ public class GameWorld {
 		/* temporary vars */
 		GameState out = new GameState();
 		Vector2D temp;
-		double[] other = new double[balls.size()];
 		int[] ballsType = new int[balls.size()];
 		double[][] ballsData = new double[balls.size()][2];
 
@@ -74,14 +73,12 @@ public class GameWorld {
 				ballsData[i][0] = temp.x;
 				ballsData[i][1] = temp.y;
 				ballsType[i] = balls.get(i).getType();
-				other[i] = balls.get(i).getUnusedVariable();
 			}
 		}
 
 		/* set ball data */
 		out.setBallsData(ballsData);
 		out.setBallsType(ballsType);
-		out.setSpareVar(other);
 
 		/* set game status */
 		out.setStatus(ready ? 1 : 0);
@@ -113,7 +110,9 @@ public class GameWorld {
 	 * must not be synced with balls when used elsewhere because synced inside
 	 */
 	private void injectRandomBall() {
-
+		
+		if (ticktock <= timeLimit - Constants.GAME_TIME) return;
+		System.out.println("inject!!!");
 		/* first run stuff */
 		if (init) System.out.println("Start!");
 		init = false;
@@ -133,7 +132,7 @@ public class GameWorld {
 		else speed = new Vector2D(speed2, speed1);
 
 		/* make new ball */
-		synchronized (balls) { balls.add(new Ball(position, speed, elapsedTimeMillis, randomValue, ballType));}
+		synchronized (balls) { balls.add(new Ball(position, speed, elapsedTimeMillis, ballType));}
 	}
 
 	/**
@@ -148,15 +147,13 @@ public class GameWorld {
 
 	public void update(float delta) {
 		// set time for each round
-		if (ticktock >= timeLimit) gameover = true;
+		if (ticktock >= timeLimit){
+			checkrestart();
+			return;
+		}
 
 		/* checks whether game is ready to start */
 		if (!ready) return;
-		if (gameover) {
-			checkrestart();
-			//checkexit();
-			return;
-		}
 			
 		long temp = elapsedTimeMillis;
 		/* increment time */
@@ -165,11 +162,7 @@ public class GameWorld {
 		
 		if ((int) elapsedTimeMillis/1000 > (int) temp/1000){
 			ticktock++;
-			if (ticktock <= timeLimit - Constants.GAME_TIME) return;
-			injectRandomBall();
 		}
-		
-		System.out.println(deltaMillis+" "+elapsedTimeMillis+" "+ticktock);
 		
 		/* conditions under which a ball should be injected */
 		boolean firstBallIn = init && (elapsedTimeMillis > Constants.START_GAME_DELAY) && (balls.size() == 0);

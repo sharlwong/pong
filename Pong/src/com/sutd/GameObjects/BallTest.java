@@ -38,8 +38,7 @@ public class BallTest {
 			speed = new Vector2D(speed1, speed2);
 		else
 			speed = new Vector2D(speed2, speed1);
-		testBall = new Ball(position, speed, elapsedTimeMillis, randomValue,
-				ballType);
+		testBall = new Ball(position, speed, elapsedTimeMillis, ballType);
 	}
 
 	@Test
@@ -59,13 +58,13 @@ public class BallTest {
 	
 	@Test
 	public void testMovement() {
-		Ball testBall2 = new Ball(new Vector2D(0, 0), new Vector2D(0, 1), 0, 0, 1);
+		Ball testBall2 = new Ball(new Vector2D(0, 0), new Vector2D(0, 1), 0, 1);
 		testBall2.updateCurrentTime(10);
 		/* startvelocity only represent direction, while the speed is always 0.0005 */
 		Vector2D expectedPosition = new Vector2D(0, Constants.BALL_SPEED * 10);
 		System.out.println(testBall2.getCurrentPosition().y);
 		assertEquals(expectedPosition, testBall2.getCurrentPosition());
-		testBall2 = new Ball(new Vector2D(0, 0), new Vector2D(1, 0), 0, 0, 1);
+		testBall2 = new Ball(new Vector2D(0, 0), new Vector2D(1, 0), 0, 1);
 		testBall2.updateCurrentTime(10);
 		/* error input handler test, if velocity in y direction is 0,  */
 		assertEquals(expectedPosition, testBall2.getCurrentPosition());
@@ -73,11 +72,11 @@ public class BallTest {
 	
 	@Test
 	public void testIsMovingUp() {
-		Ball testBall2 = new Ball(new Vector2D(0, 0), new Vector2D(0, 1), 0, 0, 1);
+		Ball testBall2 = new Ball(new Vector2D(0, 0), new Vector2D(0, 1), 0, 1);
 		assertTrue(testBall2.isMovingUp());
-		testBall2 = new Ball(new Vector2D(0, 0), new Vector2D(0, -1), 0, 0, 1);
+		testBall2 = new Ball(new Vector2D(0, 0), new Vector2D(0, -1), 0, 1);
 		assertFalse(testBall2.isMovingUp());
-		testBall2 = new Ball(new Vector2D(0, 0), new Vector2D(0, 0), 0, 0, 1);
+		testBall2 = new Ball(new Vector2D(0, 0), new Vector2D(0, 0), 0, 1);
 		/* input error handler */
 		assertTrue(testBall2.isMovingUp());
 	}

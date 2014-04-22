@@ -117,7 +117,6 @@ public class GameRenderer {
 		player1 = calc.makePaddleXY(state.getPlayer1Data(), 1);
 
 		scores = state.getScores();
-		ballDoubles = state.getSpareVar();
 		ballsType = state.getBallsType();
 		timeLeft = state.getTimeLeft();
 		

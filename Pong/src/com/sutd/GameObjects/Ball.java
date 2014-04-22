@@ -4,16 +4,14 @@ import com.sutd.PongHelpers.Constants;
 import com.sutd.PongHelpers.Vector2D;
 
 public class Ball {
-	private double   uselessVar;
 	private long     initTime;
 	private Vector2D velocity;
 	private Vector2D initialPosition;
 	private Vector2D currentPosition;
 	private int type;
 
-	public Ball(Vector2D startPosition, Vector2D startVelocity, long startTimeMillis, double unusedVariable, int type) {
+	public Ball(Vector2D startPosition, Vector2D startVelocity, long startTimeMillis, int type) {
 		this.initialPosition = startPosition;
-		this.uselessVar = unusedVariable;
 		this.initTime = startTimeMillis;
 		this.initTime = startTimeMillis;
 		this.type = type;
@@ -45,9 +43,9 @@ public class Ball {
 	public int getType() {
 		return type;
 	}
-
-	public double getUnusedVariable() {
-		return uselessVar;
+	
+	public int getScore() {
+		return type + 1;
 	}
 
 	public Vector2D getCurrentPosition() {
