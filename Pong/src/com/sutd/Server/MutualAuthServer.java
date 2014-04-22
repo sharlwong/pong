@@ -51,7 +51,10 @@ public class MutualAuthServer {
 
 		/* decode */
 		String received = passwordAuthenticate.decrypt(temp1 + temp2);
-		if (received == null) { return null;}
+		if (received == null) { 
+			encryption.sendMessage(socket, passwordAuthenticate.encrypt(""));
+			return null;
+		}
 
 
 		/* verification */
@@ -60,6 +63,7 @@ public class MutualAuthServer {
 		verified = verified && received.substring(temp).equals(password);
 		if (!verified) {
 			System.out.println("Verification failed, returning...");
+			encryption.sendMessage(socket, "");
 			return null;
 		}
 

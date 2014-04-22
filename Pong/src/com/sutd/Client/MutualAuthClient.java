@@ -50,6 +50,7 @@ public class MutualAuthClient {
 		temp = encryptedTemp.length() / 2;
 		String encrypted1 = encryptedTemp.substring(0, temp);
 		String encrypted2 = encryptedTemp.substring(temp);
+		System.out.println("Encrypted!");
 
 		/* send part 1 */
 		encryption.sendMessage(socket, encrypted1);
@@ -64,6 +65,7 @@ public class MutualAuthClient {
 		temp2 = decryption.getMessage(socket);
 
 		/* decode */
+		System.out.println("Verification ...");
 		String received = passwordAuthenticate.decrypt(temp1 + temp2);
 		if (received == null) {
 			System.out.println("Verification failed, exiting...");

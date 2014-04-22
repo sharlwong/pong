@@ -103,7 +103,7 @@ public class RSATools {
 			} catch (NoSuchPaddingException e) {
 				e.printStackTrace();
 			} catch (IllegalBlockSizeException e) {
-				e.printStackTrace();
+				return null;
 			} catch (BadPaddingException e) {
 				e.printStackTrace();
 			} catch (InvalidKeyException e) {
