@@ -7,8 +7,8 @@ import java.awt.event.MouseEvent;
  * Created by avery_000 on 01-Apr-14.
  */
 public class InputHandler {
-	private final GameWorld game;
 	private final Constants calc;
+	private final GameWorld game;
 
 	public InputHandler(GameWorld gameWorld, Constants calc) {
 		this.game = gameWorld;
@@ -70,19 +70,19 @@ public class InputHandler {
 		}
 	}
 
-	public void mouseDown() {
-		game.setInjectBalls();
-	}
-
-	public void mouseUp() {
-		game.stopInjectBalls();
-	}
-
 	public void mouseAt(MouseEvent e) {
 		double relativePos = e.getX() - calc.getPaddlePixelWidth() / 2;
 		double relativeMax = calc.getHorizontalPixelUnitLength() + 2 * calc.getBallPixelRadius() - calc.getPaddlePixelWidth();
 		relativePos = relativePos < 0 ? 0 : relativePos;
 		relativePos = relativePos > relativeMax ? relativeMax : relativePos;
 		game.setP0fractional(relativePos / relativeMax);
+	}
+
+	public void mouseDown() {
+		game.setInjectBalls();
+	}
+
+	public void mouseUp() {
+		game.stopInjectBalls();
 	}
 }

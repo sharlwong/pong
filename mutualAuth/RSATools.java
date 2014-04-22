@@ -1,29 +1,19 @@
 package archived.security_lab.mutualAuth;
 
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
-
-import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.SecretKeySpec;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.Socket;
 import java.nio.ByteBuffer;
-import java.nio.charset.Charset;
 import java.security.*;
-import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Arrays;
 import java.util.Random;
 
 /**
- * THIS IS AN OLD VERSION
+ * Tools for crypto
  */
-public class RSATools {
+public abstract class RSATools {
 	public static String base64(byte[] bytes) {
 		BASE64Encoder base64 = new BASE64Encoder();
 		return base64.encode(bytes);
@@ -31,27 +21,66 @@ public class RSATools {
 
 	public static byte[] base64(String string) {
 		try {
-			return new BASE64Decoder().decodeBuffer(string);
-		} catch (IOException e) {
-			e.printStackTrace();
+			return new BASE64Decoder().decodeBuffer(string.replaceAll("[^a-zA-Z0-9+/=]", ""));
+		} catch (Exception e) { }
+		return new byte[0];
+	}
+
+	public static byte[] decrypt(String instance, Key key, byte[] encrypted) {
+		try {
+			Cipher cipher = Cipher.getInstance(instance);
+			cipher.init(Cipher.DECRYPT_MODE, key);
+			return cipher.doFinal(encrypted);
+		} catch (Exception e) { }
+		return new byte[0];
+	}
+
+	public static Object deserialize(byte[] yourBytes) {
+		ByteArrayInputStream bis = new ByteArrayInputStream(yourBytes);
+		ObjectInput in = null;
+		Object o = null;
+		try {
+			in = new ObjectInputStream(bis);
+			o = in.readObject();
+		} catch (Exception e) {
+		} finally {
+			try {
+				bis.close();
+			} catch (Exception ex) { }
+			try {
+				if (in != null) in.close();
+			} catch (Exception ex) { }
 		}
-		return null;
+		return o;
 	}
 
 	public static String digest(String message) {
 		MessageDigest md = null;
 		try {
 			md = MessageDigest.getInstance("SHA");
-		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
-		}
+		} catch (Exception e) { }
+		assert md != null;
 		md.update(message.getBytes());
 		byte[] digest = md.digest();
 		return base64(digest);
 	}
 
-	public static String nonce() {
-		return nonce(128);
+	public static byte[] encrypt(String instance, Key key, byte[] plainText) {
+		try {
+			Cipher cipher = Cipher.getInstance(instance);
+			cipher.init(Cipher.ENCRYPT_MODE, key);
+			return cipher.doFinal(plainText);
+		} catch (Exception e) { }
+		return new byte[0];
+	}
+
+	public static Object getUnencryptedObject(Socket socket) {
+		Object obj = null;
+		try {
+			ObjectInputStream obIn = new ObjectInputStream(socket.getInputStream());
+			obj = obIn.readObject();
+		} catch (Exception e) { }
+		return obj;
 	}
 
 	public static String nonce(int length) {
@@ -63,138 +92,108 @@ public class RSATools {
 		return temp;
 	}
 
+	public static String nonce() {
+		return nonce(128);
+	}
+
+	public static void sendUnencryptedObject(Socket socket, Object message) {
+		try {
+			ObjectOutputStream obOut = new ObjectOutputStream(socket.getOutputStream());
+			obOut.writeObject(message);
+			obOut.flush();
+		} catch (Exception e) { }
+	}
+
+	public static byte[] serialize(Object yourObject) {
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		ObjectOutput out = null;
+		try {
+			out = new ObjectOutputStream(bos);
+			out.writeObject(yourObject);
+		} catch (Exception e) {
+		} finally {
+			try {
+				if (out != null) out.close();
+			} catch (Exception ex) { }
+			try {
+				bos.close();
+			} catch (Exception ex) { }
+		}
+		return bos.toByteArray();
+	}
+
 	public static class AESHelper {
 		SecretKeySpec keySpec;
-		private Object unencryptedObject;
 
 		public AESHelper(String keyString) {
-			byte[] key = keyString.getBytes();
-			MessageDigest messageDigest = null;
-			try {
-				messageDigest = MessageDigest.getInstance("SHA-1");
-			} catch (NoSuchAlgorithmException e) {
-				e.printStackTrace();
-			}
-			key = messageDigest.digest(key);
+			byte[] key = base64(digest(keyString));
 			key = Arrays.copyOf(key, 16);
 			keySpec = new SecretKeySpec(key, "AES");
 		}
 
-		public String decrypt(String encrypted) {
-			try {
-				Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
-				cipher.init(Cipher.DECRYPT_MODE, keySpec);
-				byte[] original = cipher.doFinal(base64(encrypted));
-				return new String(original);
-			} catch (NoSuchAlgorithmException e) {
-				e.printStackTrace();
-			} catch (NoSuchPaddingException e) {
-				e.printStackTrace();
-			} catch (IllegalBlockSizeException e) {
-				e.printStackTrace();
-			} catch (BadPaddingException e) {
-				e.printStackTrace();
-			} catch (InvalidKeyException e) {
-				e.printStackTrace();
-			}
-			return null;
+		public Object decryptObject(String encrypted) {
+			byte[] decrypted = decrypt("AES/ECB/PKCS5Padding", keySpec, base64(encrypted));
+			return deserialize(decrypted);
 		}
 
-		public String encrypt(String message) {
-			try {
-				Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
-				cipher.init(Cipher.ENCRYPT_MODE, keySpec);
-				return base64(cipher.doFinal((message).getBytes()));
-			} catch (NoSuchAlgorithmException e) {
-				e.printStackTrace();
-			} catch (NoSuchPaddingException e) {
-				e.printStackTrace();
-			} catch (InvalidKeyException e) {
-				e.printStackTrace();
-			} catch (BadPaddingException e) {
-				e.printStackTrace();
-			} catch (IllegalBlockSizeException e) {
-				e.printStackTrace();
-			}
-			return null;
+		public String decryptString(String encrypted) {
+			return new String(decrypt("AES/ECB/PKCS5Padding", keySpec, base64(encrypted)));
+		}
+
+		public String encryptObject(Object message) {
+			byte[] bytes = serialize(message);
+			return base64(encrypt("AES/ECB/PKCS5Padding", keySpec, bytes));
+		}
+
+		public String encryptString(String message) {
+			return base64(encrypt("AES/ECB/PKCS5Padding", keySpec, message.getBytes()));
 		}
 
 		public String getMessage(Socket socket) {
-			Object obj = null;
-			try {
-				ObjectInputStream obIn = new ObjectInputStream(socket.getInputStream());
-				obj = obIn.readObject();
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			}
-			return decrypt((String) obj);
+			Object obj = getUnencryptedObject(socket);
+			return decryptString((String) obj);
 		}
 
+		public Object getObject(Socket socket) {
+			Object obj = getUnencryptedObject(socket);
+			return decryptObject((String) obj);
+		}
 
 		public void sendMessage(Socket socket, String message) {
-			try {
-				ObjectOutputStream obOut = new ObjectOutputStream(socket.getOutputStream());
-				obOut.writeObject(encrypt(message));
-				obOut.flush();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			sendUnencryptedObject(socket, encryptString(message));
+		}
+
+		public void sendObject(Socket socket, Object object) {
+			sendUnencryptedObject(socket, encryptObject(object));
 		}
 	}
 
 	/**
 	 * Created by avery_000 on 07-Apr-14.
 	 */
-	public static class RSADecryption {
+	public static class RSAPrivate {
 		private final int RSAKeySize = 2048;
 		private KeyPair keyPair;
 
-		public RSADecryption() {
+		public RSAPrivate() {
 			KeyPairGenerator RSAKeyGen = null;
 			try {
 				RSAKeyGen = KeyPairGenerator.getInstance("RSA");
-			} catch (NoSuchAlgorithmException e) {
-				e.printStackTrace();
-			}
+			} catch (Exception e) { }
 			SecureRandom random = new SecureRandom();
+			assert RSAKeyGen != null;
 			RSAKeyGen.initialize(RSAKeySize, random);
 			keyPair = RSAKeyGen.generateKeyPair();
 		}
 
-		public String decrypt(String encryptedBase64) {
-			try {
-				byte[] decode64 = base64(encryptedBase64);
-				Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
-				cipher.init(Cipher.DECRYPT_MODE, keyPair.getPrivate());
-				byte[] newPlainText = cipher.doFinal(decode64);
-				return new String(newPlainText, Charset.defaultCharset());
-			} catch (NoSuchAlgorithmException e) {
-				e.printStackTrace();
-			} catch (NoSuchPaddingException e) {
-				e.printStackTrace();
-			} catch (InvalidKeyException e) {
-				e.printStackTrace();
-			} catch (IllegalBlockSizeException e) {
-				e.printStackTrace();
-			} catch (BadPaddingException e) {
-				e.printStackTrace();
-			}
-			return null;
+		public String decryptRSA(String encryptedBase64) {
+			byte[] decode64 = base64(encryptedBase64);
+			return new String(decrypt("RSA/ECB/PKCS1Padding", keyPair.getPrivate(), decode64));
 		}
 
 		public String getMessage(Socket socket) {
-			Object obj = null;
-			try {
-				ObjectInputStream obIn = new ObjectInputStream(socket.getInputStream());
-				obj = obIn.readObject();
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			}
-			return decrypt((String) obj);
+			Object obj = getUnencryptedObject(socket);
+			return decryptRSA((String) obj);
 		}
 
 		protected PrivateKey getPrivateKey() {
@@ -213,151 +212,85 @@ public class RSATools {
 				socket.getOutputStream().write(bb.array());
 				socket.getOutputStream().write(encodedKey);
 				socket.getOutputStream().flush();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			} catch (Exception e) { }
+		}
+
+		public void sendSignature(Socket socket, String message) {
+			sendUnencryptedObject(socket, sign(message));
+		}
+
+		public String sign(String message) {
+			try {
+				/* Create a Signature object and initialize it with the private key */
+				Signature rsaSignature = Signature.getInstance("SHA1withRSA");
+				rsaSignature.initSign(keyPair.getPrivate());
+
+	            /* Update and sign the data */
+				byte[] buffer = message.getBytes();
+				rsaSignature.update(buffer, 0, buffer.length);
+
+	            /* Now that the data to be signed has been processed, generate a signature for it */
+				byte[] generatedSignature = rsaSignature.sign();
+
+				/* done now return */
+				return base64(generatedSignature);
+			} catch (Exception e) { }
+			return "";
 		}
 	}
 
 	/**
 	 * Created by avery_000 on 07-Apr-14.
 	 */
-	public static class RSAEncryption {
-		private Key publicKey;
+	public static class RSAPublic {
+		private PublicKey publicKey;
 
-		public String encrypt(String message) {
-			byte[] cipherText = new byte[0];
-			try {
-				Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
-				cipher.init(Cipher.ENCRYPT_MODE, publicKey);
-				cipherText = cipher.doFinal(message.getBytes(Charset.defaultCharset()));
-			} catch (NoSuchAlgorithmException e) {
-				e.printStackTrace();
-			} catch (NoSuchPaddingException e) {
-				e.printStackTrace();
-			} catch (InvalidKeyException e) {
-				e.printStackTrace();
-			} catch (IllegalBlockSizeException e) {
-				e.printStackTrace();
-			} catch (BadPaddingException e) {
-				e.printStackTrace();
-			}
-			return base64(cipherText);
+		public RSAPublic() {}
+
+		public RSAPublic(RSAPrivate rsaPrivate) {
+			setPublicKey(rsaPrivate.getPublicKeyEncoded());
+		}
+
+		public RSAPublic(byte[] encodedPublicKey) {
+			setPublicKey(encodedPublicKey);
+		}
+
+		public String encryptRSA(String message) {
+			return base64(encrypt("RSA/ECB/PKCS1Padding", publicKey, message.getBytes()));
 		}
 
 		public void getKey(Socket socket) {
+			byte[] encodedPublicKey = null;
 			try {
-				byte[] lenb = new byte[4];
-				socket.getInputStream().read(lenb, 0, 4);
-				ByteBuffer bb = ByteBuffer.wrap(lenb);
-				int len = bb.getInt();
-				byte[] cPubKeyBytes = new byte[len];
-				socket.getInputStream().read(cPubKeyBytes);
-				X509EncodedKeySpec ks = new X509EncodedKeySpec(cPubKeyBytes);
-				KeyFactory kf = KeyFactory.getInstance("RSA");
-				publicKey = kf.generatePublic(ks);
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (NoSuchAlgorithmException e) {
-				e.printStackTrace();
-			} catch (InvalidKeySpecException e) {
-				e.printStackTrace();
-			}
+				int len;
+				byte[] byteLength = new byte[4];
+				len = socket.getInputStream().read(byteLength, 0, 4);
+				if (len == 0) return;
+				ByteBuffer bb = ByteBuffer.wrap(byteLength);
+				len = bb.getInt();
+				encodedPublicKey = new byte[len];
+				len = socket.getInputStream().read(encodedPublicKey);
+				if (len == 0) return;
+			} catch (Exception e) { }
+			setPublicKey(encodedPublicKey);
 		}
 
-		public Key getPublicKey() {
-			return publicKey;
+		public boolean getVerification(Socket socket, String originalData) {
+			Object obj = getUnencryptedObject(socket);
+			return verify(originalData, (String) obj);
+		}
+
+		public void sendMessage(Socket socket, String message) {
+			sendUnencryptedObject(socket, encryptRSA(message));
 		}
 
 		public void setPublicKey(byte[] encodedPublicKey) {
 			try {
-				X509EncodedKeySpec ks = new X509EncodedKeySpec(encodedPublicKey);
-				KeyFactory kf = KeyFactory.getInstance("RSA");
-				publicKey = kf.generatePublic(ks);
-			} catch (NoSuchAlgorithmException e) {
-				e.printStackTrace();
-			} catch (InvalidKeySpecException e) {
-				e.printStackTrace();
-			}
-		}
-
-		public void sendMessage(Socket socket, String message) {
-
-			try {
-				ObjectOutputStream obOut = new ObjectOutputStream(socket.getOutputStream());
-				obOut.writeObject(encrypt(message));
-				obOut.flush();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-
-	/**
-	 * Created by avery_000 on 08-Apr-14.
-	 */
-	public static class RSASign {
-		PrivateKey privateKey;
-
-		public RSASign(RSADecryption rsaDecryption) {
-			this.privateKey = rsaDecryption.getPrivateKey();
-		}
-
-		public String sign(String message) {
-			try {
-				/* Create a Signature object and initialize it with the private key */
-				Signature dsa = Signature.getInstance("SHA1withRSA");
-				dsa.initSign(privateKey);
-
-	            /* Update and sign the data */
-				byte[] buffer = message.getBytes();
-				dsa.update(buffer, 0, buffer.length);
-
-	            /* Now that the data to be signed has been processed, generate a signature for it */
-				byte[] generatedSignature = dsa.sign();
-
-				/* done now return */
-				return base64(generatedSignature);
-			} catch (NoSuchAlgorithmException e) {
-				e.printStackTrace();
-			} catch (InvalidKeyException e) {
-				e.printStackTrace();
-			} catch (SignatureException e) {
-				e.printStackTrace();
-			}
-			return null;
-		}
-
-		public void sendMessage(Socket socket, String message) {
-			try {
-				ObjectOutputStream obOut = new ObjectOutputStream(socket.getOutputStream());
-				obOut.writeObject(sign(message));
-				obOut.flush();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-
-	/**
-	 * Created by avery_000 on 08-Apr-14.
-	 */
-	public static class RSAVerify {
-		PublicKey publicKey;
-
-		public RSAVerify(RSAEncryption rsaEncryption) {
-			try {
-				byte[] receivedEncodedKey = rsaEncryption.getPublicKey().getEncoded();
-
 			/* rebuild key */
-				X509EncodedKeySpec pubKeySpec = new X509EncodedKeySpec(receivedEncodedKey);
+				X509EncodedKeySpec pubKeySpec = new X509EncodedKeySpec(encodedPublicKey);
 				KeyFactory keyFactory = KeyFactory.getInstance("RSA");
 				publicKey = keyFactory.generatePublic(pubKeySpec);
-			} catch (NoSuchAlgorithmException e) {
-				e.printStackTrace();
-			} catch (InvalidKeySpecException e) {
-				e.printStackTrace();
-			}
+			} catch (Exception e) { }
 		}
 
 		public boolean verify(String originalData, String signature) {
@@ -369,56 +302,11 @@ public class RSATools {
 	            /* verify data */
 				byte[] buffer = originalData.getBytes();
 				sig.update(buffer, 0, buffer.length);
-				boolean verifies = sig.verify(base64(signature));
 
 				/* done */
-				return verifies;
-			} catch (NoSuchAlgorithmException e) {
-				e.printStackTrace();
-			} catch (InvalidKeyException e) {
-				e.printStackTrace();
-			} catch (SignatureException e) {
-				e.printStackTrace();
-			}
+				return sig.verify(base64(signature));
+			} catch (Exception e) { }
 			return false;
-		}
-
-		public boolean getVerification(Socket socket, String originalData) {
-			Object obj = null;
-			try {
-				ObjectInputStream obIn = new ObjectInputStream(socket.getInputStream());
-				obj = obIn.readObject();
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			}
-			return verify(originalData, (String) obj);
-		}
-
-		public static void main(String[] args) {
-
-			/* data */
-			String originalData = "Something to be signed and sent and verified.";
-
-			try {
-
-				RSADecryption rsaDecryption = new RSADecryption();
-				RSAEncryption rsaEncryption = new RSAEncryption();
-				rsaEncryption.setPublicKey(rsaDecryption.getPublicKeyEncoded());
-
-				RSASign rsaSign = new RSASign(rsaDecryption);
-				RSAVerify rsaVerify = new RSAVerify(rsaEncryption);
-
-				String sig = rsaSign.sign(originalData);
-
-				boolean v = rsaVerify.verify(originalData, sig);
-
-				System.out.println(sig);
-				System.out.println(v);
-			} catch (Exception e) {
-				System.err.println("Caught exception " + e.toString());
-			}
 		}
 	}
 }

@@ -2,8 +2,8 @@ T1:
 A a man in the middle can pretend to be the server to the client and the client to the server by sending them respectively its own public key. Now, when the client (P) sends over its password, it is encrypted with the incorrect public key. This means that the man in the middle can now decrypt the message and read the password, and create its own message with that password and forward it to the server.
 
 T2:
-Code: TestClient2
-    TestServer2
+TestClient2
+TestServer2
 it works because the third party cannot decrypt and re-encrypt the password + nonce message with its own public key before both halves are sent.
 
 T3:
@@ -37,12 +37,15 @@ TestServer5
 6) speak
 
 T6:
+TestClient6
+TestServer6
 if there is no knowledge whatsoever, it is impossible to verify anyone or anything
 what players want is the minimal knowledge for authenticating things
+
 one solution is a trusted server or certificate provider
 the client verifies the server and verifies themselves to the server
 the server, as a proxy, verifies everything else
 
 the code is implemented separately, but a helper class can be found here:
-TestClient6
-TestServer6
+MutualAuthClient
+MutualAuthServer
