@@ -22,11 +22,11 @@ public class TestClient2 {
 
 		System.out.println("Exchanging keys...");
 		/* send client public key */
-		RSATools.RSADecryption decryption = new RSATools.RSADecryption();
+		RSATools.RSAPrivate decryption = new RSATools.RSAPrivate();
 		decryption.sendKey(socket);
 
 		/* get server public key */
-		RSATools.RSAEncryption encryption = new RSATools.RSAEncryption();
+		RSATools.RSAPublic encryption = new RSATools.RSAPublic();
 		encryption.getKey(socket);
 
 		System.out.println("Exchanging nonsense...");
@@ -37,7 +37,7 @@ public class TestClient2 {
 		serverNonce = decryption.getMessage(socket);
 
 		/* encrypt server nonce ++ password */
-		String encryptedTemp = passwordAuthenticate.encrypt(serverNonce + password);
+		String encryptedTemp = passwordAuthenticate.encryptString(serverNonce + password);
 
 		System.out.println("Interlock start...");
 		/* split into halves */
@@ -58,13 +58,18 @@ public class TestClient2 {
 		temp2 = decryption.getMessage(socket);
 
 		/* decode */
-		String received = passwordAuthenticate.decrypt(temp1 + temp2);
+		String received = passwordAuthenticate.decryptString(temp1 + temp2);
 
 		/* verification */
 		temp = clientNonce.length();
-		verified = received.substring(0, temp).equals(clientNonce);
-		verified = verified && received.substring(temp).equals(password);
-		if (!verified) {
+		try {
+			verified = received.substring(0, temp).equals(clientNonce);
+			verified = verified && received.substring(temp).equals(password);
+			if (!verified) {
+				System.out.println("Verification failed, exiting...");
+				System.exit(1);
+			}
+		} catch (Exception e) {
 			System.out.println("Verification failed, exiting...");
 			System.exit(1);
 		}

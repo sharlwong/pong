@@ -89,6 +89,7 @@ public class GameState {
 		flipped.setStatus(status);
 		flipped.setTimeLeft(timeLeft);
 		flipped.setBallsData(ballsData);
+		flipped.setBallsType(ballsType);
 
 		//flip score
 		flipped.setScores(new int[]{scores[1], scores[0]});

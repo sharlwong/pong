@@ -15,7 +15,7 @@ public class GameWorld {
 	public        boolean      ready;
 
 	/* simulation variable */
-	private final static double frameDrop = 0.25;
+	private final static double frameDrop = 0.0;
 
 	public GameWorld() {
 		elapsedTimeMillis = 0;

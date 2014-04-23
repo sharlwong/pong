@@ -2,9 +2,6 @@ package archived.security_lab.mutualAuth;
 
 import java.math.BigInteger;
 
-/**
- * Created by avery_000 on 10-Apr-14.
- */
 public class TestClient6 {
 	public static void main(String[] args) throws Exception {
 		int i = 0;

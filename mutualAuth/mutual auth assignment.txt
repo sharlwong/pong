@@ -1,23 +1,22 @@
 T1:
-a third party could intercept the keys and (optionally) send his own
-then intercept the message, decrypt it, and forward it
+A a man in the middle can pretend to be the server to the client and the client to the server by sending them respectively its own public key. Now, when the client (P) sends over its password, it is encrypted with the incorrect public key. This means that the man in the middle can now decrypt the message and read the password, and create its own message with that password and forward it to the server.
 
 T2:
 TestClient2
 TestServer2
-it works because the third party cannot decrypt and re-encrypt the password + nonce message before both halves are sent
+it works because the third party cannot decrypt and re-encrypt the password + nonce message with its own public key before both halves are sent.
 
 T3:
 TestClient3
 TestServer3
 1) a and b exchange (key, nonce) -> nonce means that the verification process can't be repeated
-2) a and b aes-encrypt (the other person's nonce + the password) using the shared password
+2) a and b aes-encrypt (the other person's nonce + the password) using the shared password <- This adds an extra layer of security that makes it immune to MITM (as password itself is treated as a secret key. Note the encryption part of this step is optional)
 3) a and b interlock exchange the above -> third party cannot block or switch the exchanges information
 4) a and b verify the shared password -> if incorrect, they can't reconstruct the original password
 5) a and b generate a random string to build a shared aes key -> so neither of them can 'spoil' the key
-6) a and b exchange these strings, aes-encrypted with the shared password
+6) a and b exchange these strings, AES encrypted with the password and RSA-encrypted with each other's public keys -> Again, the aes encryption is optional.
 7) a and b concatenate these strings into an aes key
-8) speak
+8) Now all messages are encrypted using this aes key
 
 T4:
 TestClient4
@@ -38,12 +37,15 @@ TestServer5
 6) speak
 
 T6:
+TestClient6
+TestServer6
 if there is no knowledge whatsoever, it is impossible to verify anyone or anything
 what players want is the minimal knowledge for authenticating things
+
 one solution is a trusted server or certificate provider
 the client verifies the server and verifies themselves to the server
 the server, as a proxy, verifies everything else
 
 the code is implemented separately, but a helper class can be found here:
-TestClient6
-TestServer6
+MutualAuthClient
+MutualAuthServer

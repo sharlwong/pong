@@ -2,9 +2,6 @@ package multipong;
 
 import java.awt.*;
 
-/**
- * Created by avery_000 on 25-Mar-14.
- */
 public class Constants {
 
 	/* this is the square unit-length board on which the point-mass balls move about */
@@ -12,11 +9,11 @@ public class Constants {
 	public final static double WIDTH  = 1;
 
 	/* some number of balls fit vertically, but not necessarily sideways, due to XY scaling */
-	public final static double BALL_RADIUS = 0.02;
+	public final static double BALL_RADIUS = 0.06;
 
 	/* these are the distances for the vertical buffers */
-	public final static double EDGE_PADDING           = 0.03;
-	public final static double PADDLE_EFFECTIVE_DEPTH = 0.03;
+	public final static double EDGE_PADDING           = 0.01; // Previous value: 0.03 (recorded in case)
+	public final static double PADDLE_EFFECTIVE_DEPTH = 0.06; // Previous value:  0.03 (recorded in case)
 
 	/* this is how big the display will be
 	 * because the math treats the ball as a point mass
@@ -24,7 +21,7 @@ public class Constants {
 	 * the paddles must render above and under this padding
 	 */
 	public final static double DISPLAY_HEIGHT = HEIGHT + 2 * BALL_RADIUS + 2 * PADDLE_EFFECTIVE_DEPTH + 2 * EDGE_PADDING;
-	public final static double BALL_SPEED     = 0.001;
+	public final static double BALL_SPEED     = 0.0005;
 
 	/* by default paddle will be one-tenth of the screen
 	 * note though that the screen will have an extra ball-radius at the end, so a bit extra complication there
@@ -45,11 +42,14 @@ public class Constants {
 
 	/* Speed of rendering, gameworld updating and buffer size respectively */
 	public final static int FPS               = 50;
-	public final static int UPDATE_DELTA      = 10;
-	public final static int STATE_BUFFER_SIZE = 50;
+	public final static int UPDATE_DELTA            = 16;
+	public final static int STATE_BUFFER_SIZE       = 1;
+	public final static int COUNT_DOWN_SECOND       = 10;
+	public final static int AGAIN_COUNT_DOWN_SECOND = 2;
+	public final static int GAME_TIME               = 20;
 
-	public Constants(Dimension dimension) {
-		this.screen = dimension;
+	public Constants(Dimension d) {
+		this.screen = d;
 
 		/* find vertical distances */
 		verticalFractionalPadding = EDGE_PADDING + PADDLE_EFFECTIVE_DEPTH + BALL_RADIUS;

@@ -6,14 +6,9 @@ import java.net.Socket;
 public class ClientSendObject {
 
 	public static void main(String[] args) throws Exception {
-		String password = "1234567";
 		final int port = 3344;
 		Socket socket;
-		String clientNonce = RSATools.nonce();
-		String serverNonce;
-		RSATools.AESHelper passwordAuthenticate = new RSATools.AESHelper(password);
 		String temp1, temp2;
-		int temp;
 		boolean verified;
 
 		System.out.println("Client start!");
@@ -32,7 +27,6 @@ public class ClientSendObject {
 
 		System.out.println("Exchanging bits...");
 		temp1 = rsaPrivate.getMessage(socket);
-		;
 		rsaPublic.sendMessage(socket, temp2);
 
 		System.out.println("Exchanging signatures...");
