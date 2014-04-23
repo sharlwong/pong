@@ -13,6 +13,12 @@ import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * GameWorld is responsible to handle and update balls, paddles and other objects
+ * during game play. Mainly, it generates random balls, counts game time and keeps
+ * updating to check collision and so on. It also checks whether players choose to
+ * restart the game after one round ends.
+ */
 public class GameWorld {
 	public        long         elapsedTimeMillis;
 	private final List<Ball>   balls;
@@ -46,15 +52,11 @@ public class GameWorld {
 		bounce = AssetLoader.bounce;
 		System.out.println("Game initialized, please wait for start...");
 	}
-
-	public void exit() {
-		System.out.println("GAME OVER");
-		System.out.println("Player 0: " + player0.getScore());
-		System.out.println("Player 1: " + player1.getScore());
-		System.out.println("Done!");
-		System.exit(0);
-	}
-
+	
+	/**
+	 * 
+	 * @return	current GameState
+	 */
 	public GameState getGameState() {
 
 		/* simulate dropped frames */
@@ -97,17 +99,8 @@ public class GameWorld {
 		return out;
 	}
 
-	public void setInjectBalls() {
-		injectBalls = elapsedTimeMillis + 100;
-		injectRandomBall();
-	}
-
-	public void stopInjectBalls() {
-		injectBalls = 0;
-	}
-
 	/**
-	 * must not be synced with balls when used elsewhere because synced inside
+	 * must not be synchronized with balls when used elsewhere because balls are synchronized inside
 	 */
 	private void injectRandomBall() {
 		
@@ -144,7 +137,15 @@ public class GameWorld {
 	public Paddle getPaddle(int p) {
 		return (p == 0) ? player0 : player1;
 	}
-
+	
+	/**
+	 * 1. check the other player is connected or not
+	 * 2. check the game is counting down or not
+	 * 3. check the game started or not, inject balls at appropriate time
+	 * 4. check ball collision
+	 * 5. check time up
+	 * @param delta		time interval
+	 */
 	public void update(float delta) {
 		// set time for each round
 		if (ticktock >= timeLimit){
@@ -200,10 +201,17 @@ public class GameWorld {
 		}
 	}
 	
+	/**
+	 * 
+	 * @return	how much time the game remains
+	 */
 	public int getSecondLeft(){
 		return timeLimit - ticktock;
 	}
 	
+	/**
+	 * check whether user pressed the "Again ?" button
+	 */
 	public void checkrestart(){
 		if(Gdx.input.justTouched()) {
 			int x = Gdx.input.getX();
@@ -223,24 +231,5 @@ public class GameWorld {
 				balls.clear();
 			}
 		}
-	}
-	
-//	public void checkexit(){
-//		if(Gdx.input.justTouched()) {
-//			int x = Gdx.input.getX()/2;
-//			int y = Gdx.input.getY();
-//			if (x>Gdx.graphics.getWidth()/4 && x<Gdx.graphics.getWidth()/2 && y > Gdx.graphics.getHeight() - 80 && y < Gdx.graphics.getHeight() - 40){
-//				// exit
-//				System.out.println("EXIT");
-//			}
-//		}
-//	}
-
-	public void setP0fractional(double pos) {
-		player0.setFractionalPosition(pos);
-	}
-
-	public void setP1fractional(double pos) {
-		player1.setFractionalPosition(pos);
 	}
 }

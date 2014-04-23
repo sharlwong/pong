@@ -12,11 +12,11 @@ import com.sutd.Server.GameServer;
 
 
 public class StartWorld {
-	private Rectangle start_game_button, join_game_button, music_button;
-	private Boolean server_created = false;
-	private Boolean client1_created = false;
-	private Boolean client2_created = false;
-	private PongGame pong_game;
+	private 	Rectangle 	start_game_button, join_game_button, music_button;
+	private 	Boolean 	server_created = false;
+	private 	Boolean 	client1_created = false;
+	private 	Boolean 	client2_created = false;
+	private 	PongGame 	pong_game;
 	
 	private Music chimp_short;
 	
@@ -38,9 +38,11 @@ public class StartWorld {
 	public Rectangle getStartButton() {
 		return new Rectangle(start_game_button);
 	}
+	
 	public Rectangle getJoinButton() {
 		return new Rectangle(join_game_button);
 	}
+	
 	public Rectangle getMusicButton() {
 		return new Rectangle(music_button);
 	}
@@ -56,8 +58,6 @@ public class StartWorld {
 	 * 
 	 * If join game button is touched, a new client is created and connected to the server too.*
 	 * */
-	
-	
 	private void check_if_touched() {
 		if(Gdx.input.justTouched()) {
 			Gdx.app.log("MyTag", "Just Touched!");
@@ -92,7 +92,6 @@ public class StartWorld {
 		AssetLoader.music.stop();
 	}
 	
-
 	/**
 	 * Starts Server Thread
 	 * And immediately connects to it as a client
