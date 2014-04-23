@@ -1,15 +1,16 @@
 package com.sutd.Pong;
 
 import com.badlogic.gdx.Game;
+import com.sutd.Client.GameClient;
 import com.sutd.PongHelpers.AssetLoader;
-import com.sutd.Screens.StartScreen;
-import com.sutd.Server.*;
-import com.sutd.Client.*;
+import com.sutd.Screens.AuthScreen;
+import com.sutd.Server.GameServer;
 
 public class PongGame extends Game {
 	public GameServer server;
 	public GameClient client;
 	public int        player;
+	public String     t;
 
 	@Override
 	public void create() {
@@ -18,7 +19,8 @@ public class PongGame extends Game {
 		AssetLoader.load();
 		AssetLoader.music.play();
 		AssetLoader.music.setLooping(true);
-		setScreen(new StartScreen(this));
+		setScreen(new AuthScreen(this));
+		//setScreen(new StartScreen(this));
 		//        setScreen(new GameScreen());
 	}
 
