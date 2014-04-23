@@ -25,8 +25,8 @@ public abstract class AssetLoader {
 
 	public static BitmapFont font, shadow;
 
-	public static Texture fruitball_texture, screen_texture, wait_texture, paddle_texture, game_texture, instr_texture;
-	public static TextureRegion watermelon, orange, kiwi, splash_screen, wait_screen, game_screen, instr_screen, paddle_top, paddle_bottom;
+	public static Texture fruitball_texture, auth_texture, screen_texture, wait_texture, paddle_texture, game_texture, instr_texture;
+	public static TextureRegion watermelon, orange, kiwi, auth_screen, splash_screen, wait_screen, game_screen, instr_screen, paddle_top, paddle_bottom;
 	public static Animation octopusAnimation;
 
 	public static Music music, chimp_long, chimp_short;
@@ -50,6 +50,9 @@ public abstract class AssetLoader {
 
 		fruitball_texture = new Texture(Gdx.files.internal("data/Fruitball_Texture.png"));
 		fruitball_texture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+		
+		auth_texture = new Texture(Gdx.files.internal("data/auth_screen.png"));
+		auth_texture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 
 		screen_texture = new Texture(Gdx.files.internal("data/Splash_screen_strokes_2.png"));
 		screen_texture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
@@ -74,6 +77,9 @@ public abstract class AssetLoader {
 
 		kiwi = new TextureRegion(fruitball_texture, 256, 0, 128, 128);
 		kiwi.flip(false, true);
+		
+		auth_screen = new TextureRegion(auth_texture, 0, 0, 256, 512);
+		auth_screen.flip(false, true);
 
 		splash_screen = new TextureRegion(screen_texture, 0, 0, 256, 512);
 		splash_screen.flip(false, true);

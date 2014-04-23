@@ -28,16 +28,18 @@ public class GameClient {
 	private boolean isReady = false;
 	private RSATools.AESHelper AESHelper;
 	private String             password;
+	public String t = "0";
 
 	/* Pre-condition: We expect a server to be up and running
 	 * and the address should be accessible to the client.
 	 */
 	public void connectToServer() throws UnauthenticatedException {
+		System.out.println("client side t is "+ t);
 		client_socket = Gdx.net.newClientSocket(Protocol.TCP, serverAddress, serverPort, null);
 		writer = new PrintWriter(client_socket.getOutputStream());
 		reader = new BufferedReader(new InputStreamReader(client_socket.getInputStream()));
 		System.out.println("Authenticating...");
-		AESHelper = MutualAuthClient.authenticate(client_socket, password);
+		AESHelper = MutualAuthClient.authenticate(client_socket, password, Integer.valueOf(t));
 		if (AESHelper == null) {
 			System.out.println("Error Authenticating!");
 			isReady = false;
@@ -85,5 +87,8 @@ public class GameClient {
 
 	public synchronized void setPassword(String password) {
 		this.password = password;
+	}
+	public synchronized void setVersion(String t){
+		this.t = t;
 	}
 }

@@ -149,7 +149,7 @@ public class MutualAuthClient {
 			encryption.sendMessage(socket, temp2);
 
 			System.out.println("Exchanging signatures...");
-			verified = rsaVerify.verify(socket, temp1);
+			verified = rsaVerify.getVerification(socket, temp1);
 			rsaSign.sendMessage(socket, temp2);
 
 			if (!verified) {

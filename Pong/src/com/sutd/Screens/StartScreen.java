@@ -20,6 +20,7 @@ public class StartScreen implements Screen {
         start_renderer = new StartRenderer(start_world);
         this.game = game;
 		this.game.client = new GameClient();
+		game.client.setVersion(game.t);
     }
 
     @Override
@@ -30,6 +31,9 @@ public class StartScreen implements Screen {
         //Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
         start_world.update();
         start_renderer.render(delta);
+        
+        
+        
         if (game.client.ready()) {
         	System.out.print("Ready");
         	try {

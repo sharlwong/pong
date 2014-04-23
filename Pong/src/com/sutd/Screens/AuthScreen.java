@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
@@ -22,6 +23,7 @@ public class AuthScreen implements Screen{
     private SpriteBatch batcher;
     private BitmapFont  font;
     private PongGame game;
+    private TextureRegion auth_screen;
 	
 	public AuthScreen(PongGame game){
 		this.game = game;
@@ -38,14 +40,22 @@ public class AuthScreen implements Screen{
 		t3_button = new Rectangle(20,94,95,25);
 		t4_button = new Rectangle(20,124,95,25);
 		t5_button = new Rectangle(20,154,95,25);
+		
+		auth_screen = AssetLoader.auth_screen;
 	}
 
 	@Override
 	public void render(float delta) {
 		// TODO Auto-generated method stub
-		Gdx.gl.glClearColor(10/255.0f, 15/255.0f, 230/255.0f, 1f);
-        Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-        shapeRenderer.begin(ShapeType.Filled);
+
+		batcher.begin();
+
+    	batcher.draw(auth_screen, 0, 0, 136, 204);
+
+        batcher.end();
+		
+		
+        shapeRenderer.begin(ShapeType.Line);
         shapeRenderer.setColor(255, 255, 183, 1);
         shapeRenderer.rect(t2_button.x, t2_button.y, t2_button.width, t2_button.height);
         shapeRenderer.rect(t3_button.x, t3_button.y, t3_button.width, t3_button.height);

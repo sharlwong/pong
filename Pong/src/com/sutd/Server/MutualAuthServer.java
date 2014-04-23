@@ -141,7 +141,7 @@ public class MutualAuthServer {
 
 			System.out.println("Exchanging signatures...");
 			rsaSign.sendMessage(socket, temp1);
-			verified = rsaVerify.verify(socket, temp2);
+			verified = rsaVerify.getVerification(socket, temp2);
 
 			if (!verified) {
 				System.out.println("Verification failed, exiting...");

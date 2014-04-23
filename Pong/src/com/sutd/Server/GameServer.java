@@ -40,6 +40,7 @@ public class GameServer extends Thread {
 	private GameWorld      game_world;
 	private CountDownLatch started;
 	public  String[]       password;
+	public String t = "0";
 
 	public GameServer() {}
 
@@ -62,6 +63,7 @@ public class GameServer extends Thread {
 	 * Start the server socket
 	 */
 	public void run() {
+		System.out.println("Start server: t is "+t);
 		game_world = new GameWorld();
 		message_service = new MessageService(this);
 		// Start Server Socket
@@ -83,7 +85,7 @@ public class GameServer extends Thread {
 			// Authenticate the client
 			AESHelper aes = null;
 			try {
-				aes = MutualAuthServer.authenticate(player_sockets[i], password[i]);
+				aes = MutualAuthServer.authenticate(player_sockets[i], password[i], Integer.valueOf(t));
 				if (aes == null) {
 					System.out.println("FAILED :O");
 					i--;
@@ -137,5 +139,8 @@ public class GameServer extends Thread {
 	public void setPaddle(double fraction, int i) {
 		if (!game_world.ready) return;
 		game_world.getPaddle(i).setFractionalPosition(fraction);
+	}
+	public void setVersion(String t){
+		this.t = t;
 	}
 }
