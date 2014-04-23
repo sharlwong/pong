@@ -19,49 +19,50 @@ import com.sutd.Network.UnauthenticatedException;
 // It is accessed by both ClientBroadcaster and StartWorld
 
 public class GameClient {
-	private Socket client_socket;
-	private PrintWriter writer;
+	private Socket         client_socket;
+	private PrintWriter    writer;
 	private BufferedReader reader;
 	private BlockingQueue<String> buffer = new ArrayBlockingQueue<String>(10);
 	private String serverAddress;
-	private int serverPort;
+	private int    serverPort;
 	private boolean isReady = false;
 	private RSATools.AESHelper AESHelper;
-	private String password;
+	private String             password;
 
 	/* Pre-condition: We expect a server to be up and running
 	 * and the address should be accessible to the client.
 	 */
 	public void connectToServer() throws UnauthenticatedException {
-		client_socket = Gdx.net.newClientSocket(Protocol.TCP,serverAddress , serverPort, null);
+		client_socket = Gdx.net.newClientSocket(Protocol.TCP, serverAddress, serverPort, null);
 		writer = new PrintWriter(client_socket.getOutputStream());
-		reader = new BufferedReader( new InputStreamReader(client_socket.getInputStream()));
+		reader = new BufferedReader(new InputStreamReader(client_socket.getInputStream()));
 		System.out.println("Authenticating...");
-		AESHelper = MutualAuthClient.authenticate(client_socket,password);
-		if(AESHelper == null) {
+		AESHelper = MutualAuthClient.authenticate(client_socket, password);
+		if (AESHelper == null) {
 			System.out.println("Error Authenticating!");
 			isReady = false;
 			password = null;
 			throw new UnauthenticatedException();
 		}
 	}
-	
+
 	public void sendMessage(String message) {
-		System.out.println("message:" +message);
+		System.out.println("message:" + message);
 		message = AESHelper.encrypt(message);
-		message=message.replace("\r","").replace("\n","");
-		System.out.println("Client Sending: "+message);
+		message = message.replace("\r", "").replace("\n", "");
+		System.out.println("Client Sending: " + message);
 		writer.println(message);
 		writer.flush();
 	}
 
 	public void startListening() {
-		MessageProducer listener = new MessageProducer(reader, buffer,AESHelper);
+		MessageProducer listener = new MessageProducer(reader, buffer, AESHelper);
 		listener.start();
 	}
 
 	/**
 	 * Start Dealing with the messages
+	 *
 	 * @param handler the handler that is callbacked after a message is received.
 	 */
 	public void startConsuming(MessageHandler handler) {
@@ -77,9 +78,11 @@ public class GameClient {
 		this.serverPort = port;
 		this.isReady = true;
 	}
+
 	public synchronized boolean ready() {
 		return this.isReady && (this.password != null);
 	}
+
 	public synchronized void setPassword(String password) {
 		this.password = password;
 	}
