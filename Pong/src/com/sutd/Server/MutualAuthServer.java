@@ -129,6 +129,9 @@ public class MutualAuthServer {
 			aesHelper = new RSATools.AESHelper(temp1 + temp2);
 		}
 		else if (code == 5 || code == 1) {
+			RSATools.RSASign rsaSign = new RSATools.RSASign(decryption);
+			RSATools.RSAVerify rsaVerify = new RSATools.RSAVerify(encryption);
+
 			System.out.println("Generating randomness...");
 			temp1 = RSATools.nonce();
 
@@ -137,8 +140,8 @@ public class MutualAuthServer {
 			temp2 = decryption.getMessage(socket);
 
 			System.out.println("Exchanging signatures...");
-			decryption.sendSignature(socket, temp1);
-			verified = encryption.getVerification(socket, temp2);
+			rsaSign.sendMessage(socket, temp1);
+			verified = rsaVerify.verify(socket, temp2);
 
 			if (!verified) {
 				System.out.println("Verification failed, exiting...");
