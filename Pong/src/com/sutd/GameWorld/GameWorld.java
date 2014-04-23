@@ -161,6 +161,9 @@ public class GameWorld {
 		long deltaMillis = (long) (delta);
 		elapsedTimeMillis += deltaMillis;
 		
+		if ((int) elapsedTimeMillis/Constants.BALL_FREQUENCY > (int) temp/Constants.BALL_FREQUENCY){
+			injectRandomBall();
+		}
 		if ((int) elapsedTimeMillis/1000 > (int) temp/1000){
 			ticktock++;
 		}

@@ -23,6 +23,10 @@ public class Ball {
 		this.initTime = startTimeMillis;
 		this.initTime = startTimeMillis;
 		this.type = type;
+		
+		/* widen angle */
+		startVelocity.x *= Constants.ANGLE_WIDENER;
+		
 
 		/* error correct starting speed, leaving the direction equal */
 		Vector2D initialVelocity = startVelocity.cpy().makeUnitVector().multiply(Constants.BALL_SPEED);
