@@ -1,11 +1,13 @@
 package com.sutd.Screens;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.sutd.Client.GameClient;
 import com.sutd.GameWorld.StartRenderer;
 import com.sutd.GameWorld.StartWorld;
 import com.sutd.Network.UnauthenticatedException;
 import com.sutd.Pong.PongGame;
+import com.sutd.PongHelpers.PasswordListener;
 
 
 public class StartScreen implements Screen {
@@ -42,6 +44,7 @@ public class StartScreen implements Screen {
         	catch (UnauthenticatedException e) {
         		System.out.println("Wrong password!");
         		game.client.setPassword(null);
+        		Gdx.input.getTextInput(new PasswordListener(game.client), "Wrong Password. Try Again", "");
         		return;
         	}
             game.client.startListening();

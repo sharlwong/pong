@@ -42,7 +42,6 @@ public class GameClient {
 		AESHelper = MutualAuthClient.authenticate(client_socket, password, Integer.valueOf(t));
 		if (AESHelper == null) {
 			System.out.println("Error Authenticating!");
-			isReady = false;
 			password = null;
 			throw new UnauthenticatedException();
 		}
@@ -86,6 +85,7 @@ public class GameClient {
 	}
 
 	public synchronized void setPassword(String password) {
+		System.out.println("Setting password");
 		this.password = password;
 	}
 	public synchronized void setVersion(String t){
