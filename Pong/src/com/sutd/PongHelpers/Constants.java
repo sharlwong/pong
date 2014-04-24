@@ -6,6 +6,11 @@ import java.util.Collection;
 
 import com.sutd.GameObjects.GameState;
 
+/***
+ * This class contains important constants that we use across the entire game. 
+ * Some of these constants may have dependencies with one another.
+ * This is an effective way to keep the code clean.
+ * ***/
 public class Constants {
 
 	/* this is the square unit-length board on which the point-mass balls move about */
@@ -30,7 +35,7 @@ public class Constants {
 	/* by default paddle will be one-tenth of the screen
 	 * note though that the screen will have an extra ball-radius at the end, so a bit extra complication there
 	 */
-	public final static double PADDLE_WIDTH = 0.4;
+	public final static double PADDLE_WIDTH = 0.35;
 
 	/* delay appearance of first ball by this much to give the user time to prepare */
 	public final static double START_GAME_DELAY = 300;
@@ -48,13 +53,13 @@ public class Constants {
 	public final static int    FPS                     = 50;
 	public final static int    UPDATE_DELTA            = 16;
 	public final static int    STATE_BUFFER_SIZE       = 1;
-	public final static int    COUNT_DOWN_SECOND       = 10;
+	public final static int    COUNT_DOWN_SECOND       = 12;
 	public final static int    AGAIN_COUNT_DOWN_SECOND = 2;
-	public final static int    GAME_TIME               = 20;
+	public final static int    GAME_TIME               = 22;
 	public final static int    BALL_FREQUENCY          = 300;
 	public final static double ANGLE_WIDENER           = 3;
-	public final static double BALL_MAX_SPEED          = 1.5;
-	public final static double BALL_MIN_SPEED          = 0.5;
+	public final static double BALL_MAX_SPEED          = 1.4;
+	public final static double BALL_MIN_SPEED          = 0.7;
 
 	public Constants(Dimension d) {
 		this.screen = d;

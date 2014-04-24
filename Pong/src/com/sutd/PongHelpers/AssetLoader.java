@@ -27,8 +27,7 @@ public abstract class AssetLoader {
 	public static BitmapFont font, shadow;
 
 	public static Texture fruitball_texture, screen_texture, wait_texture, paddle_texture, game_texture, instr_texture, sound_texture;
-	public static TextureRegion watermelon, orange, kiwi, splash_screen, wait_screen, game_screen, instr_screen, paddle_top, paddle_bottom, sound_icon;
-	public static Animation octopusAnimation;
+	public static TextureRegion watermelon, orange, kiwi, splash_screen, wait_screen, game_screen, story_screen, fruit_pt_screen, paddle_top, paddle_bottom, sound_icon;
 
 	public static Music music, chimp_long, chimp_short, bounce;
 	
@@ -72,7 +71,7 @@ public abstract class AssetLoader {
 		game_texture = new Texture(Gdx.files.internal("data/Game_screen.png"));
 		game_texture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 
-		instr_texture = new Texture(Gdx.files.internal("data/Instructions_screen.png"));
+		instr_texture = new Texture(Gdx.files.internal("data/Combined_instr.png"));
 		instr_texture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 
 		watermelon = new TextureRegion(fruitball_texture, 0, 0, 128, 128);
@@ -93,8 +92,11 @@ public abstract class AssetLoader {
 		game_screen = new TextureRegion(game_texture, 0, 0, 256, 512);
 		game_screen.flip(false, true);
 
-		instr_screen = new TextureRegion(instr_texture, 0, 0, 256, 512);
-		instr_screen.flip(false, true);
+		story_screen = new TextureRegion(instr_texture, 0, 0, 256, 512);
+		story_screen.flip(false, true);
+		
+		fruit_pt_screen = new TextureRegion(instr_texture, 256, 0, 256, 512);
+		fruit_pt_screen.flip(false, true);
 
 		paddle_top = new TextureRegion(paddle_texture, 0, 0, 128, 41);
 		paddle_top.flip(false, false);
@@ -122,6 +124,4 @@ public abstract class AssetLoader {
 		chimp_short.dispose();
 	}
 
-	public static class LagException extends RuntimeException {
-	}
 }

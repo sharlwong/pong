@@ -40,7 +40,7 @@ public class GameRenderer {
 	int[] player0;
 	int[] player1;
 	
-	private TextureRegion watermelon, kiwi, orange, wait_screen, instr_screen, game_screen, paddle_top, paddle_bottom;
+	private TextureRegion watermelon, kiwi, orange, wait_screen, story_screen, fruit_pt_screen, game_screen, paddle_top, paddle_bottom;
 	private GameState lastKnownState;
 	private Music     chimp_long, chimp_short;
 
@@ -78,11 +78,12 @@ public class GameRenderer {
 		kiwi = AssetLoader.kiwi;
 		orange = AssetLoader.orange;
 		font = AssetLoader.font;
-		instr_screen = AssetLoader.instr_screen;
+		story_screen = AssetLoader.story_screen;
 		wait_screen = AssetLoader.wait_screen;
 		paddle_top = AssetLoader.paddle_top;
 		paddle_bottom = AssetLoader.paddle_bottom;
 		game_screen = AssetLoader.game_screen;
+		fruit_pt_screen = AssetLoader.fruit_pt_screen;
 		chimp_long = AssetLoader.chimp_long;
 		chimp_short = AssetLoader.chimp_short;
 	}
@@ -203,10 +204,20 @@ public class GameRenderer {
 			
 			/* Game is loading. */
 			else {
+				
+				/* Load story screen. */
+				if (countDown >= 8) {
+					batcher.draw(story_screen, 0, 0, 136, 204);	
+					System.out.println("Story screen");
+				}
 
-				/* Load instructions screen. */
-				if (countDown > 2) {
-					batcher.draw(instr_screen, 0, 0, 136, 204);	
+				/* Load fruit points screen. */
+				if (countDown > 2 && countDown < 8) {
+					batcher.draw(fruit_pt_screen, 0, 0, 136, 204);	
+					System.out.println("Fruit point screen");
+					
+					/* Draw bottom paddle. */
+					drawBottomPaddle(player0[0], player0[1]);
 				}
 
 				/* Load the words: READY? GO! */
@@ -216,11 +227,17 @@ public class GameRenderer {
 					
 					/* Play short chimp call to signal start of game. */
 					chimp_short.play();
+					
+					/* Draw bottom paddle. */
+					drawBottomPaddle(player0[0], player0[1]);
 				}
 				else if (countDown == 1) {
 
 					batcher.draw(game_screen, 0, 0, 136, 204);
 					font.draw(batcher, "GO !", 2 * d.width / 5, d.height / 2 - 20);
+					
+					/* Draw bottom paddle. */
+					drawBottomPaddle(player0[0], player0[1]);
 				}
 			}
 		}
