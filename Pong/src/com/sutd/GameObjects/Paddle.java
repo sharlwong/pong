@@ -47,8 +47,7 @@ public class Paddle {
 	public boolean collisionCheck(Ball b) {
 		Vector2D ballPosition = b.getCurrentPosition();
 		boolean up = b.isMovingUp();
-		if (Math.abs(ballPosition.x - paddleCenter.x) > (Constants.PADDLE_WIDTH / 2) + Constants.BALL_RADIUS)
-			return false;
+		if (Math.abs(ballPosition.x - paddleCenter.x) > (Constants.PADDLE_WIDTH / 2)) return false;
 		if (playerBottom && ballPosition.y < (0 - Constants.PADDLE_EFFECTIVE_DEPTH) && !up) return false;
 		if (playerBottom && ballPosition.y < 0 && !up) return true;
 		if (!playerBottom && ballPosition.y > (Constants.HEIGHT + Constants.PADDLE_EFFECTIVE_DEPTH) && up) return false;

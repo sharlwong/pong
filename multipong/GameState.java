@@ -1,8 +1,5 @@
 package multipong;
 
-/**
- * Created by avery_000 on 08-Apr-14.
- */
 public class GameState {
 	private double[][] ballsData;
 	private double[]   player0Data;
@@ -11,11 +8,6 @@ public class GameState {
 	private int        status;
 	private int        timeLeft;
 	private int[]      scores;
-	private double[]   spareVar;
-
-	public double[] getSpareVar() {
-		return spareVar;
-	}
 
 	public double[][] getBallsData() {
 		return ballsData;
@@ -71,10 +63,6 @@ public class GameState {
 
 	public void setBallsType(int[] ballsType) {
 		this.ballsType = ballsType;
-	}
-
-	public void setSpareVar(double[] spareVar) {
-		this.spareVar = spareVar;
 	}
 
 	/**

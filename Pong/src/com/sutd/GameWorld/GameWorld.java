@@ -26,7 +26,7 @@ public class GameWorld {
 	private       Paddle       player1;
 	private       SecureRandom random;
 	private       long         injectBalls;
-	private       boolean      init;
+	private       int          init;
 	public        boolean      ready;
 	public        boolean      gameover;
 	public        int          ticktock;
@@ -37,6 +37,7 @@ public class GameWorld {
 	private final static double frameDrop = 0;
 
 	public GameWorld() {
+		init = Integer.MAX_VALUE;
 		elapsedTimeMillis = 0;
 		player0 = new Paddle(0);
 		player1 = new Paddle(1);
@@ -46,7 +47,6 @@ public class GameWorld {
 		injectBalls = 0;
 		ticktock = 0;
 		timeLimit = Constants.GAME_TIME + Constants.COUNT_DOWN_SECOND;
-		init = true;
 		ready = false;
 		gameover = false;
 		bounce = AssetLoader.bounce;
@@ -103,11 +103,10 @@ public class GameWorld {
 	 */
 	private void injectRandomBall() {
 
-		if (ticktock <= timeLimit - Constants.GAME_TIME) return;
-		System.out.println("inject!!!");
 		/* first run stuff */
-		if (init) System.out.println("Start!");
-		init = false;
+		if (init == 0) System.out.println("Start!");
+		else System.out.println("inject!!!");
+		init = -1;
 
 		/* ball type and other data */
 		double randomValue = random.nextDouble() * 3;
@@ -148,6 +147,10 @@ public class GameWorld {
 	 * @param delta time interval
 	 */
 	public void update(float delta) {
+		updateDeltaTime((long) delta)
+	}
+
+	public void updateDeltaTime(long deltaMillis) {
 		// set time for each round
 		if (ticktock >= timeLimit) {
 			checkrestart();
@@ -157,24 +160,27 @@ public class GameWorld {
 		/* checks whether game is ready to start */
 		if (!ready) return;
 
-		long temp = elapsedTimeMillis;
 		/* increment time */
-		long deltaMillis = (long) (delta);
+		long temp = elapsedTimeMillis;
 		elapsedTimeMillis += deltaMillis;
+		if ((int) elapsedTimeMillis / 1000 > (int) temp / 1000) ticktock++;
 
-		if ((int) elapsedTimeMillis / Constants.BALL_FREQUENCY > (int) temp / Constants.BALL_FREQUENCY) {
-			injectRandomBall();
+		/* countdown */
+		if (ticktock <= timeLimit - Constants.GAME_TIME) {
+			if (init != timeLimit - ticktock - Constants.GAME_TIME) {
+				init = timeLimit - ticktock - Constants.GAME_TIME;
+				System.out.println(init);
+			}
+			return;
 		}
-		if ((int) elapsedTimeMillis / 1000 > (int) temp / 1000) {
-			ticktock++;
-		}
-		
+
 		/* conditions under which a ball should be injected */
-		boolean firstBallIn = init && (elapsedTimeMillis > Constants.START_GAME_DELAY) && (balls.size() == 0);
+		boolean firstBallIn = init > 0 && (elapsedTimeMillis > Constants.START_GAME_DELAY) && (balls.size() == 0);
 		boolean ballInjectionIsOn = (injectBalls > 0) && (injectBalls < elapsedTimeMillis);
-		
+		boolean tickInject = (int) elapsedTimeMillis / Constants.BALL_FREQUENCY > (int) temp / Constants.BALL_FREQUENCY;
+
 		/* inject ball */
-		if (firstBallIn || ballInjectionIsOn) injectRandomBall();
+		if (firstBallIn || ballInjectionIsOn || tickInject) injectRandomBall();
 
 		/* work with balls */
 		List<Ball> removeThese = new ArrayList<Ball>();
