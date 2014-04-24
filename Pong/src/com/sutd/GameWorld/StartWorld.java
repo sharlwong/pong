@@ -100,6 +100,7 @@ public class StartWorld {
 		// Start Server
 		CountDownLatch start = new CountDownLatch(1);
 		Gdx.app.log("my app","HOST");
+		pong_game.player = 0;
 		pong_game.server = new GameServer(start);
 		pong_game.server.start();
 		try {
