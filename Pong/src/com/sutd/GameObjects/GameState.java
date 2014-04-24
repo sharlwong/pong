@@ -116,7 +116,7 @@ public class GameState {
 		flipped.setScores(new int[]{scores[1], scores[0]});
 		flipped.setOrange(orangeP1, orangeP0);
 		flipped.setKiwi(kiwiP1, kiwiP0);
-		flipped.setKiwi(watermelonP1, watermelonP0);
+		flipped.setWatermelon(watermelonP1, watermelonP0);
 		//flip paddles
 		flipped.setPlayer1Data(new double[]{1 - player0Data[0], 1});
 		flipped.setPlayer0Data(new double[]{1 - player1Data[0], 0});

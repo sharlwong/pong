@@ -75,7 +75,7 @@ public abstract class AssetLoader {
 		instr_texture = new Texture(Gdx.files.internal("data/Instructions_screen.png"));
 		instr_texture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 		
-		coco_texture = new Texture(Gdx.files.internal("data/monkey.png"));
+		coco_texture = new Texture(Gdx.files.internal("data/monkey2.png"));
 		coco_texture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 
 		watermelon = new TextureRegion(fruitball_texture, 0, 0, 128, 128);
@@ -108,7 +108,7 @@ public abstract class AssetLoader {
 		sound_icon = new TextureRegion(sound_texture, 0, 0, 32, 32);
 		sound_icon.flip(false, true);
 		
-		coco = new TextureRegion(coco_texture, 0, 0, 256, 256);
+		coco = new TextureRegion(coco_texture, 0, 0, 280, 300);
 		coco.flip(false, true);
 	}
 
