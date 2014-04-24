@@ -30,5 +30,6 @@ public class GameUpdater implements MessageHandler {
 			}
 		}
 		stateBuffer.offer(state);
+		//System.out.println(state.getOrange()[0]);
 	}
 }
