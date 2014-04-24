@@ -93,6 +93,10 @@ public class GameWorld {
 		/* set scores */
 		out.setScores(new int[]{player0.getScore(), player1.getScore()});
 		out.setTimeLeft(getSecondLeft());
+		
+		out.setOrange(player0.getOrange(), player1.getOrange());
+		out.setKiwi(player0.getKiwi(), player1.getKiwi());
+		out.setWatermelon(player0.getWatermelon(), player1.getWatermelon());
 
 		/* done */
 		return out;

@@ -42,6 +42,7 @@ class MessageService implements MessageHandler {
 			if(i == ignore) continue; // don't send message to the sender!
 			out[i].println(message);
 			out[i].flush();
+			//System.out.println(message);
 		}
 	}
 	public synchronized void send(String message) {

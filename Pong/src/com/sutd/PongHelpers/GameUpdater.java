@@ -21,5 +21,6 @@ public class GameUpdater implements MessageHandler {
 		GameState state = gson.fromJson(message, GameState.class);
 		if (player == 1) state = state.flip();
 		stateBuffer.offer(state);
+		//System.out.println(state.getOrange()[0]);
 	}
 }

@@ -26,8 +26,8 @@ public abstract class AssetLoader {
 
 	public static BitmapFont font, shadow;
 
-	public static Texture fruitball_texture, screen_texture, wait_texture, paddle_texture, game_texture, instr_texture, sound_texture;
-	public static TextureRegion watermelon, orange, kiwi, splash_screen, wait_screen, game_screen, instr_screen, paddle_top, paddle_bottom, sound_icon;
+	public static Texture fruitball_texture, screen_texture, wait_texture, paddle_texture, game_texture, instr_texture, sound_texture, coco_texture;
+	public static TextureRegion watermelon, orange, kiwi, splash_screen, wait_screen, game_screen, instr_screen, paddle_top, paddle_bottom, sound_icon, coco;
 	public static Animation octopusAnimation;
 
 	public static Music music, chimp_long, chimp_short, bounce;
@@ -74,6 +74,9 @@ public abstract class AssetLoader {
 
 		instr_texture = new Texture(Gdx.files.internal("data/Instructions_screen.png"));
 		instr_texture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+		
+		coco_texture = new Texture(Gdx.files.internal("data/monkey.png"));
+		coco_texture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 
 		watermelon = new TextureRegion(fruitball_texture, 0, 0, 128, 128);
 		watermelon.flip(false, true);
@@ -104,6 +107,9 @@ public abstract class AssetLoader {
 		
 		sound_icon = new TextureRegion(sound_texture, 0, 0, 32, 32);
 		sound_icon.flip(false, true);
+		
+		coco = new TextureRegion(coco_texture, 0, 0, 256, 256);
+		coco.flip(false, true);
 	}
 
 	/**
