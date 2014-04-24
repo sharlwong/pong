@@ -18,7 +18,7 @@ import com.sutd.PongHelpers.InputHandler;
 import java.util.Random;
 
 /**
- * GameRenderer is responsible for rendering all the objects onscreen.
+ * GameRenderer is responsible for rendering all the objects during the game play.
  * It calls upon values from Constants and assets from AssetLoader to render.
  * We employ two rendering classes in LibGDX engine: ShapeRenderer and SpriteBatch.
  * ShapeRenderer is used to render in-built shapes in LibGDX, while SpriteBatch is
