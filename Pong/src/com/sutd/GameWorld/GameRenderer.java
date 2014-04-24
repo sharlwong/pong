@@ -140,6 +140,12 @@ public class GameRenderer {
 			batcher.draw(wait_screen, 0, 0, 136, 204);
 		}
 		
+		else if (state.getStatus() == -1) {
+			System.out.println("I need to disconnect");
+			batcher.end();
+			return;
+		}
+		
 		/* Game over */
 		else if (timeLeft == 0) {
 			

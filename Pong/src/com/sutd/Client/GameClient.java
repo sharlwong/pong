@@ -1,6 +1,7 @@
 package com.sutd.Client;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -24,6 +25,8 @@ public class GameClient {
 	private String serverAddress;
 	private int serverPort;
 	private boolean isReady = false;
+	private MessageConsumer consumer;
+	private MessageProducer listener;
 
 	/* Pre-condition: We expect a server to be up and running
 	 * and the address should be accessible to the client.
@@ -40,7 +43,7 @@ public class GameClient {
 	}
 
 	public void startListening() {
-		MessageProducer listener = new MessageProducer(reader, buffer);
+		listener = new MessageProducer(reader, buffer);
 		listener.start();
 	}
 
@@ -49,7 +52,7 @@ public class GameClient {
 	 * @param handler the handler that is callbacked after a message is received.
 	 */
 	public void startConsuming(MessageHandler handler) {
-		MessageConsumer consumer = new MessageConsumer(buffer, handler);
+		consumer = new MessageConsumer(buffer, handler);
 		consumer.start();
 	}
 
@@ -63,5 +66,13 @@ public class GameClient {
 	}
 	public boolean ready() {
 		return this.isReady;
+	}
+
+	public void tearDown() {
+		consumer.interrupt();
+		listener.interrupt();
+		// We dont care about joining...
+		client_socket.dispose();
+		writer.close();
 	}
 }

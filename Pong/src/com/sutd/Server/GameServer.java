@@ -38,6 +38,7 @@ public class GameServer extends Thread {
 	private MessageService message_service;
 	private GameWorld game_world;
 	private CountDownLatch started;
+	private ScheduledExecutorService exec;
 
 	public GameServer() {}
 	/**
@@ -79,7 +80,7 @@ public class GameServer extends Thread {
 		game_world.ready = true; 
 
 		ServerUpdater serverUpdater = new ServerUpdater(game_world, message_service);
-		ScheduledExecutorService exec = Executors.newSingleThreadScheduledExecutor();
+		exec = Executors.newSingleThreadScheduledExecutor();
 		exec.scheduleWithFixedDelay(serverUpdater, 0, Constants.UPDATE_DELTA, TimeUnit.MILLISECONDS);
 	}
 
@@ -107,5 +108,21 @@ public class GameServer extends Thread {
 	public void setPaddle(double fraction, int i) {
 		if(!game_world.ready) return ;
 		game_world.getPaddle(i).setFractionalPosition(fraction);
+	}
+	
+	public void handleDisconnect(int i) {
+		//probably close stuff here.
+		listeners[i].interrupt();
+		player_sockets[i].dispose();
+		// Tell everyone except i to disconnect!
+		int ignore = i;
+		game_world.disconnect = true;
+		sendDisconnect(ignore);
+
+	}
+	public void sendDisconnect(int ignore) {
+		//close the updater first
+		exec.shutdownNow();
+		message_service.sendState(game_world.getGameState(), ignore);
 	}
 }

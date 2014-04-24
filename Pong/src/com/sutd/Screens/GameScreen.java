@@ -65,6 +65,9 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
+        pong_game.client.sendMessage("disconnect_event;"+"I am disconnecting");
+        pong_game.client.tearDown();
+        //pong_game.server.tearDown();
     }
 
 }

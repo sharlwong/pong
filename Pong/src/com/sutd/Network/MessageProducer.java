@@ -1,6 +1,8 @@
 package com.sutd.Network;
 
 import java.io.BufferedReader;
+import java.io.IOException;
+import java.net.SocketException;
 import java.util.concurrent.BlockingQueue;
 
 /**
@@ -32,9 +34,16 @@ public class MessageProducer extends Thread {
 				boolean offered = buffer.offer(id+";"+message);
 				//if(offered) System.out.println("Add to buffer"+ id +";" + message);
 
-			} catch (Exception e) {
-				e.printStackTrace();
+			} catch (IOException e) {
+				System.out.println("Producer Closing...");
+				break;
 			}
+		}
+		try {
+			reader.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 }	

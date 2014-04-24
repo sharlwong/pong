@@ -24,11 +24,12 @@ public class MessageConsumer extends Thread{
         	}
         catch (InterruptedException e) {
         	// TODO Auto-generated catch block
-        	e.printStackTrace();
+        	System.out.println("Consumer Interrupted. Exiting....");
+        	return;
         	}
         catch (IndexOutOfBoundsException e) {
-        	e.printStackTrace();
-        	
+        	System.out.println("Got null..ie closed!");
+        	break;
         	}
 		}
 	}

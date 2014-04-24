@@ -23,7 +23,7 @@ public class PongGame extends Game {
 
 	@Override
 	public void dispose() {
-
+		getScreen().dispose();
 	}
 
 	@Override
