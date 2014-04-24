@@ -20,7 +20,7 @@ public class Ball {
 	private double   speedMultiplier;
 
 	public Ball(Vector2D startPosition, Vector2D startVelocity, long startTimeMillis, int type) {
-		this(startPosition, startVelocity, startTimeMillis, type, 1)
+		this(startPosition, startVelocity, startTimeMillis, type, 1);
 	}
 
 	public Ball(Vector2D startPosition, Vector2D startVelocity, long startTimeMillis, int type, double speedMultiplier) {
@@ -51,7 +51,7 @@ public class Ball {
 
 		/* how fast must it move to get there on time */
 		double realSpeed = distanceToTravel / (realEndTimeMillis - initTime);
-		velocity = initialVelocity.makeUnitVector().multiply(realSpeed);
+		velocity = initialVelocity.makeUnitVector().multiply(realSpeed).multiply(speedMultiplier);
 
 		/* setup ball at time zero */
 		updateCurrentTime(startTimeMillis);

@@ -35,7 +35,7 @@ public class Paddle {
 		if (!playerBottom) yVelocity = 0 - yVelocity;
 		Vector2D outVelocity = new Vector2D(b.getCurrentPosition().x - paddleCenter.x, yVelocity);
 		outVelocity.makeUnitVector().multiply(Constants.BALL_SPEED);
-		return new Ball(b.getCurrentPosition(), outVelocity, currentTimeMillis, b.getType(), b.getSpeedMultiplier);
+		return new Ball(b.getCurrentPosition(), outVelocity, currentTimeMillis, b.getType(), b.getSpeedMultiplier());
 	}
 
 	/**

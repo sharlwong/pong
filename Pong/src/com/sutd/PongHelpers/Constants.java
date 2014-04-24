@@ -56,6 +56,8 @@ public class Constants {
 	public final static int GAME_TIME               = 20;
 	public static final int BALL_FREQUENCY 		= 300;
 	public static final double ANGLE_WIDENER = 3;
+	public static final double BALL_MAX_SPEED = 1.5;
+	public static final double BALL_MIN_SPEED = 0.5;
 
 	public Constants(Dimension d) {
 		this.screen = d;

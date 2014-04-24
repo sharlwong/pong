@@ -122,10 +122,10 @@ public class GameWorld {
 		Vector2D speed;
 		if (Math.abs(speed1) < Math.abs(speed2)) speed = new Vector2D(speed1, speed2);
 		else speed = new Vector2D(speed2, speed1);
-		double speedMultiplier = random.nextDouble * 1.5 + 0.5;
+		double speedMultiplier = random.nextDouble() * (Constants.BALL_MAX_SPEED - Constants.BALL_MIN_SPEED) + (Constants.BALL_MIN_SPEED);
 
 		/* make new ball */
-		synchronized (balls) { balls.add(new Ball(position, speed, elapsedTimeMillis, ballType));}
+		synchronized (balls) { balls.add(new Ball(position, speed, elapsedTimeMillis, ballType, speedMultiplier));}
 	}
 
 	/**
