@@ -40,9 +40,20 @@ public class GameScreen implements Screen {
     public void render(float delta) {
         runTime += delta;
         game_renderer.render(runTime);
+        if(game_renderer.disconnect) {
+        	handleDisconnect();
+        	return;
+        }
         pong_game.client.sendMessage("player_position;"+player_paddle.getTransformedFractionalPosition(pong_game.player));
     }
 
+	private void handleDisconnect() {
+		pong_game.client.tearDown();
+		pong_game.client = null;
+		pong_game.server = null;
+		pong_game.setScreen(new StartScreen(pong_game));	
+	}
+	
     @Override
     public void resize(int width, int height) {
     }

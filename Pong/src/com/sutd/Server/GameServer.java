@@ -39,6 +39,7 @@ public class GameServer extends Thread {
 	private GameWorld game_world;
 	private CountDownLatch started;
 	private ScheduledExecutorService exec;
+	private ServerBroadcaseter broadcaster;
 
 	public GameServer() {}
 	/**
@@ -61,7 +62,7 @@ public class GameServer extends Thread {
 		serverSocket = Gdx.net.newServerSocket(Protocol.TCP,port, null);
 		System.out.println("Server started at:");
 		//Start broadcasting presence
-		ServerBroadcaseter broadcaster = new ServerBroadcaseter("lhst", "5000");
+		broadcaster = new ServerBroadcaseter("lhst", "5000");
 		broadcaster.start();
 		//mark server as started
 		if(started != null) started.countDown();
@@ -82,6 +83,15 @@ public class GameServer extends Thread {
 		ServerUpdater serverUpdater = new ServerUpdater(game_world, message_service);
 		exec = Executors.newSingleThreadScheduledExecutor();
 		exec.scheduleWithFixedDelay(serverUpdater, 0, Constants.UPDATE_DELTA, TimeUnit.MILLISECONDS);
+		
+		try {
+			consumer.join();
+			System.out.println("Everyhtin gbetter :)");
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 
 	/**
@@ -111,18 +121,30 @@ public class GameServer extends Thread {
 	}
 	
 	public void handleDisconnect(int i) {
-		//probably close stuff here.
-		listeners[i].interrupt();
-		player_sockets[i].dispose();
 		// Tell everyone except i to disconnect!
 		int ignore = i;
 		game_world.disconnect = true;
 		sendDisconnect(ignore);
-
 	}
+
+	/**
+	 * Called from the context of consumer so dont close it here.
+	 * @param ignore
+	 */
 	public void sendDisconnect(int ignore) {
 		//close the updater first
 		exec.shutdownNow();
 		message_service.sendState(game_world.getGameState(), ignore);
+
+		//stop all listeners
+		for(MessageProducer listener: listeners) {
+			listener.interrupt();
+		}
+		for(Socket socket: player_sockets) {
+			socket.dispose();
+		} 
+		broadcaster.interrupt();
+		serverSocket.dispose();
+		consumer.interrupt();
 	}
 }

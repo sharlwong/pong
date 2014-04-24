@@ -17,11 +17,12 @@ public class ServerBroadcaseter extends Thread {
 	}
 
 	public void run() {
+		DatagramSocket socket = null;
 		try {
-			DatagramSocket socket =  new DatagramSocket(8888, InetAddress.getByName("0.0.0.0"));
+			socket =  new DatagramSocket(8888, InetAddress.getByName("0.0.0.0"));
 			socket.setBroadcast(true);
 
-			while(true) {
+			while(!this.isInterrupted()) {
 				byte[] rec_buf = new byte[5000];
 				DatagramPacket packet = new DatagramPacket(rec_buf, rec_buf.length);
 				socket.receive(packet);
@@ -35,6 +36,7 @@ public class ServerBroadcaseter extends Thread {
 				socket.send(sendPacket);
 				System.out.println("SENDING: YES I AM SERVER AT PORT;"+port);
 			}
+			
 
 		} catch (SocketException e) {
 			// TODO Auto-generated catch block
@@ -46,6 +48,8 @@ public class ServerBroadcaseter extends Thread {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		System.out.println("Broadcaster Closing!");
+		if(socket!=null) socket.close();
 	}
 
 }

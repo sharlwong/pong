@@ -52,6 +52,8 @@ public class GameRenderer {
 	int      countDown;
 	int      tick;
 	int		 ballCounter;
+	
+	public boolean disconnect = false;
 
 	BlockingQueue<GameState> buffer;
 
@@ -142,6 +144,7 @@ public class GameRenderer {
 		
 		else if (state.getStatus() == -1) {
 			System.out.println("I need to disconnect");
+			disconnect = true;
 			batcher.end();
 			return;
 		}
