@@ -147,7 +147,7 @@ public class GameWorld {
 	 * @param delta time interval
 	 */
 	public void update(float delta) {
-		updateDeltaTime((long) delta)
+		updateDeltaTime((long) delta);
 	}
 
 	public void updateDeltaTime(long deltaMillis) {
