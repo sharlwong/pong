@@ -105,7 +105,7 @@ public class GameRenderer {
 			System.out.println("Nothing to render...");
 			return;
 		}
-		if (state == null) {
+		else if (state == null) {
 			state = lastKnownState;
 			// System.out.println("Missed frame to render...");
 		}
@@ -133,10 +133,10 @@ public class GameRenderer {
 		
 
 		/* Keep time */
-		if ((timeLeft - tick) == -1) {
+		if ((timeLeft - tick) <= -1) {
 			tick--;
 			System.out.println("Ticks: " + tick);
-			if (countDown > 0) {
+			if (countDown > -1) {
 				countDown--;
 				System.out.println("Countdown: " + countDown);
 			}
@@ -203,7 +203,7 @@ public class GameRenderer {
 		else {
 			
 			/* Game play starts */			
-			if (countDown == 0) {
+			if (countDown == -1) {
 				batcher.draw(game_screen, 0, 0, 136, 204);
 			
 				/* Draw fruitballs. */
@@ -241,19 +241,19 @@ public class GameRenderer {
 			else {
 
 				/* Load instructions screen. */
-				if (countDown > 2) {
+				if (countDown > 1) {
 					batcher.draw(instr_screen, 0, 0, 136, 204);	
 				}
 
 				/* Load the words: READY? GO! */
-				else if (countDown == 2) {
+				else if (countDown == 1) {
 					batcher.draw(game_screen, 0, 0, 136, 204);
 					font.draw(batcher, "READY ?", d.width / 4, d.height / 2 - 20);
 					
 					/* Play short chimp call to signal start of game. */
 					chimp_short.play();
 				}
-				else if (countDown == 1) {
+				else if (countDown == 0) {
 
 					batcher.draw(game_screen, 0, 0, 136, 204);
 					font.draw(batcher, "GO !", 2 * d.width / 5, d.height / 2 - 20);
