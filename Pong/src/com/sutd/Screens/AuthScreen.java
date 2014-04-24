@@ -18,6 +18,7 @@ public class AuthScreen implements Screen{
 	private Rectangle t3_button;
 	private Rectangle t4_button;
 	private Rectangle t5_button;
+	private Rectangle t6_button;
 	private OrthographicCamera cam;
     private ShapeRenderer shapeRenderer;
     private SpriteBatch batcher;
@@ -36,10 +37,11 @@ public class AuthScreen implements Screen{
         batcher.setProjectionMatrix(cam.combined);
         font = AssetLoader.font;
         
-        t2_button = new Rectangle(20,64,95,25);
-		t3_button = new Rectangle(20,94,95,25);
-		t4_button = new Rectangle(20,124,95,25);
-		t5_button = new Rectangle(20,154,95,25);
+        t2_button = new Rectangle(20,54,95,25);
+		t3_button = new Rectangle(20,84,95,25);
+		t4_button = new Rectangle(20,114,95,25);
+		t5_button = new Rectangle(20,144,95,25);
+		t6_button = new Rectangle(20,174,95,25);
 		
 		auth_screen = AssetLoader.auth_screen;
 	}
@@ -61,6 +63,7 @@ public class AuthScreen implements Screen{
         shapeRenderer.rect(t3_button.x, t3_button.y, t3_button.width, t3_button.height);
         shapeRenderer.rect(t4_button.x, t4_button.y, t4_button.width, t4_button.height);
         shapeRenderer.rect(t5_button.x, t5_button.y, t5_button.width, t5_button.height);
+        shapeRenderer.rect(t6_button.x, t6_button.y, t6_button.width, t6_button.height);
         shapeRenderer.end();
         Gdx.gl.glDisable(GL10.GL_BLEND);
         
@@ -69,6 +72,7 @@ public class AuthScreen implements Screen{
         font.draw(batcher, "T3", t3_button.x + 35, t3_button.y + 5);
         font.draw(batcher, "T4", t4_button.x + 35, t4_button.y + 5);
         font.draw(batcher, "T5", t5_button.x + 35, t5_button.y + 5);
+        font.draw(batcher, "T6", t6_button.x + 35, t6_button.y + 5);
         batcher.end();
         
         check_if_touched();
@@ -97,6 +101,10 @@ public class AuthScreen implements Screen{
 			}else if(x>= Gdx.graphics.getWidth()*((float) t5_button.x/136) && x<= Gdx.graphics.getWidth()*((float)(t5_button.x+t5_button.width)/136) && 
  					y>= Gdx.graphics.getHeight()*((float)t5_button.y/204) && y<=Gdx.graphics.getHeight()*((float)(t5_button.y+t5_button.height)/204)) {
 				game.t = "5";
+				game.setScreen(new StartScreen(game));
+			}else if(x>= Gdx.graphics.getWidth()*((float) t6_button.x/136) && x<= Gdx.graphics.getWidth()*((float)(t6_button.x+t6_button.width)/136) && 
+ 					y>= Gdx.graphics.getHeight()*((float)t6_button.y/204) && y<=Gdx.graphics.getHeight()*((float)(t6_button.y+t6_button.height)/204)) {
+				game.t = "6";
 				game.setScreen(new StartScreen(game));
 			}
 		}
