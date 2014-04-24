@@ -1,11 +1,11 @@
 package multipong;
 
 public class Paddle {
-	public boolean playerBottom;
-	private double max = Constants.WIDTH + Constants.BALL_RADIUS - (Constants.PADDLE_WIDTH / 2);
-	private double min = (Constants.PADDLE_WIDTH / 2) - Constants.BALL_RADIUS;
+	private double max   = Constants.WIDTH + Constants.BALL_RADIUS - (Constants.PADDLE_WIDTH / 2);
+	private double min   = (Constants.PADDLE_WIDTH / 2) - Constants.BALL_RADIUS;
+	private int    score = 0;
 	private Vector2D paddleCenter;
-	private double score = 0;
+	public  boolean  playerBottom;
 
 	public Paddle(int playerNum) {
 		paddleCenter = new Vector2D(-1, Constants.HEIGHT * playerNum);
@@ -18,7 +18,7 @@ public class Paddle {
 		if (!playerBottom) yVelocity = 0 - yVelocity;
 		Vector2D outVelocity = new Vector2D(b.getCurrentPosition().x - paddleCenter.x, yVelocity);
 		outVelocity.makeUnitVector().multiply(Constants.BALL_SPEED);
-		return new Ball(b.getCurrentPosition(), outVelocity, currentTimeMillis, b.getUnusedVariable(), b.getType());
+		return new Ball(b.getCurrentPosition(), outVelocity, currentTimeMillis, b.getType(), b.getSpeedMultiplier());
 	}
 
 	public boolean collisionCheck(Ball b) {
@@ -32,16 +32,14 @@ public class Paddle {
 		return false;
 	}
 
-	public Vector2D getCenter() {
-		return paddleCenter;
-	}
-
-	public int getScore() {
-		return (int) Math.floor(score);
-	}
-
 	public void incrementScore(Ball b) {
-		score += b.getType();
+		score += b.getScore();
+	}
+
+	private void setPosition(double xValue) {
+		paddleCenter.x = xValue;
+		if (paddleCenter.x < min) paddleCenter.x = min;
+		if (paddleCenter.x > max) paddleCenter.x = max;
 	}
 
 	public void setFractionalPosition(double fraction) {
@@ -49,13 +47,28 @@ public class Paddle {
 		setPosition(min + fraction * (max - min));
 	}
 
-	public double getFractionalPosition() {
-		return (paddleCenter.x - min) / (max - min);
+	/**
+	 * @return paddle center coordinates.
+	 */
+	public double[] getXY() {
+		return new double[]{paddleCenter.x, paddleCenter.y};
 	}
 
-	private void setPosition(double xValue) {
-		paddleCenter.x = xValue;
-		if (paddleCenter.x < min) paddleCenter.x = min;
-		if (paddleCenter.x > max) paddleCenter.x = max;
+	/**
+	 * @return paddle center coordinates in the form of Vector2D
+	 */
+	public Vector2D getCenter() {
+		return paddleCenter;
+	}
+
+	/**
+	 * @return current score of the paddle controller
+	 */
+	public int getScore() {
+		return score;
+	}
+
+	public double getFractionalPosition() {
+		return (paddleCenter.x - min) / (max - min);
 	}
 }

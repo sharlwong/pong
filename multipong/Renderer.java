@@ -74,55 +74,23 @@ public class Renderer extends JPanel implements Runnable {
 		player0 = calc.makePaddleXY(state.getPlayer0Data(), 0);
 		player1 = calc.makePaddleXY(state.getPlayer1Data(), 1);
 		scores = state.getScores();
-		ballDoubles = state.getSpareVar();
 		ballTypes = state.getBallsType();
 
 		/* render all the balls */
 		for (int i = 0; i < balls.length; i++) {
-			int type = (int) Math.floor(ballDoubles[i]);
+			int type = (int) Math.floor(ballTypes[i]);
 			switch (type) {
 				case 0:
-					g.setColor(Color.BLACK);
-					break;
-				case 1:
 					g.setColor(Color.ORANGE);
 					break;
-				case 2:
-					g.setColor(Color.WHITE);
-					break;
-				case 3:
-					g.setColor(Color.DARK_GRAY);
-					break;
-				case 4:
+				case 1:
 					g.setColor(Color.GREEN);
 					break;
-				case 5:
-					g.setColor(Color.MAGENTA);
-					break;
-				case 6:
-					g.setColor(Color.YELLOW);
-					break;
-				case 7:
-					g.setColor(Color.PINK);
-					break;
-				case 8:
-					g.setColor(Color.CYAN);
-					break;
-				case 9:
-					g.setColor(Color.GRAY);
-					break;
-				case 10:
-					g.setColor(Color.LIGHT_GRAY);
-					break;
-				case 11:
-					g.setColor(Color.BLUE);
-					break;
-				case 12:
+				case 2:
 					g.setColor(Color.RED);
 					break;
 				default:
-					Color BROWN = new Color(165, 42, 42);
-					g.setColor(BROWN);
+					g.setColor(Color.LIGHT_GRAY);
 					break;
 			}
 			drawBall(g, balls[i][0], balls[i][1]);

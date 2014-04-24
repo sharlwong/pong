@@ -1,22 +1,29 @@
 package multipong;
 
 public class Ball {
-	private double   uselessVar;
 	private long     initTime;
 	private Vector2D velocity;
 	private Vector2D initialPosition;
 	private Vector2D currentPosition;
-	private int type;
+	private int      type;
+	private double   speedMultiplier;
 
-	public Ball(Vector2D startPosition, Vector2D startVelocity, long startTimeMillis, double unusedVariable, int type) {
+	public Ball(Vector2D startPosition, Vector2D startVelocity, long startTimeMillis, int type) {
+		this(startPosition, startVelocity, startTimeMillis, type, 1);
+	}
+
+	public Ball(Vector2D startPosition, Vector2D startVelocity, long startTimeMillis, int type, double speedMultiplier) {
 		this.initialPosition = startPosition;
-		this.uselessVar = unusedVariable;
 		this.initTime = startTimeMillis;
 		this.initTime = startTimeMillis;
 		this.type = type;
+		this.speedMultiplier = speedMultiplier;
+
+		/* widen angle */
+		startVelocity.x *= Constants.ANGLE_WIDENER;
 
 		/* error correct starting speed, leaving the direction equal */
-		Vector2D initialVelocity = startVelocity.cpy().makeUnitVector().multiply(Constants.BALL_SPEED);
+		Vector2D initialVelocity = startVelocity.cpy().makeUnitVector().multiply(Constants.BALL_SPEED).multiply(speedMultiplier);
 
 		/* error containment */
 		if (initialVelocity.y == 0) initialVelocity = Vector2D.Y.cpy().makeUnitVector().multiply(Constants.BALL_SPEED);
@@ -33,22 +40,10 @@ public class Ball {
 
 		/* how fast must it move to get there on time */
 		double realSpeed = distanceToTravel / (realEndTimeMillis - initTime);
-		velocity = initialVelocity.makeUnitVector().multiply(realSpeed);
+		velocity = initialVelocity.makeUnitVector().multiply(realSpeed).multiply(speedMultiplier);
 
 		/* setup ball at time zero */
 		updateCurrentTime(startTimeMillis);
-	}
-
-	public int getType() {
-		return type;
-	}
-
-	public double getUnusedVariable() {
-		return uselessVar;
-	}
-
-	public Vector2D getCurrentPosition() {
-		return currentPosition;
 	}
 
 	public void updateCurrentTime(long currentTimeMillis) {
@@ -73,5 +68,27 @@ public class Ball {
 
 	public boolean isMovingUp() {
 		return velocity.y > 0;
+	}
+
+	/**
+	 * @return Ball Type (Integer, 0, 1, or 2)
+	 */
+	public int getType() {
+		return type;
+	}
+
+	/**
+	 * @return Score of the ball (Integer, 1, 2, or 3)
+	 */
+	public int getScore() {
+		return type + 1;
+	}
+
+	public Vector2D getCurrentPosition() {
+		return currentPosition;
+	}
+
+	public double getSpeedMultiplier() {
+		return speedMultiplier;
 	}
 }
