@@ -1,4 +1,4 @@
-dpackage com.sutd.PongHelpers;
+package com.sutd.PongHelpers;
 
 public class Vector2D {
 	public static final Vector2D X    = new Vector2D(1, 0);
