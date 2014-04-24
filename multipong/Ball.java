@@ -8,25 +8,18 @@ public class Ball {
 	private int      type;
 	private double   speedMultiplier;
 
-	public Ball(Vector2D startPosition, Vector2D startVelocity, long startTimeMillis, int type) {
-		this(startPosition, startVelocity, startTimeMillis, type, 1);
-	}
-
 	public Ball(Vector2D startPosition, Vector2D startVelocity, long startTimeMillis, int type, double speedMultiplier) {
 		this.initialPosition = startPosition;
 		this.initTime = startTimeMillis;
-		this.initTime = startTimeMillis;
 		this.type = type;
-		this.speedMultiplier = speedMultiplier;
+		this.speedMultiplier = speedMultiplier <= 0 ? 0.1 : speedMultiplier;
 
-		/* widen angle */
-		startVelocity.x *= Constants.ANGLE_WIDENER;
-
-		/* error correct starting speed, leaving the direction equal */
-		Vector2D initialVelocity = startVelocity.cpy().makeUnitVector().multiply(Constants.BALL_SPEED).multiply(speedMultiplier);
+		/* widen starting velocity angle */
+		Vector2D initialVelocity = startVelocity.cpy().multiply(Constants.ANGLE_WIDENER);
 
 		/* error containment */
-		if (initialVelocity.y == 0) initialVelocity = Vector2D.Y.cpy().makeUnitVector().multiply(Constants.BALL_SPEED);
+		if (initialVelocity.y == 0)
+			initialVelocity = Vector2D.Y.cpy();
 
 		/* how far does the ball move to the paddle line */
 		double distanceToTravel;
@@ -34,13 +27,13 @@ public class Ball {
 			distanceToTravel = (Constants.HEIGHT - startPosition.y) * (initialVelocity.length() / Math.abs(initialVelocity.y));
 		else distanceToTravel = startPosition.y * (initialVelocity.length() / Math.abs(initialVelocity.y));
 
-		/* when is it supposed to the paddle line */
+		/* when is it supposed to the paddle line, rounded to the nearest millisecond */
 		double realTimeTakenMillis = distanceToTravel / Constants.BALL_SPEED;
 		long realEndTimeMillis = initTime + (long) realTimeTakenMillis;
 
-		/* how fast must it move to get there on time */
+		/* how fast must it move to get there on time, times the speed constant */
 		double realSpeed = distanceToTravel / (realEndTimeMillis - initTime);
-		velocity = initialVelocity.makeUnitVector().multiply(realSpeed).multiply(speedMultiplier);
+		this.velocity = initialVelocity.makeUnitVector().multiply(realSpeed).multiply(speedMultiplier);
 
 		/* setup ball at time zero */
 		updateCurrentTime(startTimeMillis);
