@@ -31,8 +31,7 @@ public class StartRenderer {
     
     private SpriteBatch batcher;
 	private TextureRegion splash_screen, sound_icon;
-	private Texture texture;
-	
+
 	private void initAssets() {
 		splash_screen = AssetLoader.splash_screen;
 		sound_icon = AssetLoader.sound_icon;
@@ -47,8 +46,6 @@ public class StartRenderer {
         
         batcher = new SpriteBatch();
 		batcher.setProjectionMatrix(cam.combined);
-		texture = new Texture(Gdx.files.internal("data/texture.png"));
-		texture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 		
 		initAssets();
     }

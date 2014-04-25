@@ -185,7 +185,7 @@ public class GameWorld {
 		boolean firstBallIn = init > 0 && (elapsedTimeMillis > Constants.START_GAME_DELAY) && (balls.size() == 0);
 		boolean ballInjectionIsOn = (injectBalls > 0) && (injectBalls < elapsedTimeMillis);
 		boolean tickInject = (int) elapsedTimeMillis / Constants.BALL_FREQUENCY > (int) temp / Constants.BALL_FREQUENCY;
-		tickInject = tickInject && (balls.size() < 7);
+		tickInject = tickInject && (balls.size() < Constants.BALL_MAX_NUMBER_ONSCREEN);
 		/* inject ball */
 		if (firstBallIn || ballInjectionIsOn || tickInject) injectRandomBall();
 
