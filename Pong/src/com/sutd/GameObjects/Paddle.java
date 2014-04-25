@@ -16,11 +16,17 @@ public class Paddle {
 	private int    score = 0;
 	private Vector2D paddleCenter;
 	public  boolean  playerBottom;
+	private 	int 	orange;
+	private 	int 	kiwi;
+	private 	int 	watermelon;
 
 	public Paddle(int playerNum) {
 		paddleCenter = new Vector2D(-1, Constants.HEIGHT * playerNum);
 		setFractionalPosition(0.5);
 		this.playerBottom = (playerNum == 0);
+		this.orange = 0;
+		this.kiwi = 0;
+		this.watermelon = 0;
 	}
 
 	/**
@@ -65,6 +71,13 @@ public class Paddle {
 	 */
 	public void incrementScore(Ball b) {
 		score += b.getScore();
+		if (b.getScore() == 1){
+			orange ++;
+		}else if(b.getScore() == 2){
+			kiwi ++;
+		}else if(b.getScore() == 3){
+			watermelon ++;
+		}
 	}
 
 	/**
@@ -122,5 +135,17 @@ public class Paddle {
 	 */
 	public double getTransformedFractionalPosition(int player) {
 		return Math.abs(player - getFractionalPosition());
+	}
+	
+	public int getOrange(){
+		return orange;
+	}
+	
+	public int getKiwi(){
+		return kiwi;
+	}
+	
+	public int getWatermelon(){
+		return watermelon;
 	}
 }

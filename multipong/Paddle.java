@@ -1,15 +1,17 @@
 package multipong;
 
 public class Paddle {
-	private double max   = Constants.WIDTH + Constants.BALL_RADIUS - (Constants.PADDLE_WIDTH / 2);
-	private double min   = (Constants.PADDLE_WIDTH / 2) - Constants.BALL_RADIUS;
-	private int    score = 0;
+	private double   max;
+	private double   min;
+	private int      score;
 	private Vector2D paddleCenter;
 	public  boolean  playerBottom;
 
 	public Paddle(int playerNum) {
-		paddleCenter = new Vector2D(-1, Constants.HEIGHT * playerNum);
-		setFractionalPosition(0.5);
+		this.max = Constants.WIDTH + Constants.BALL_RADIUS - (Constants.PADDLE_WIDTH / 2);
+		this.min = (Constants.PADDLE_WIDTH / 2) - Constants.BALL_RADIUS;
+		this.score = 0;
+		this.paddleCenter = new Vector2D(Constants.WIDTH / 2, Constants.HEIGHT * playerNum);
 		this.playerBottom = (playerNum == 0);
 	}
 

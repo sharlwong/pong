@@ -20,6 +20,16 @@ public class GameUpdater implements MessageHandler {
 		Gson gson = new Gson();
 		GameState state = gson.fromJson(message, GameState.class);
 		if (player == 1) state = state.flip();
+		if (state.getStatus() == -1) { 
+			// We need to force the buffer to accept this
+			System.out.println("Yes Clinet exit state :)");
+			try {
+				stateBuffer.put(state);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 		stateBuffer.offer(state);
+		//System.out.println(state.getOrange()[0]);
 	}
 }

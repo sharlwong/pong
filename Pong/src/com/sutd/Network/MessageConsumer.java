@@ -17,18 +17,22 @@ public class MessageConsumer extends Thread{
         	String message = buffer.take();
         	String[] data = message.split(";");
         	int id = Integer.parseInt(data[0]);
-        	
+        	if(data[1].equals("null")) {
+        		System.out.println("Got Null from:"+id);
+        		break;
+        	}
         	// Message is passed to handler to handle.
         	handler.handle(id,data[1],data[2]);
         	
         	}
         catch (InterruptedException e) {
         	// TODO Auto-generated catch block
-        	e.printStackTrace();
+        	System.out.println("Consumer Interrupted. Exiting....");
+        	return;
         	}
         catch (IndexOutOfBoundsException e) {
-        	e.printStackTrace();
-        	
+        	System.out.println("Got null..ie closed!");
+        	break;
         	}
 		}
 	}

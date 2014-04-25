@@ -40,7 +40,8 @@ public class GameRenderer {
 	int[] player0;
 	int[] player1;
 	
-	private TextureRegion watermelon, kiwi, orange, wait_screen, story_screen, fruit_pt_screen, game_screen, paddle_top, paddle_bottom;
+
+	private TextureRegion watermelon, kiwi, orange, wait_screen, story_screen, fruit_pt_screen, game_screen, paddle_top, paddle_bottom, coco;
 	private GameState lastKnownState;
 	private Music     chimp_long, chimp_short;
 
@@ -52,6 +53,12 @@ public class GameRenderer {
 	int      countDown;
 	int      tick;
 	int		 ballCounter;
+	
+	public boolean disconnect = false;
+
+	int 	orangeP0;
+	int 	kiwiP0;
+	int 	watermelonP0;
 
 	BlockingQueue<GameState> buffer;
 
@@ -86,6 +93,7 @@ public class GameRenderer {
 		fruit_pt_screen = AssetLoader.fruit_pt_screen;
 		chimp_long = AssetLoader.chimp_long;
 		chimp_short = AssetLoader.chimp_short;
+		coco = AssetLoader.coco;
 	}
 
 	public void render(float runTime) {
@@ -99,7 +107,7 @@ public class GameRenderer {
 			System.out.println("Nothing to render...");
 			return;
 		}
-		if (state == null) {
+		else if (state == null) {
 			state = lastKnownState;
 			// System.out.println("Missed frame to render...");
 		}
@@ -120,12 +128,17 @@ public class GameRenderer {
 
 		String score0 = scores[0] + "";
 		String score1 = scores[1] + "";
+		
+		orangeP0 = state.getOrange()[0];
+		kiwiP0 = state.getKiwi()[0];
+		watermelonP0 = state.getWatermelon()[0];
+		
 
 		/* Keep time */
-		if ((timeLeft - tick) == -1) {
+		if ((timeLeft - tick) <= -1) {
 			tick--;
 			System.out.println("Ticks: " + tick);
-			if (countDown > 0) {
+			if (countDown > -1) {
 				countDown--;
 				System.out.println("Countdown: " + countDown);
 			}
@@ -141,24 +154,48 @@ public class GameRenderer {
 			batcher.draw(wait_screen, 0, 0, 136, 204);
 		}
 		
+		else if (state.getStatus() == -1) {
+			System.out.println("I need to disconnect");
+			disconnect = true;
+			batcher.end();
+			return;
+		}
+		
 		/* Game over */
 		else if (timeLeft == 0) {
 			
+			
+			
 			batcher.draw(game_screen, 0, 0, 136, 204);
-			font.draw(batcher, "GAME OVER", d.width / 2 - 48, d.height / 2 - 40);
+			batcher.draw(coco, d.width/8, d.height/10, d.width/4, d.width/4);
+			
 			
 			/* Handle conclusion of game - whether there is a winner or not, and if the player is the winner. */
-			if (scores[0] > scores[1]) font.draw(batcher, "YOU WIN !", d.width / 2 - 40, d.height / 2 - 20);
-			else if (scores[0] < scores[1]) font.draw(batcher, "YOU LOSE", d.width / 2 - 37, d.height / 2 - 20);
-			else font.draw(batcher, "TIE", d.width / 2 - 10, d.height / 2 - 20);
+			if (scores[0] > scores[1]) font.draw(batcher, "WIN !", d.width / 2, d.height/9);
+			else if (scores[0] < scores[1]) font.draw(batcher, "LOSE", d.width / 2, d.height/9);
+			else font.draw(batcher, "TIE", d.width / 2, d.height/9);
+			
+			
+			font.draw(batcher, Integer.toString(orangeP0), d.width / 2 - 48, d.height / 2 - 40);
+			font.draw(batcher, Integer.toString(kiwiP0), d.width / 2 - 48, d.height / 2 - 20);
+			font.draw(batcher, Integer.toString(watermelonP0), d.width / 2 - 48, d.height / 2);
+			
+			font.draw(batcher, "x", d.width / 2 - 25, d.height / 2 - 40);
+			font.draw(batcher, "x", d.width / 2 - 25, d.height / 2 - 20);
+			font.draw(batcher, "x", d.width / 2 - 25, d.height / 2);
+			
+			batcher.draw(orange, d.width / 2, d.height / 2 - 40, 2 * (int) calc.getBallPixelRadius()  * 7/6, 2 * (int) calc.getBallPixelRadius()  * 7/6);
+			batcher.draw(kiwi, d.width / 2, d.height / 2 - 20, 2 * (int) calc.getBallPixelRadius()  * 7/6, 2 * (int) calc.getBallPixelRadius()  * 7/6);
+			batcher.draw(watermelon, d.width / 2, d.height / 2 , 2 * (int) calc.getBallPixelRadius()  * 7/6, 2 * (int) calc.getBallPixelRadius()  * 7/6);
 			
 			/* Show final scores of both players. */
-			font.draw(batcher, score0 + " : " + score1, d.width / 2 - 3 * ( score0.length() + 5), d.height / 2);
+			font.draw(batcher, "=", d.width / 5, d.height / 2 + 30);
+			font.draw(batcher, score0 + " : " + score1, d.width / 2 - 2 * ( score0.length() + 5), d.height / 2 + 30);
 			
 			/* Play again? If so, instantiate countDown and tick to original values. */
 			font.draw(batcher, "AGAIN ?", 2 * d.width / 7, d.height - 40);
-			countDown = Constants.AGAIN_COUNT_DOWN_SECOND;
-			tick = Constants.GAME_TIME + Constants.AGAIN_COUNT_DOWN_SECOND;
+			countDown = Constants.AGAIN_COUNT_DOWN_SECOND - 1;
+			tick = Constants.GAME_TIME + Constants.AGAIN_COUNT_DOWN_SECOND - 1;
 
 			/* Play short chimp call to signal start of another new game. */
 			chimp_short.play();
@@ -168,7 +205,7 @@ public class GameRenderer {
 		else {
 			
 			/* Game play starts */			
-			if (countDown == 0) {
+			if (countDown == -1) {
 				batcher.draw(game_screen, 0, 0, 136, 204);
 			
 				/* Draw fruitballs. */
@@ -212,16 +249,17 @@ public class GameRenderer {
 				}
 
 				/* Load fruit points screen. */
-				if (countDown > 2 && countDown < 8) {
+				if (countDown >= 2 && countDown < 8) {
 					batcher.draw(fruit_pt_screen, 0, 0, 136, 204);	
 					System.out.println("Fruit point screen");
 					
 					/* Draw bottom paddle. */
 					drawBottomPaddle(player0[0], player0[1]);
+
 				}
 
 				/* Load the words: READY? GO! */
-				else if (countDown == 2) {
+				else if (countDown == 1) {
 					batcher.draw(game_screen, 0, 0, 136, 204);
 					font.draw(batcher, "READY ?", d.width / 4, d.height / 2 - 20);
 					
@@ -231,7 +269,7 @@ public class GameRenderer {
 					/* Draw bottom paddle. */
 					drawBottomPaddle(player0[0], player0[1]);
 				}
-				else if (countDown == 1) {
+				else if (countDown == 0) {
 
 					batcher.draw(game_screen, 0, 0, 136, 204);
 					font.draw(batcher, "GO !", 2 * d.width / 5, d.height / 2 - 20);

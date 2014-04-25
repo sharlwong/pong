@@ -32,6 +32,10 @@ class MessageService implements MessageHandler {
 		if(type.equals("player_position")) {
 			server.setPaddle(Double.parseDouble(message), i);
 		}
+		else if (type.equals("disconnect_event")) {
+			System.out.println("Disconnect EVENTTT!!");
+			server.handleDisconnect(i);
+		}
 	}
 
 	// Broadcast Messages to all clients.
@@ -42,15 +46,20 @@ class MessageService implements MessageHandler {
 			if(i == ignore) continue; // don't send message to the sender!
 			out[i].println(message);
 			out[i].flush();
+			//System.out.println(message);
 		}
 	}
 	public synchronized void send(String message) {
 		send(message,-1);
 	}
 
-	public synchronized void sendState(GameState state) {
+	public synchronized void sendState(GameState state, int ignore) {
 		String type = "game_update;";
-		send(type+getJSONfromState(state));
+		send(type+getJSONfromState(state), ignore);
+	}
+	
+	public synchronized void sendState(GameState state) {
+		sendState(state,-1);
 	}
 
 	public synchronized void sendStateToSocket(GameState gameState, int i) {

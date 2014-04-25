@@ -28,7 +28,7 @@ public class Ball {
 		this.initTime = startTimeMillis;
 		this.initTime = startTimeMillis;
 		this.type = type;
-		this.speedMultiplier = speedMultiplier;
+		this.speedMultiplier = speedMultiplier <= 0 ? 0.1 : speedMultiplier;
 		
 		/* widen angle */
 		startVelocity.x *= Constants.ANGLE_WIDENER;

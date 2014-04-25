@@ -27,7 +27,7 @@ public class GameWorld {
 		player1 = new Paddle(1);
 		balls = new ArrayList<Ball>();
 		random = new SecureRandom();
-		random.setSeed(1234567890);
+		random.setSeed(System.currentTimeMillis());
 		injectBalls = 0;
 		ticktock = 0;
 		timeLimit = Constants.GAME_TIME + Constants.COUNT_DOWN_SECOND;

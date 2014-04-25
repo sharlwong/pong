@@ -28,6 +28,7 @@ public class GameWorld {
 	private       long         injectBalls;
 	private       int          init;
 	public        boolean      ready;
+	public        boolean      disconnect;
 	public        boolean      gameover;
 	public        int          ticktock;
 	public        int          timeLimit; //maximum time for each round
@@ -48,6 +49,7 @@ public class GameWorld {
 		ticktock = 0;
 		timeLimit = Constants.GAME_TIME + Constants.COUNT_DOWN_SECOND;
 		ready = false;
+		disconnect = false;
 		gameover = false;
 		bounce = AssetLoader.bounce;
 		System.out.println("Game initialized, please wait for start...");
@@ -82,7 +84,8 @@ public class GameWorld {
 		out.setBallsType(ballsType);
 
 		/* set game status */
-		out.setStatus(ready ? 1 : 0);
+		if(disconnect) out.setStatus(-1);
+		else out.setStatus(ready ? 1 : 0);
 
 		/* set player data */
 		temp = player0.getCenter();
@@ -93,6 +96,10 @@ public class GameWorld {
 		/* set scores */
 		out.setScores(new int[]{player0.getScore(), player1.getScore()});
 		out.setTimeLeft(getSecondLeft());
+		
+		out.setOrange(player0.getOrange(), player1.getOrange());
+		out.setKiwi(player0.getKiwi(), player1.getKiwi());
+		out.setWatermelon(player0.getWatermelon(), player1.getWatermelon());
 
 		/* done */
 		return out;
