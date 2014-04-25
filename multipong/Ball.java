@@ -18,8 +18,7 @@ public class Ball {
 		Vector2D initialVelocity = startVelocity.cpy().multiply(Constants.ANGLE_WIDENER);
 
 		/* error containment */
-		if (initialVelocity.y == 0)
-			initialVelocity = Vector2D.Y.cpy();
+		if (initialVelocity.y == 0) initialVelocity = Vector2D.Y.cpy();
 
 		/* how far does the ball move to the paddle line */
 		double distanceToTravel;
@@ -27,19 +26,22 @@ public class Ball {
 			distanceToTravel = (Constants.HEIGHT - startPosition.y) * (initialVelocity.length() / Math.abs(initialVelocity.y));
 		else distanceToTravel = startPosition.y * (initialVelocity.length() / Math.abs(initialVelocity.y));
 
-		/* when is it supposed to the paddle line, rounded to the nearest millisecond */
-		double realTimeTakenMillis = distanceToTravel / Constants.BALL_SPEED;
+		/* when is it supposed to the paddle line, rounded to the nearest delta */
+		double realTimeTakenMillis = distanceToTravel / (Constants.BALL_SPEED * speedMultiplier);
 		long realEndTimeMillis = initTime + (long) realTimeTakenMillis;
+		realEndTimeMillis += Constants.UPDATE_DELTA - (realEndTimeMillis % Constants.UPDATE_DELTA);
 
 		/* how fast must it move to get there on time, times the speed constant */
 		double realSpeed = distanceToTravel / (realEndTimeMillis - initTime);
-		this.velocity = initialVelocity.makeUnitVector().multiply(realSpeed).multiply(speedMultiplier);
+		this.velocity = initialVelocity.makeUnitVector().multiply(realSpeed);
 
 		/* setup ball at time zero */
 		updateCurrentTime(startTimeMillis);
 	}
 
 	public void updateCurrentTime(long currentTimeMillis) {
+		Vector2D temp = Vector2D.ZERO.cpy();
+		if (currentPosition != null) temp = currentPosition.cpy();
 		long timeTravelled = currentTimeMillis - initTime;
 		timeTravelled = timeTravelled < 0 ? 0 : timeTravelled;
 		Vector2D youAreHere = new Vector2D(initialPosition);
@@ -48,6 +50,9 @@ public class Ball {
 			if (youAreHere.x < 0) youAreHere.x = 0 - youAreHere.x;
 			if (youAreHere.x > Constants.WIDTH) youAreHere.x = 2 * Constants.WIDTH - youAreHere.x;
 		}
+		if (currentPosition != null && temp.y > 0 && youAreHere.y < 0) youAreHere.y = 0;
+		if (currentPosition != null && temp.y < Constants.HEIGHT && youAreHere.y > Constants.HEIGHT)
+			youAreHere.y = Constants.HEIGHT;
 		currentPosition = youAreHere;
 	}
 

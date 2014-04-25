@@ -133,7 +133,8 @@ public class GameWorld {
 
 		/* increment time */
 		long temp = elapsedTimeMillis;
-		elapsedTimeMillis += deltaMillis;
+//		elapsedTimeMillis += deltaMillis;
+		elapsedTimeMillis += Constants.UPDATE_DELTA;
 		if ((int) elapsedTimeMillis / 1000 > (int) temp / 1000) ticktock++;
 
 		/* countdown */
