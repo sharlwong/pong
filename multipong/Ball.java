@@ -8,6 +8,15 @@ public class Ball {
 	private int      type;
 	private double   speedMultiplier;
 
+	/**
+	 * a constructor, to construct a ball
+	 *
+	 * @param startPosition   where the ball starts
+	 * @param startVelocity   direction of travel
+	 * @param startTimeMillis time of birth
+	 * @param type            its color and weight
+	 * @param speedMultiplier how fast it is moving
+	 */
 	public Ball(Vector2D startPosition, Vector2D startVelocity, long startTimeMillis, int type, double speedMultiplier) {
 		this.initialPosition = startPosition;
 		this.initTime = startTimeMillis;
@@ -18,8 +27,7 @@ public class Ball {
 		Vector2D initialVelocity = startVelocity.cpy().multiply(Constants.ANGLE_WIDENER);
 
 		/* error containment */
-		if (initialVelocity.y == 0)
-			initialVelocity = Vector2D.Y.cpy();
+		if (initialVelocity.y == 0) initialVelocity = Vector2D.Y.cpy();
 
 		/* how far does the ball move to the paddle line */
 		double distanceToTravel;
@@ -27,35 +35,68 @@ public class Ball {
 			distanceToTravel = (Constants.HEIGHT - startPosition.y) * (initialVelocity.length() / Math.abs(initialVelocity.y));
 		else distanceToTravel = startPosition.y * (initialVelocity.length() / Math.abs(initialVelocity.y));
 
-		/* when is it supposed to the paddle line, rounded to the nearest millisecond */
-		double realTimeTakenMillis = distanceToTravel / Constants.BALL_SPEED;
+		/* when is it supposed to the paddle line, rounded to the nearest delta */
+		double realTimeTakenMillis = distanceToTravel / (Constants.BALL_SPEED * speedMultiplier);
 		long realEndTimeMillis = initTime + (long) realTimeTakenMillis;
+		realEndTimeMillis += Constants.UPDATE_DELTA - (realEndTimeMillis % Constants.UPDATE_DELTA);
 
 		/* how fast must it move to get there on time, times the speed constant */
 		double realSpeed = distanceToTravel / (realEndTimeMillis - initTime);
-		this.velocity = initialVelocity.makeUnitVector().multiply(realSpeed).multiply(speedMultiplier);
+		this.velocity = initialVelocity.makeUnitVector().multiply(realSpeed);
 
 		/* setup ball at time zero */
 		updateCurrentTime(startTimeMillis);
 	}
 
+	/**
+	 * the ball needs to know what time it is
+	 * so it can appear there when asked where it is
+	 *
+	 * @param currentTimeMillis is the current time in milliseconds
+	 */
 	public void updateCurrentTime(long currentTimeMillis) {
+		Vector2D temp = Vector2D.ZERO.cpy();
+
+		/* save a copy */
+		if (currentPosition != null) temp = currentPosition.cpy();
+
+		/* imaginary position */
 		long timeTravelled = currentTimeMillis - initTime;
 		timeTravelled = timeTravelled < 0 ? 0 : timeTravelled;
 		Vector2D youAreHere = new Vector2D(initialPosition);
 		youAreHere.add(velocity.cpy().multiply(timeTravelled));
+
+		/* reflection */
 		while (youAreHere.x < 0 || youAreHere.x > Constants.WIDTH) {
 			if (youAreHere.x < 0) youAreHere.x = 0 - youAreHere.x;
 			if (youAreHere.x > Constants.WIDTH) youAreHere.x = 2 * Constants.WIDTH - youAreHere.x;
 		}
+
+		/* forcing it to float */
+		if (currentPosition != null && temp.y > 0 && youAreHere.y < 0) youAreHere.y = 0;
+		if (currentPosition != null && temp.y < Constants.HEIGHT && youAreHere.y > Constants.HEIGHT)
+			youAreHere.y = Constants.HEIGHT;
+
+		/* done now return */
 		currentPosition = youAreHere;
 	}
 
+	/**
+	 * is the ball alive
+	 *
+	 * @return yes or no
+	 */
 	public boolean inGame() {
+
+		/* below bottom line */
 		if (currentPosition.y < (0 - Constants.PADDLE_EFFECTIVE_DEPTH - Constants.EDGE_PADDING) && velocity.y < 0)
 			return false;
+
+		/* above top line */
 		if (currentPosition.y > (Constants.HEIGHT + Constants.PADDLE_EFFECTIVE_DEPTH + Constants.EDGE_PADDING) && velocity.y > 0)
 			return false;
+
+		/* within bounds */
 		return true;
 	}
 
@@ -64,23 +105,41 @@ public class Ball {
 	}
 
 	/**
-	 * @return Ball Type (Integer, 0, 1, or 2)
+	 * what kind of ball is it
+	 * 0 -> yellow
+	 * 1 -> green
+	 * 2 -> red
+	 *
+	 * @return type number
 	 */
 	public int getType() {
 		return type;
 	}
 
 	/**
-	 * @return Score of the ball (Integer, 1, 2, or 3)
+	 * whats the weight of the ball
+	 * hint: it's the type plus one
+	 *
+	 * @return weight
 	 */
 	public int getScore() {
 		return type + 1;
 	}
 
+	/**
+	 * where is the ball
+	 *
+	 * @return here it is
+	 */
 	public Vector2D getCurrentPosition() {
 		return currentPosition;
 	}
 
+	/**
+	 * how fast is the ball
+	 *
+	 * @return speed relative to default
+	 */
 	public double getSpeedMultiplier() {
 		return speedMultiplier;
 	}
