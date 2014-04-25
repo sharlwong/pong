@@ -7,7 +7,6 @@ import java.awt.event.*;
 public class PongMain extends JFrame {
 
 	final static Dimension dim          = new Dimension(1000, 600);
-	private      JPanel    jContentPane = null;
 	private      Renderer  gameRenderer = null;
 
 	public PongMain() {
@@ -15,7 +14,7 @@ public class PongMain extends JFrame {
 		/* magic methods */
 		super();
 		gameRenderer = new Renderer(dim);
-		jContentPane = new JPanel();
+		JPanel jContentPane = new JPanel();
 		jContentPane.setLayout(new BorderLayout());
 		jContentPane.add(gameRenderer, BorderLayout.CENTER);
 
@@ -74,7 +73,7 @@ public class PongMain extends JFrame {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				PongMain thisClass = new PongMain();
-				thisClass.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+				thisClass.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 				thisClass.setVisible(true);
 			}
 		});

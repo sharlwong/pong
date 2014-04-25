@@ -10,8 +10,7 @@ import com.sutd.PongHelpers.Constants;
 import com.sutd.PongHelpers.Vector2D;
 
 import java.security.SecureRandom;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 
 /**
  * GameWorld is responsible to handle and update balls, paddles and other objects
@@ -20,7 +19,7 @@ import java.util.List;
  * restart the game after one round ends.
  */
 public class GameWorld {
-	private final List<Ball> balls;
+	private final HashSet<Ball> balls;
 
 	public  long         elapsedTimeMillis;
 	private Paddle       player0;
@@ -28,8 +27,8 @@ public class GameWorld {
 	private SecureRandom random;
 	private long         injectBalls;
 	private int          init;
-	private double       sumDeltas;
-	private double       numDeltas;
+	private double       sumTicks;
+	private double       tickCount;
 
 	public  boolean ready;
 	public  boolean disconnect;
@@ -46,7 +45,7 @@ public class GameWorld {
 		elapsedTimeMillis = 0;
 		player0 = new Paddle(0);
 		player1 = new Paddle(1);
-		balls = new ArrayList<Ball>();
+		balls = new HashSet<Ball>();
 		random = new SecureRandom();
 		random.setSeed(System.currentTimeMillis());
 		injectBalls = 0;
@@ -55,8 +54,8 @@ public class GameWorld {
 		ready = false;
 		disconnect = false;
 		gameover = false;
-		sumDeltas = 0;
-		numDeltas = 0;
+		sumTicks = 0;
+		tickCount = 0;
 		System.out.println("Game initialized, please wait for start...");
 	}
 
@@ -66,7 +65,7 @@ public class GameWorld {
 		System.out.println("Player 1: " + player1.getScore());
 		System.out.println("");
 		System.out.println("Ideal delta: " + Constants.UPDATE_DELTA);
-		System.out.println("Average delta: " + (double) Math.round(100 * sumDeltas / numDeltas) / 100.0);
+		System.out.println("Average delta: " + (double) Math.round(100 * sumTicks / tickCount) / 100.0);
 		System.out.println("Done!");
 		System.exit(0);
 	}
@@ -88,14 +87,15 @@ public class GameWorld {
 		Vector2D temp;
 		int[] ballsType = new int[balls.size()];
 		double[][] ballsData = new double[balls.size()][2];
-
+		int i = 0;
 		/* get ball data */
 		synchronized (balls) {
-			for (int i = 0; i < balls.size(); i++) {
-				temp = balls.get(i).getCurrentPosition();
+			for (Ball ball : balls) {
+				temp = ball.getCurrentPosition();
 				ballsData[i][0] = temp.x;
 				ballsData[i][1] = temp.y;
-				ballsType[i] = balls.get(i).getType();
+				ballsType[i] = ball.getType();
+				i++;
 			}
 		}
 
@@ -203,8 +203,8 @@ public class GameWorld {
 	 * @param deltaMillis how long has passed since last update
 	 */
 	public void updateDeltaTime(long deltaMillis) {
-		sumDeltas += deltaMillis;
-		numDeltas++;
+		sumTicks += deltaMillis;
+		tickCount++;
 
 		/* checks whether game is ready to start */
 		if (!ready) return;
@@ -217,25 +217,25 @@ public class GameWorld {
 		/* countdown */
 		if (init >= 0) {
 			/* numbers */
-		if (ticktock <= timeLimit - Constants.GAME_TIME) {
-			if (init != timeLimit - ticktock - Constants.GAME_TIME) {
-				init = timeLimit - ticktock - Constants.GAME_TIME;
-				if (init > 0) System.out.println(init);
-				if (init == 0) System.out.println("Ready");
-			}
+			if (ticktock <= timeLimit - Constants.GAME_TIME) {
+				if (init != timeLimit - ticktock - Constants.GAME_TIME) {
+					init = timeLimit - ticktock - Constants.GAME_TIME;
+					if (init > 0) System.out.println(init);
+					if (init == 0) System.out.println("Ready");
+				}
 				return;
-		}
+			}
 		/* one tick delay */
-		if (init == 0) {
-			System.out.println("Go!");
-			init = -1;
-			return;
-		}
+			if (init == 0) {
+				System.out.println("Go!");
+				init = -1;
+				return;
+			}
 		}
 
 		/* report system lag */
-		if (Math.abs((double) deltaMillis - (sumDeltas / numDeltas)) > (double) Constants.UPDATE_DELTA / 10.0)
-			System.out.println("Unusual delta offset: " + (deltaMillis - (sumDeltas / numDeltas)));
+		if (Math.abs((double) deltaMillis - (sumTicks / tickCount)) > (double) Constants.UPDATE_DELTA / 10.0)
+			System.out.println("Unusual delta offset: " + (deltaMillis - (sumTicks / tickCount)));
 
 		/* conditions under which a ball should be injected */
 		boolean firstBallIn = init > 0 && (elapsedTimeMillis > Constants.START_GAME_DELAY) && (balls.size() == 0);
@@ -246,30 +246,29 @@ public class GameWorld {
 		if (firstBallIn || ballInjectionIsOn || tickInject) injectRandomBall();
 
 		/* work with balls */
-		List<Ball> removeThese = new ArrayList<Ball>();
-		List<Ball> addThese = new ArrayList<Ball>();
+		HashSet<Ball> removeThese = new HashSet<Ball>();
+		HashSet<Ball> addThese = new HashSet<Ball>();
 		synchronized (balls) {
-			for (Ball b : balls) {
-				b.updateCurrentTime(elapsedTimeMillis);
-				if (player1.collisionCheck(b)) {
-					addThese.add(player1.bounce(b, elapsedTimeMillis));
-					removeThese.add(b);
+			for (Ball ball : balls) {
+				ball.updateCurrentTime(elapsedTimeMillis);
+				if (player1.collisionCheck(ball)) {
+					addThese.add(player1.bounce(ball, elapsedTimeMillis));
+					removeThese.add(ball);
+					bounce.play()
+				} if (player0.collisionCheck(ball)) {
+					addThese.add(player0.bounce(ball, elapsedTimeMillis));
+					removeThese.add(ball);
 					bounce.play();
 				}
-				if (player0.collisionCheck(b)) {
-					addThese.add(player0.bounce(b, elapsedTimeMillis));
-					removeThese.add(b);
-					bounce.play();
-				}
-				if (!b.inGame()) {
-					removeThese.add(b);
-					if (b.getCurrentPosition().y < 0) player1.incrementScore(b);
-					if (b.getCurrentPosition().y > Constants.HEIGHT) player0.incrementScore(b);
+				if (!ball.inGame()) {
+					removeThese.add(ball);
+					if (ball.getCurrentPosition().y < 0) player1.incrementScore(ball);
+					if (ball.getCurrentPosition().y > Constants.HEIGHT) player0.incrementScore(ball);
 				}
 			}
 
-			for (Ball b : removeThese) balls.remove(b);
-			for (Ball b : addThese) balls.add(b);
+			balls.removeAll(removeThese);
+			balls.addAll(addThese);
 			if (balls.size() == 0) injectRandomBall();
 		}
 	}
