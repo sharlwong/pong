@@ -15,6 +15,7 @@ import com.sutd.GameObjects.GameState;
  * 
  * This is also an effective way to keep the code clean and tidy.
  * ***/
+
 public class Constants {
 
 	/* this is the square unit-length board on which the point-mass balls move about */
@@ -54,21 +55,26 @@ public class Constants {
 	private final double    edgePixelPadding;
 
 	/* Speed of rendering, gameworld updating and buffer size respectively */
-	public final static int    FPS                     = 50;
-	public final static int    UPDATE_DELTA            = 16;
-	public final static int    STATE_BUFFER_SIZE       = 1;
-	public final static int    COUNT_DOWN_SECOND       = 12;
-	public final static int    AGAIN_COUNT_DOWN_SECOND = 2;
+	public final static int    FPS                      = 50;
+	public final static int    UPDATE_DELTA             = 16;
+	public final static int    STATE_BUFFER_SIZE        = 1;
+	public final static int    COUNT_DOWN_SECOND        = 12;
+	public final static int    AGAIN_COUNT_DOWN_SECOND  = 2;
+	public final static int    GAME_TIME                = 22;
+	public final static int    BALL_FREQUENCY           = 400;
+	public final static double ANGLE_WIDENER            = 3;
+	public final static double BALL_MAX_SPEED           = 1.4;
+	public final static double BALL_MIN_SPEED           = 0.7;
+	public static final int    BALL_MAX_NUMBER_ONSCREEN = 7;
+	public final static double BALL_EMISSION_ZONE       = 0.2;
 
-	public final static int    GAME_TIME               = 22;
-	public final static int    BALL_FREQUENCY          = 400;
-	public final static double ANGLE_WIDENER           = 3;
-	public final static double BALL_MAX_SPEED          = 1.4;
-	public final static double BALL_MIN_SPEED          = 0.7;
-	public static final int BALL_MAX_NUMBER_ONSCREEN = 7;
-
-	public Constants(Dimension d) {
-		this.screen = d;
+	/**
+	 * Give Constants a screen size and it will do the math.
+	 *
+	 * @param screenRes is the screen resolution
+	 */
+	public Constants(Dimension screenRes) {
+		this.screen = screenRes;
 
 		/* find vertical distances */
 		verticalFractionalPadding = EDGE_PADDING + PADDLE_EFFECTIVE_DEPTH + BALL_RADIUS;
@@ -119,6 +125,13 @@ public class Constants {
 		return edgePixelPadding;
 	}
 
+	/**
+	 * Given ball position will be translated from the fractional cartesian plane
+	 * to some point on a square grid of pixels of the phone screen.
+	 *
+	 * @param ball position
+	 * @return pixel XY
+	 */
 	private Dimension translateBallReferenceFrame(double[] ball) {
 		/* note that v is in small square reference frame of point-mass balls; do not modify v */
 		double x = ball[0];
@@ -145,6 +158,12 @@ public class Constants {
 		return new Dimension((int) x, (int) y);
 	}
 
+	/**
+	 * Helper class to map the reference frame translation over a list of balls
+	 *
+	 * @param ballsData is a list of balls
+	 * @return is the list of pixel-based positions
+	 */
 	public int[][] makeBallXYs(double[][] ballsData) {
 		int[][] out = new int[ballsData.length][2];
 		for (int i = 0; i < ballsData.length; i++) {
@@ -155,6 +174,13 @@ public class Constants {
 		return out;
 	}
 
+	/**
+	 * Given paddle fractional position will be translated to pixel position
+	 *
+	 * @param paddle position
+	 * @param player top == 1 OR bottom == 0
+	 * @return pixel position
+	 */
 	public int[] makePaddleXY(double[] paddle, int player) {
 		int[] out = new int[2];
 		Dimension temp = translateBallReferenceFrame(paddle);
