@@ -7,9 +7,13 @@ import java.util.Collection;
 import com.sutd.GameObjects.GameState;
 
 /***
- * This class contains important constants that we use across the entire game. 
+ * This class contains important arbitrary constants that we use across the entire game. 
  * Some of these constants may have dependencies with one another.
- * This is an effective way to keep the code clean.
+ * 
+ * Constants that deal with the size of objects are relative to the screen. This 
+ * is to allow for a grid scaling system for drawing objects. 
+ * 
+ * This is also an effective way to keep the code clean and tidy.
  * ***/
 public class Constants {
 

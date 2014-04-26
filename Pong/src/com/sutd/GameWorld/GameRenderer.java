@@ -22,7 +22,9 @@ import java.util.Random;
  * It calls upon values from Constants and assets from AssetLoader to render.
  * We employ two rendering classes in LibGDX engine: ShapeRenderer and SpriteBatch.
  * ShapeRenderer is used to render in-built shapes in LibGDX, while SpriteBatch is
- * used to render images.***/
+ * used to render images.
+ * 
+ * ***/
 
 public class GameRenderer {
 
@@ -148,8 +150,6 @@ public class GameRenderer {
 
 		/* Wait for second client to join server. */
 		if (state.getStatus() == 0) {
-			//			font.draw(batcher, "Waiting", d.width / 2 - 30, d.height / 2 - 20);
-			//			font.draw(batcher, "Player 2", d.width / 2 - 30, d.height / 2 + 10);
 
 			batcher.draw(wait_screen, 0, 0, 136, 204);
 		}
@@ -280,9 +280,6 @@ public class GameRenderer {
 			}
 		}
 		batcher.end();
-
-		/* Draw normal balls: For testing. */
-		// for (int[] ball : balls) drawBall(ball[0], ball[1]);
 	}
 
 	/** Use SpriteBatch to draw a watermelon as a ball.
@@ -337,7 +334,6 @@ public class GameRenderer {
 		batcher.enableBlending();
         batcher.draw(paddle_top, centerX - width / 2, centerY - height / 2, width, height);
 		
-		//shapeRenderer.rect(centerX - width / 2, centerY - height / 2, width, height);
 	}
 	
 	/** Use SpriteBatch to draw a banana as a bottom paddle.
@@ -352,28 +348,6 @@ public class GameRenderer {
 		batcher.enableBlending();
         batcher.draw(paddle_bottom, centerX - width / 2, centerY - height / 2, width, height);
 		
-		//shapeRenderer.rect(centerX - width / 2, centerY - height / 2, width, height);
 	}
 
-
-	/*
-	 * This method is used only for testing purposes.
-	 * Returns a pseudo-random number between min(inclusive) and max (inclusive).
-	 *
-	 * @param min Minimum value
-	 * @param max Maximum value.  Must be greater than min.
-	 * @return Integer between min and max.
-	 * @see java.util.Random#nextInt(int)
-	 */
-
-	private static int randInt(int min, int max) {
-
-		// Usually this can be a field rather than a method variable
-		Random rand = new Random();
-
-		// nextInt is normally exclusive of the top value,
-		// so add 1 to make it inclusive
-		int randomNum = rand.nextInt((max - min) + 1) + min;
-		return randomNum;
-	}
 }

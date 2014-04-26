@@ -1,5 +1,7 @@
 package com.sutd.PongHelpers;
 
+
+
 public class Vector2D {
 	public static final Vector2D X    = new Vector2D(1, 0);
 	public static final Vector2D Y    = new Vector2D(0, 1);
@@ -32,7 +34,7 @@ public class Vector2D {
 	}
 
 	/**
-	 * angle from the x-axis anticlockwise in degrees
+	 * Angle from the x-axis anticlockwise in degrees
 	 *
 	 * @return
 	 */

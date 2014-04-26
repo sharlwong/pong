@@ -14,7 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * GameWorld is responsible to handle and update balls, paddles and other objects
+ * GameWorld is like the Brain of our game.
+ * It is responsible for handling and updating balls, paddles and other objects
  * during game play. Mainly, it generates random balls, counts game time and keeps
  * updating to check collision and so on. It also checks whether players choose to
  * restart the game after one round ends.

@@ -2,6 +2,9 @@ package com.sutd.Server;
 
 import com.sutd.GameWorld.GameWorld;
 
+/**
+ * */
+
 class ServerUpdater implements Runnable {
     private static long LastTime;
 	private GameWorld game_world;

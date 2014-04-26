@@ -6,6 +6,9 @@ import com.google.gson.Gson;
 import com.sutd.GameObjects.GameState;
 import com.sutd.Network.MessageHandler;
 
+/**
+ * **/
+
 public class GameUpdater implements MessageHandler {
 	BlockingQueue<GameState> stateBuffer;
 	private int player;
