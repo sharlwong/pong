@@ -22,7 +22,7 @@ public class PaddleTest {
 	@Test
 	public void testBounce() {
 		Vector2D startPosition = new Vector2D(Constants.WIDTH / 2, Constants.HEIGHT / 2);
-		Ball testBall = new Ball(startPosition, new Vector2D(0, -1), 0, 1);
+		Ball testBall = new Ball(startPosition, new Vector2D(0, -1), 0, 1, 1);
 		/* after bounce, the y direction of testBall will be changed into opposite direction */
 		assertFalse(testBall.isMovingUp());
 		assertTrue(testPaddle0.bounce(testBall, 0).isMovingUp());
@@ -32,7 +32,7 @@ public class PaddleTest {
 	@Test
 	public void testCollisionCheck() {
 		Vector2D startPosition = new Vector2D(Constants.WIDTH / 2, Constants.HEIGHT / 2);
-		Ball testBall = new Ball(startPosition, new Vector2D(0, -1), 0, 1);
+		Ball testBall = new Ball(startPosition, new Vector2D(0, -1), 0, 1, 1);
 		assertFalse(testPaddle0.collisionCheck(testBall));
 	}
 
@@ -56,7 +56,7 @@ public class PaddleTest {
 		Vector2D startPosition = new Vector2D(Constants.WIDTH / 2, Constants.HEIGHT / 2);
 		int sum = 0;
 		for (int i = 0; i< 10; i++){
-			Ball testBall = new Ball(startPosition, new Vector2D(0, -1), 0, (int) (Math.random() * 10));
+			Ball testBall = new Ball(startPosition, new Vector2D(0, -1), 0, (int) (Math.random() * 10), 1);
 			sum += testBall.getScore();
 			testPaddle0.incrementScore(testBall);
 		}
@@ -97,10 +97,7 @@ public class PaddleTest {
 	public void testGetTransformedFractionalPosition() {
 		double max = Constants.WIDTH + Constants.BALL_RADIUS - (Constants.PADDLE_WIDTH / 2);
 		double min = (Constants.PADDLE_WIDTH / 2) - Constants.BALL_RADIUS;
-		double position = 0.5;
-		testPaddle0.setFractionalPosition(position);
-		assertEquals(new Vector2D(Constants.WIDTH / 2, 0), new Vector2D(min + (max - min) * testPaddle0.getTransformedFractionalPosition(1), 0));
-		position = 0;
+		double position = 0;
 		testPaddle0.setFractionalPosition(position);
 		assertEquals(new Vector2D(max, 0), new Vector2D(min + (max - min) * testPaddle0.getTransformedFractionalPosition(1), 0));
 		position = 1;
