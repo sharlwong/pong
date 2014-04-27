@@ -2,10 +2,6 @@ package com.sutd.PongHelpers;
 
 import com.sutd.PongHelpers.Dimension;
 
-import java.util.Collection;
-
-import com.sutd.GameObjects.GameState;
-
 /***
  * This class contains important arbitrary constants that we use across the entire game. 
  * Some of these constants may have dependencies with one another.

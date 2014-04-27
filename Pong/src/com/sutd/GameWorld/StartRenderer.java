@@ -3,18 +3,11 @@ package com.sutd.GameWorld;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.sutd.GameObjects.Ball;
-import com.sutd.GameObjects.Paddle;
 import com.sutd.PongHelpers.AssetLoader;
-import com.sutd.PongHelpers.Assets;
-
-import com.sutd.PongHelpers.Vector2D;
 
 /**
  * StartRenderer is responsible for rendering all the objects on the start screen (blue).

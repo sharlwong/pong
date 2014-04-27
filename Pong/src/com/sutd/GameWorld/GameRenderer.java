@@ -16,8 +16,6 @@ import com.sutd.PongHelpers.Constants;
 import com.sutd.PongHelpers.Dimension;
 import com.sutd.PongHelpers.InputHandler;
 
-import java.util.Random;
-
 /**
  * GameRenderer is responsible for rendering all the objects during the game play.
  * It calls upon values from Constants and assets from AssetLoader to render.

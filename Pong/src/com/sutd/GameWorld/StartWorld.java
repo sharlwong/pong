@@ -18,9 +18,6 @@ import com.sutd.Server.GameServer;
 
 public class StartWorld {
 	private 	Rectangle 	start_game_button, join_game_button, music_button;
-	private 	Boolean 	server_created = false;
-	private 	Boolean 	client1_created = false;
-	private 	Boolean 	client2_created = false;
 	private 	PongGame 	pong_game;
 	
 	private Music chimp_short;

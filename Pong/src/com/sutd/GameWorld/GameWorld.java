@@ -5,7 +5,6 @@ import com.badlogic.gdx.audio.Music;
 import com.sutd.GameObjects.Ball;
 import com.sutd.GameObjects.GameState;
 import com.sutd.GameObjects.Paddle;
-import com.sutd.PongHelpers.AssetLoader;
 import com.sutd.PongHelpers.Constants;
 import com.sutd.PongHelpers.Vector2D;
 
