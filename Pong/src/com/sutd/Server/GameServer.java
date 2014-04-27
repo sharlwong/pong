@@ -114,6 +114,11 @@ public class GameServer extends Thread {
 		consumer.start();
 	}
 
+	/**
+	 * Sets player paddle position on the game world.
+	 * @param fraction relative position of the paddle
+	 * @param i the id of the player whose paddle needs to be updated.
+	 */
 	public void setPaddle(double fraction, int i) {
 		if(!game_world.ready) return ;
 		game_world.getPaddle(i).setFractionalPosition(fraction);

@@ -1,15 +1,14 @@
 package com.sutd.GameObjects;
 
 /**
- * GameState is a Go-Between Class that contains information on scores and fruit count for each player, 
+ * GameState is a Go-Between Class that contains information on scores and fruit count for each player,
  * status of game play and time left, as well as paddle and ball positions from both local client and server.
- * 
- * It is the glue between the server and the client, but unlike network class primarily concerns itself 
+ * <p/>
+ * It is the glue between the server and the client, but unlike network class primarily concerns itself
  * with Game Layer Processing. It is an extremely important class!
  */
 
 public class GameState {
-
 	private double[][] ballsData;
 	private double[]   player0Data;
 	private double[]   player1Data;
