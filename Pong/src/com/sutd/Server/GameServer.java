@@ -24,7 +24,6 @@ import com.sutd.PongHelpers.Constants;
  * The authoritative Server.
  * Responsible for handling requests
  * updating game state and responding.
- * @author Swayam
  *
  */
 public class GameServer extends Thread {
@@ -39,7 +38,7 @@ public class GameServer extends Thread {
 	private GameWorld game_world;
 	private CountDownLatch started;
 	private ScheduledExecutorService exec;
-	private ServerBroadcaseter broadcaster;
+	private ServerBroadcaster broadcaster;
 
 	public GameServer() {}
 	/**
@@ -62,7 +61,7 @@ public class GameServer extends Thread {
 		serverSocket = Gdx.net.newServerSocket(Protocol.TCP,port, null);
 		System.out.println("Server started at:");
 		//Start broadcasting presence
-		broadcaster = new ServerBroadcaseter("lhst", "5000");
+		broadcaster = new ServerBroadcaster("lhst", "5000");
 		broadcaster.start();
 		//mark server as started
 		if(started != null) started.countDown();
@@ -115,6 +114,11 @@ public class GameServer extends Thread {
 		consumer.start();
 	}
 
+	/**
+	 * Sets player paddle position on the game world.
+	 * @param fraction relative position of the paddle
+	 * @param i the id of the player whose paddle needs to be updated.
+	 */
 	public void setPaddle(double fraction, int i) {
 		if(!game_world.ready) return ;
 		game_world.getPaddle(i).setFractionalPosition(fraction);
