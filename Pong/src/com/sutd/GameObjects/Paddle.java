@@ -9,26 +9,20 @@ import com.sutd.PongHelpers.Vector2D;
  * updating. Paddle has two types, which are the bottom one and the top one respectively.
  * Functions related to position setting will be called in InputHandler. **
  */
+
 public class Paddle {
-	private double   max;
-	private double   min;
-	private int      score;
+	private double max   = Constants.WIDTH + Constants.BALL_RADIUS - (Constants.PADDLE_WIDTH / 2);
+	private double min   = (Constants.PADDLE_WIDTH / 2) - Constants.BALL_RADIUS;
+	private int    score = 0;
 	private Vector2D paddleCenter;
 	public  boolean  playerBottom;
-	private int      orange;
-	private int      kiwi;
-	private int      watermelon;
+	private 	int 	orange;
+	private 	int 	kiwi;
+	private 	int 	watermelon;
 
-	/**
-	 * give you a paddle
-	 *
-	 * @param playerNum top == 1 OR bottom == 0
-	 */
 	public Paddle(int playerNum) {
-		this.max = Constants.WIDTH + Constants.BALL_RADIUS - (Constants.PADDLE_WIDTH / 2);
-		this.min = (Constants.PADDLE_WIDTH / 2) - Constants.BALL_RADIUS;
-		this.score = 0;
-		this.paddleCenter = new Vector2D(Constants.WIDTH / 2, Constants.HEIGHT * playerNum);
+		paddleCenter = new Vector2D(-1, Constants.HEIGHT * playerNum);
+		setFractionalPosition(0.5);
 		this.playerBottom = (playerNum == 0);
 		this.orange = 0;
 		this.kiwi = 0;
@@ -38,31 +32,32 @@ public class Paddle {
 	/**
 	 * This function will be called when collision happens.
 	 *
-	 * @param ball              Ball before collision
+	 * @param b                 Ball before collision
 	 * @param currentTimeMillis Time when collision happens
-	 * @return new ball with new velocity and initialized starting time after collision
+	 * @return The new ball with new velocity and initialized starting time after collision
 	 */
-	public Ball bounce(Ball ball, long currentTimeMillis) {
+	public Ball bounce(Ball b, long currentTimeMillis) {
 		double yVelocity = Constants.PADDLE_WIDTH / 2;
 		if (!playerBottom) yVelocity = 0 - yVelocity;
-		Vector2D outVelocity = new Vector2D(ball.getCurrentPosition().x - paddleCenter.x, yVelocity);
-		return new Ball(ball.getCurrentPosition(), outVelocity, currentTimeMillis, ball.getType(), ball.getSpeedMultiplier());
+		Vector2D outVelocity = new Vector2D(b.getCurrentPosition().x - paddleCenter.x, yVelocity);
+		outVelocity.makeUnitVector().multiply(Constants.BALL_SPEED);
+		return new Ball(b.getCurrentPosition(), outVelocity, currentTimeMillis, b.getType(), b.getSpeedMultiplier());
 	}
 
 	/**
 	 * Check whether collision happens. By checking paddle position and ball position.
 	 *
-	 * @param ball to check
+	 * @param b Ball b
 	 * @return True if collision detected and false otherwise.
 	 */
-	public boolean collisionCheck(Ball ball) {
-		Vector2D ballPosition = ball.getCurrentPosition();
-		boolean up = ball.isMovingUp();
+	public boolean collisionCheck(Ball b) {
+		Vector2D ballPosition = b.getCurrentPosition();
+		boolean up = b.isMovingUp();
 		if (Math.abs(ballPosition.x - paddleCenter.x) > (Constants.PADDLE_WIDTH / 2)) return false;
 		if (playerBottom && ballPosition.y < (0 - Constants.PADDLE_EFFECTIVE_DEPTH) && !up) return false;
-		if (playerBottom && ballPosition.y <= 0 && !up) return true;
+		if (playerBottom && ballPosition.y < 0 && !up) return true;
 		if (!playerBottom && ballPosition.y > (Constants.HEIGHT + Constants.PADDLE_EFFECTIVE_DEPTH) && up) return false;
-		if (!playerBottom && ballPosition.y >= (Constants.HEIGHT) && up) return true;
+		if (!playerBottom && ballPosition.y > (Constants.HEIGHT) && up) return true;
 		return false;
 	}
 
@@ -72,13 +67,17 @@ public class Paddle {
 	 * Type: 1	Kiwi		Score: 2
 	 * Type: 2  Watermelon	Score: 3
 	 *
-	 * @param ball to be added
+	 * @param b Ball
 	 */
-	public void incrementScore(Ball ball) {
-		score += ball.getScore();
-		if (ball.getScore() == 1) orange++;
-		if (ball.getScore() == 2) kiwi++;
-		if (ball.getScore() == 3) watermelon++;
+	public void incrementScore(Ball b) {
+		score += b.getScore();
+		if (b.getScore() == 1){
+			orange ++;
+		}else if(b.getScore() == 2){
+			kiwi ++;
+		}else if(b.getScore() == 3){
+			watermelon ++;
+		}
 	}
 
 	/**
@@ -106,17 +105,13 @@ public class Paddle {
 	}
 
 	/**
-	 * where art thou (i want numbers)
-	 *
-	 * @return here i am (paddle center XY)
+	 * @return paddle center coordinates.
 	 */
 	public double[] getXY() {
 		return new double[]{paddleCenter.x, paddleCenter.y};
 	}
 
 	/**
-	 * request vector position
-	 *
 	 * @return paddle center coordinates in the form of Vector2D
 	 */
 	public Vector2D getCenter() {
@@ -124,19 +119,12 @@ public class Paddle {
 	}
 
 	/**
-	 * whats your score
-	 *
 	 * @return current score of the paddle controller
 	 */
 	public int getScore() {
 		return score;
 	}
 
-	/**
-	 * where are you
-	 *
-	 * @return this is fraction of where i could be
-	 */
 	public double getFractionalPosition() {
 		return (paddleCenter.x - min) / (max - min);
 	}
@@ -148,16 +136,16 @@ public class Paddle {
 	public double getTransformedFractionalPosition(int player) {
 		return Math.abs(player - getFractionalPosition());
 	}
-
-	public int getOrange() {
+	
+	public int getOrange(){
 		return orange;
 	}
-
-	public int getKiwi() {
+	
+	public int getKiwi(){
 		return kiwi;
 	}
-
-	public int getWatermelon() {
+	
+	public int getWatermelon(){
 		return watermelon;
 	}
 }
