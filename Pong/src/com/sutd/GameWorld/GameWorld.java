@@ -239,7 +239,7 @@ public class GameWorld {
 			System.out.println("Unusual delta offset: " + (deltaMillis - (sumTicks / tickCount)));
 
 		/* conditions under which a ball should be injected */
-		boolean firstBallIn = init > 0 && (elapsedTimeMillis > Constants.START_GAME_DELAY) && (balls.size() == 0);
+		boolean firstBallIn = balls.size() == 0;
 		boolean ballInjectionIsOn = (injectBalls > 0) && (injectBalls < elapsedTimeMillis);
 		boolean tickInject = (int) elapsedTimeMillis / Constants.BALL_FREQUENCY > (int) temp / Constants.BALL_FREQUENCY;
 		tickInject = tickInject && (balls.size() < Constants.BALL_MAX_NUMBER_ONSCREEN);
@@ -271,7 +271,7 @@ public class GameWorld {
 
 			balls.removeAll(removeThese);
 			balls.addAll(addThese);
-			if (balls.size() == 0) injectRandomBall();
+			//			if (balls.size() == 0) injectRandomBall();
 		}
 	}
 

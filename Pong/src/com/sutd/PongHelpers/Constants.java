@@ -41,8 +41,7 @@ public class Constants {
 	 */
 	public final static double PADDLE_WIDTH = 0.35;
 
-	/* delay appearance of first ball by this much to give the user time to prepare */
-	public final static double START_GAME_DELAY = 300;
+	/* stuff initialized upon construction */
 	private final Dimension screen;
 	private final double    verticalFractionalPadding;
 	private final double    horizontalFractionalPadding;
