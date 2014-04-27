@@ -1,7 +1,11 @@
 package com.sutd.PongHelpers;
 
 /**
- * Our self-defined helper class that helps deal with dimensions. **/
+ * Our self-defined class that defines dimensions.
+ * 
+ * This class was actually created in response to the fact that Android phones
+ * do not support the Dimension class in Java.awt package
+ * **/
 
 public class Dimension {
 	public int height;

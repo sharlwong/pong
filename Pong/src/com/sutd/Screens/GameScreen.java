@@ -15,12 +15,15 @@ import com.sutd.PongHelpers.Dimension;
 import com.sutd.PongHelpers.InputHandler;
 
 /**
- * GameScreen concerns itself with activities that happen on the screen when the game is ongoing.
- * Its render method calls upon GameRenderer.
- * When a disconnect happens, it sets a new screen to StartScreen.
+ * GameScreen implements a special Screen class from libGDX.
+ *
+ * It creates a new GameRenderer, ClientUpdater and InputHandler.
+ * It calls upon GameRenderer to begin rendering.
  * 
- * It implements a special libGDX class called Screen.
+ * When a disconnection happens, it helps to call the client to tear down,
+ * as well as start a new Start Screen.
  */
+
 
 public class GameScreen implements Screen {
 	

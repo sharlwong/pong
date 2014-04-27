@@ -6,14 +6,14 @@ import com.sutd.GameWorld.StartRenderer;
 import com.sutd.GameWorld.StartWorld;
 import com.sutd.Pong.PongGame;
 
-
 /**
- * StartScreen concerns itself with activities that happen before the actual game starts.
- * It initializes the StartWorld, and its render method calls upon StartRenderer. 
+ * StartScreen implements a special Screen class from libGDX.
+ *
+ * It creates a new StartWorld and a new StartRenderer.
  * 
- * It also connects the client to the server, and asks it to start listening.
+ * If the client is ready, it will prompt it to connect to the server and to
+ * start listening. Then, it will set a new Game Screen.
  * 
- * It implements a special libGDX class called Screen.
  */
 
 public class StartScreen implements Screen {

@@ -29,6 +29,8 @@ public class StartRenderer {
 		splash_screen = AssetLoader.splash_screen;
 		sound_icon = AssetLoader.sound_icon;
 	}
+	
+	/** Start rendering a StartWorld **/
 
     public StartRenderer(StartWorld world) {
         start_world = world;
@@ -42,6 +44,13 @@ public class StartRenderer {
 		
 		initAssets();
     }
+    
+    /** This method draws:
+     * 1. Black background to prevent flickering
+     * 2. Splash screen image
+     * 3. Start button
+     * 4. Join button
+     * 5. Mute music button **/
 
     public void render(float runTime) {
     	

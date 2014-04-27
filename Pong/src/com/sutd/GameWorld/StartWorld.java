@@ -11,9 +11,11 @@ import com.sutd.PongHelpers.AssetLoader;
 import com.sutd.Server.GameServer;
 
 /**
- * StartWorld is like the Brain of activities prior to the actual game play. 
- * It is responsible for initializing a server and two clients upon the correct touch input, 
- * and creates buttons for Start Game, Join Game and Mute Music. 
+ * StartWorld concerns itself with activities happening prior to the actual game.
+ * Importantly, it is responsible for initializing a server and two clients upon
+ * the correct touch input.
+ * 
+ * It also creates the Start Game, Join Game and Music buttons.
  */
 
 public class StartWorld {
@@ -60,7 +62,6 @@ public class StartWorld {
 	 * 
 	 * If join game button is touched, a new client is created and connected to the server too.*
 	 * */
-	
 	private void check_if_touched() {
 		if(Gdx.input.justTouched()) {
 			Gdx.app.log("MyTag", "Just Touched!");

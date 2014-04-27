@@ -5,9 +5,7 @@ import com.badlogic.gdx.InputProcessor;
 import com.sutd.GameObjects.Paddle;
 
 /**
- * InputHandler is a helper class that conveniently calls upon useful methods provided by libGDX
- * to handle and process touch input.
- * 
+ * This class implements a special class from libGDX that helps to handles input processing.
  */
 public class InputHandler implements InputProcessor {
 	private final Paddle    player_paddle;
