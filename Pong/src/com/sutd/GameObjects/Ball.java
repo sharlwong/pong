@@ -66,10 +66,10 @@ public class Ball {
 	 *                          will be calculated.
 	 */
 	public void updateCurrentTime(long currentTimeMillis) {
-//		Vector2D temp = Vector2D.ZERO.cpy();
 
 		/* save a copy */
-//		if (currentPosition != null) temp = currentPosition.cpy();
+		//Vector2D temp = Vector2D.ZERO.cpy();
+		//if (currentPosition != null) temp = currentPosition.cpy();
 
 		/* imaginary position */
 		long timeTravelled = currentTimeMillis - initTime;
@@ -84,9 +84,9 @@ public class Ball {
 		}
 
 		/* forcing it to float */
-//		if (currentPosition != null && temp.y > 0 && youAreHere.y < 0) youAreHere.y = 0;
-//		if (currentPosition != null && temp.y < Constants.HEIGHT && youAreHere.y > Constants.HEIGHT)
-//			youAreHere.y = Constants.HEIGHT;
+		//if (currentPosition != null && temp.y > 0 && youAreHere.y < 0) youAreHere.y = 0;
+		//if (currentPosition != null && temp.y < Constants.HEIGHT && youAreHere.y > Constants.HEIGHT)
+		//  youAreHere.y = Constants.HEIGHT;
 
 		/* done now return */
 		currentPosition = youAreHere;
