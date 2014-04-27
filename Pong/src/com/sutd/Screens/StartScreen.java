@@ -16,6 +16,10 @@ import com.sutd.Pong.PongGame;
  * 
  */
 
+/**
+ * Coordinates StartWorld and Start Renderer
+ * Responsible for starting communication of the client with the server.
+ */
 public class StartScreen implements Screen {
 	
 	private StartWorld start_world;
@@ -31,11 +35,13 @@ public class StartScreen implements Screen {
     }
 
     @Override
+    /**
+     * Renders the StartScreen
+     * Checks if client has been initialized. 
+     * Connects to server and starts listening to updates if so and 
+     * switches to GameScreen.
+     */
     public void render(float delta) {
-        // Draws the RGB color 10, 15, 230, at 100% opacity
-    	//System.out.println("Rendering!");
-        //Gdx.gl.glClearColor(10/255.0f, 15/255.0f, 230/255.0f, 1f);
-        //Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
         start_world.update();
         start_renderer.render(delta);
         if (game.client.ready()) {

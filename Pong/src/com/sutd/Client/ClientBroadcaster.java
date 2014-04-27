@@ -8,6 +8,10 @@ import java.net.InterfaceAddress;
 import java.net.NetworkInterface;
 import java.util.Enumeration;
 
+/**
+ * Sends broadcast messages to identify pong servers
+ * connects to the first server that responds.
+ */
 public class ClientBroadcaster extends Thread{
 	GameClient client;
 	public ClientBroadcaster(GameClient client) {

@@ -16,6 +16,12 @@ public class MessageProducer extends Thread {
 	private BlockingQueue<String> buffer;
 	private int id = -1;
 	
+	/**
+	 * Constructor 
+	 * @param reader The BufferedReader object to listen to
+	 * @param buffer The buffer to put messages received into.
+	 * @param id Helper attribute. Useful to keep track of who sent the message.
+	 */
 	public MessageProducer(BufferedReader reader, BlockingQueue<String> buffer,int id) {
 		this(reader, buffer);
 		this.id = id;
@@ -25,6 +31,11 @@ public class MessageProducer extends Thread {
 		this.reader = reader;
 		this.buffer = buffer;
 	}
+	
+	/**
+	 * Listen for messages from socket's inputstream
+	 * Put received messages in the buffer.
+	 */
 	public void run() {
 		while(!this.isInterrupted()) {
 			try {

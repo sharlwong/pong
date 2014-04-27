@@ -7,13 +7,20 @@ import com.sutd.Server.*;
 import com.sutd.Client.*;
 
 /** PongGame extends a special Game class from libGDX. 
- * It is the game object itself. **/
-
+ * It is the game object itself.
+ * Has a handle on global vars.
+ * Manages game events such as dispose and create.
+ * @author Swayam
+ *
+ */
 public class PongGame extends Game {
 	public GameServer server;
 	public GameClient client;
 	public int        player;
 
+	/**
+	 * Called when game first starts.
+	 */
 	@Override
 	public void create() {
 		System.out.println("Game Created!");
@@ -24,6 +31,9 @@ public class PongGame extends Game {
 		AssetLoader.music.setLooping(true);
 	}
 
+	/**
+	 * Called when game is being exitted.
+	 */
 	@Override
 	public void dispose() {
 		getScreen().dispose();
