@@ -43,7 +43,7 @@ public class PaddleTest {
 		for (int i = 0; i < 999; i++) {
 			int temp = random.nextInt(200);
 			score += temp + 1;
-			paddle.incrementScore(new Ball(Vector2D.X, Vector2D.Y, 0, temp, 1));
+			paddle.incrementScore(new Ball(Vector2D.X, Vector2D.Y, 0, temp,1));
 			assert paddle.getScore() == score;
 		}
 		pass("getScore");

@@ -1,20 +1,11 @@
 package multipong;
 
-/**
- * Paddle is a game object in this game. Paddle will be controlled by players during
- * the game play. Meanwhile, it is also responsible for collision check and score
- * updating. Paddle has two types, which are the bottom one and the top one respectively.
- * Functions related to position setting will be called in InputHandler. **
- */
 public class Paddle {
 	private double   max;
 	private double   min;
 	private int      score;
 	private Vector2D paddleCenter;
 	public  boolean  playerBottom;
-	private int      orange;
-	private int      kiwi;
-	private int      watermelon;
 
 	/**
 	 * give you a paddle
@@ -27,17 +18,14 @@ public class Paddle {
 		this.score = 0;
 		this.paddleCenter = new Vector2D(Constants.WIDTH / 2, Constants.HEIGHT * playerNum);
 		this.playerBottom = (playerNum == 0);
-		this.orange = 0;
-		this.kiwi = 0;
-		this.watermelon = 0;
 	}
 
 	/**
-	 * This function will be called when collision happens.
+	 * bounce a ball off this paddle
 	 *
-	 * @param ball              Ball before collision
-	 * @param currentTimeMillis Time when collision happens
-	 * @return new ball with new velocity and initialized starting time after collision
+	 * @param ball              to bounce
+	 * @param currentTimeMillis give the ball a birth date
+	 * @return new ball to relace the old one
 	 */
 	public Ball bounce(Ball ball, long currentTimeMillis) {
 		double yVelocity = Constants.PADDLE_WIDTH / 2;
@@ -47,10 +35,10 @@ public class Paddle {
 	}
 
 	/**
-	 * Check whether collision happens. By checking paddle position and ball position.
+	 * is this ball hitting this paddle
 	 *
 	 * @param ball to check
-	 * @return True if collision detected and false otherwise.
+	 * @return yes or no
 	 */
 	public boolean collisionCheck(Ball ball) {
 		Vector2D ballPosition = ball.getCurrentPosition();
@@ -64,25 +52,18 @@ public class Paddle {
 	}
 
 	/**
-	 * When a ball passes paddle, score will be increased.
-	 * Type: 0	Orange		Score: 1
-	 * Type: 1	Kiwi		Score: 2
-	 * Type: 2  Watermelon	Score: 3
+	 * add a balls weight to your score
 	 *
-	 * @param ball to be added
+	 * @param ball to add
 	 */
 	public void incrementScore(Ball ball) {
 		score += ball.getScore();
-		if (ball.getScore() == 1) orange++;
-		if (ball.getScore() == 2) kiwi++;
-		if (ball.getScore() == 3) watermelon++;
 	}
 
 	/**
-	 * Set x coordinate of the center point of the paddle.
+	 * move to this place
 	 *
-	 * @param xValue center point, cannot be larger than max value (screenwidth - paddlewidth / 2),
-	 *               cannot be smaller than min value (paddlewidth / 2) either.
+	 * @param xValue move here
 	 */
 	private void setPosition(double xValue) {
 		paddleCenter.x = xValue;
@@ -91,11 +72,9 @@ public class Paddle {
 	}
 
 	/**
-	 * Similar to setPosition. Input will be the fraction from 0 to 1.
-	 * More convenient to use in other classes.
+	 * move relative to the traversal line
 	 *
-	 * @param fraction fraction position. From 0 to 1.
-	 *                 0 represents the min value while 1 represents the max value.
+	 * @param fraction of the line the paddle should be at
 	 */
 	public void setFractionalPosition(double fraction) {
 		if (fraction < 0 || fraction > 1) return;
@@ -105,7 +84,7 @@ public class Paddle {
 	/**
 	 * where art thou (i want numbers)
 	 *
-	 * @return here i am (paddle center XY)
+	 * @return here i am (paddle center
 	 */
 	public double[] getXY() {
 		return new double[]{paddleCenter.x, paddleCenter.y};
@@ -136,25 +115,5 @@ public class Paddle {
 	 */
 	public double getFractionalPosition() {
 		return (paddleCenter.x - min) / (max - min);
-	}
-
-	/**
-	 * @param player paddle on the bottom or on the top
-	 * @return paddle's fractional position on the other screen
-	 */
-	public double getTransformedFractionalPosition(int player) {
-		return Math.abs(player - getFractionalPosition());
-	}
-
-	public int getOrange(){
-		return orange;
-	}
-
-	public int getKiwi(){
-		return kiwi;
-	}
-
-	public int getWatermelon(){
-		return watermelon;
 	}
 }

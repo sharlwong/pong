@@ -1,12 +1,5 @@
 package multipong;
 
-/**
- * Ball is a game object. It will be rendered as fruit during the game play.
- * Its attributes includes initialTime, initialVelocity, initialPosition, currentPosition and ballType.
- * For the ease of communication, the moving track of each ball will be calculated locally within the
- * constraint of synchronization.
- * ballType determines the way it will be rendered and it's score value.
- */
 public class Ball {
 	private long     initTime;
 	private Vector2D velocity;
@@ -41,7 +34,6 @@ public class Ball {
 		if (initialVelocity.y > 0)
 			distanceToTravel = (Constants.HEIGHT - startPosition.y) * (initialVelocity.length() / Math.abs(initialVelocity.y));
 		else distanceToTravel = startPosition.y * (initialVelocity.length() / Math.abs(initialVelocity.y));
-		distanceToTravel *= 1.001;
 
 		/* when is it supposed to the paddle line, rounded to the nearest delta */
 		double realTimeTakenMillis = distanceToTravel / (Constants.BALL_SPEED * speedMultiplier);
@@ -57,10 +49,10 @@ public class Ball {
 	}
 
 	/**
-	 * Update ball's position and velocity after the input amount of time.
+	 * the ball needs to know what time it is
+	 * so it can appear there when asked where it is
 	 *
-	 * @param currentTimeMillis After this amount of time, the position and velocity of the ball
-	 *                          will be calculated.
+	 * @param currentTimeMillis is the current time in milliseconds
 	 */
 	public void updateCurrentTime(long currentTimeMillis) {
 		Vector2D temp = Vector2D.ZERO.cpy();
@@ -90,10 +82,9 @@ public class Ball {
 	}
 
 	/**
-	 * Check this ball is still in game or not.
-	 * "In Game" is defined as moving within the game (screen) region.
+	 * is the ball alive
 	 *
-	 * @return true if the ball is still in game, false otherwise.
+	 * @return yes or no
 	 */
 	public boolean inGame() {
 
@@ -109,11 +100,6 @@ public class Ball {
 		return true;
 	}
 
-	/**
-	 * Check if the ball is moving upwards (actually downwards as it is shown on the screen)
-	 *
-	 * @return true if the ball is moving upward (y value is increasing)
-	 */
 	public boolean isMovingUp() {
 		return velocity.y > 0;
 	}
