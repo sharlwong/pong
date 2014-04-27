@@ -1,5 +1,12 @@
 package com.sutd.GameObjects;
 
+/**
+ * GameState is a Go-Between Class that contains information on scores and fruit count for each player,
+ * status of game play and time left, as well as paddle and ball positions from both local client and server.
+ * <p/>
+ * It is the glue between the server and the client, but unlike network class primarily concerns itself
+ * with Game Layer Processing. It is an extremely important class!
+ */
 public class GameState {
 	private double[][] ballsData;
 	private double[]   player0Data;
@@ -8,12 +15,12 @@ public class GameState {
 	private int        status;
 	private int        timeLeft;
 	private int[]      scores;
-	private int orangeP0;
-	private int kiwiP0;
-	private int watermelonP0;
-	private int orangeP1;
-	private int kiwiP1;
-	private int watermelonP1;
+	private int        orangeP0;
+	private int        kiwiP0;
+	private int        watermelonP0;
+	private int        orangeP1;
+	private int        kiwiP1;
+	private int        watermelonP1;
 
 	public double[][] getBallsData() {
 		return ballsData;
@@ -42,17 +49,17 @@ public class GameState {
 	public int[] getBallsType() {
 		return ballsType;
 	}
-	
-	public int[] getOrange(){
-		return new int[] {orangeP0, orangeP1};
+
+	public int[] getOrange() {
+		return new int[]{orangeP0, orangeP1};
 	}
-	
-	public int[] getKiwi(){
-		return new int[] {kiwiP0, kiwiP1};
+
+	public int[] getKiwi() {
+		return new int[]{kiwiP0, kiwiP1};
 	}
-	
-	public int[] getWatermelon(){
-		return new int[] {watermelonP0, watermelonP1};
+
+	public int[] getWatermelon() {
+		return new int[]{watermelonP0, watermelonP1};
 	}
 
 	public void setBallsData(double[][] ballsData) {
@@ -82,18 +89,18 @@ public class GameState {
 	public void setBallsType(int[] ballsType) {
 		this.ballsType = ballsType;
 	}
-	
-	public void setOrange(int orange1, int orange2){
+
+	public void setOrange(int orange1, int orange2) {
 		this.orangeP0 = orange1;
 		this.orangeP1 = orange2;
 	}
-	
-	public void setKiwi(int kiwi1, int kiwi2){
+
+	public void setKiwi(int kiwi1, int kiwi2) {
 		this.kiwiP0 = kiwi1;
 		this.kiwiP1 = kiwi2;
 	}
-	
-	public void setWatermelon(int watermelon1, int watermelon2){
+
+	public void setWatermelon(int watermelon1, int watermelon2) {
 		this.watermelonP0 = watermelon1;
 		this.watermelonP1 = watermelon2;
 	}
