@@ -1,13 +1,18 @@
 package com.sutd.PongHelpers;
 
-
-
 public class Vector2D {
+	/* various constants */
 	public static final Vector2D X    = new Vector2D(1, 0);
 	public static final Vector2D Y    = new Vector2D(0, 1);
 	public static final Vector2D ZERO = new Vector2D(0, 0);
+
+	/* object vars */
 	public double x;
 	public double y;
+
+	/**
+	 * C O N S T R U C T O R S
+	 */
 
 	public Vector2D() {
 	}
@@ -21,6 +26,14 @@ public class Vector2D {
 		set(v);
 	}
 
+	public Vector2D cpy() {
+		return new Vector2D(this);
+	}
+
+	/**
+	 * S I M P L E  M A T H
+	 */
+
 	public Vector2D add(Vector2D v) {
 		this.x += v.x;
 		this.y += v.y;
@@ -31,61 +44,6 @@ public class Vector2D {
 		this.x += x;
 		this.y += y;
 		return this;
-	}
-
-	/**
-	 * Angle from the x-axis anticlockwise in degrees
-	 *
-	 * @return
-	 */
-	public double angle() {
-		double angle = Math.atan2(this.y, this.x) * (180 / Math.PI);
-		if (angle < 0) angle += 360;
-		return angle;
-	}
-
-	public Vector2D clamp(double min, double max) {
-		double l2 = lengthSquared();
-		if (l2 == 0) return this;
-		if (l2 > max * max) return makeUnitVector().multiply(max);
-		if (l2 < min * min) return makeUnitVector().multiply(min);
-		return this;
-	}
-
-	public Vector2D cpy() {
-		return new Vector2D(this);
-	}
-
-	public double crossProduct(Vector2D v) {
-		return this.x * v.y - this.y * v.x;
-	}
-
-	public double crossProduct(double x, double y) {
-		return this.x * y - this.y * x;
-	}
-
-	public double distance(Vector2D v) {
-		double x_d = v.x - this.x;
-		double y_d = v.y - this.y;
-		return Math.sqrt(x_d * x_d + y_d * y_d);
-	}
-
-	public double distance(double x, double y) {
-		double x_d = x - this.x;
-		double y_d = y - this.y;
-		return Math.sqrt(x_d * x_d + y_d * y_d);
-	}
-
-	public double distanceSquared(Vector2D v) {
-		double x_d = v.x - this.x;
-		double y_d = v.y - this.y;
-		return x_d * x_d + y_d * y_d;
-	}
-
-	public double distanceSquared(double x, double y) {
-		double x_d = x - this.x;
-		double y_d = y - this.y;
-		return x_d * x_d + y_d * y_d;
 	}
 
 	public Vector2D div(double value) {
@@ -100,12 +58,51 @@ public class Vector2D {
 		return multiply(1 / other.x, 1 / other.y);
 	}
 
-	public double dotProduct(Vector2D v) {
-		return this.x * v.x + this.y * v.y;
+	public Vector2D multiply(double scalar) {
+		this.x *= scalar;
+		this.y *= scalar;
+		return this;
 	}
 
-	public double dotProduct(double x, double y) {
-		return this.x * x + this.y * y;
+	public Vector2D multiply(double x, double y) {
+		this.x *= x;
+		this.y *= y;
+		return this;
+	}
+
+	public Vector2D multiply(Vector2D v) {
+		this.x *= v.x;
+		this.y *= v.y;
+		return this;
+	}
+
+	public Vector2D subtract(Vector2D v) {
+		this.x -= v.x;
+		this.y -= v.y;
+		return this;
+	}
+
+	public Vector2D subtract(double x, double y) {
+		this.x -= x;
+		this.y -= y;
+		return this;
+	}
+
+	/**
+	 * I N F O
+	 */
+
+	/* from x-axis clockwise, in degrees */
+	public double angle() {
+		double angle = Math.atan2(this.y, this.x) * (180 / Math.PI);
+		if (angle < 0) angle += 360;
+		return angle;
+	}
+
+	public double radians() {
+		double angle = Math.atan2(this.y, this.x);
+		if (angle < 0) angle += 2 * Math.PI;
+		return angle;
 	}
 
 	public boolean epsilonEquals(Vector2D obj, double epsilon) {
@@ -147,18 +144,53 @@ public class Vector2D {
 		return this.x * this.x + this.y * this.y;
 	}
 
+	public double distance(double x, double y) {
+		double x_d = x - this.x;
+		double y_d = y - this.y;
+		return Math.sqrt(x_d * x_d + y_d * y_d);
+	}
+
+	public double distanceSquared(Vector2D v) {
+		double x_d = v.x - this.x;
+		double y_d = v.y - this.y;
+		return x_d * x_d + y_d * y_d;
+	}
+
+	public double distanceSquared(double x, double y) {
+		double x_d = x - this.x;
+		double y_d = y - this.y;
+		return x_d * x_d + y_d * y_d;
+	}
+
+	public double distance(Vector2D v) {
+		double x_d = v.x - this.x;
+		double y_d = v.y - this.y;
+		return Math.sqrt(x_d * x_d + y_d * y_d);
+	}
+
+	public String toString() {
+		return "[" + this.x + ":" + this.y + "]";
+	}
+
+	/**
+	 * T R A N S F O R M S
+	 */
+
+	/* enforce bounds on a vector */
+	public Vector2D clamp(double min, double max) {
+		double l2 = lengthSquared();
+		if (l2 == 0) return this;
+		if (l2 > max * max) return makeUnitVector().multiply(max);
+		if (l2 < min * min) return makeUnitVector().multiply(min);
+		return this;
+	}
+
+	/* enforce length limit */
 	public Vector2D limit(double limit) {
 		if (lengthSquared() > limit * limit) {
 			makeUnitVector();
 			multiply(limit);
 		}
-		return this;
-	}
-
-	public Vector2D linearInterpolate(Vector2D target, double alpha) {
-		double invAlpha = 1 - alpha;
-		this.x = (this.x * invAlpha + target.x * alpha);
-		this.y = (this.y * invAlpha + target.y * alpha);
 		return this;
 	}
 
@@ -171,41 +203,18 @@ public class Vector2D {
 		return this;
 	}
 
-	public Vector2D multiply(double scalar) {
-		this.x *= scalar;
-		this.y *= scalar;
-		return this;
-	}
-
-	public Vector2D multiply(double x, double y) {
-		this.x *= x;
-		this.y *= y;
-		return this;
-	}
-
-	public Vector2D multiply(Vector2D v) {
-		this.x *= v.x;
-		this.y *= v.y;
-		return this;
-	}
-
-	public double radians() {
-		double angle = Math.atan2(this.y, this.x);
-		if (angle < 0) angle += 2 * Math.PI;
-		return angle;
-	}
-
+	/* rotate clockwise */
 	public Vector2D rotate(double degrees) {
+		/* make angles */
 		double rad = degrees * (Math.PI / 180);
 		double cos = Math.cos(rad);
 		double sin = Math.sin(rad);
-
+		/* apply rotation matrix */
 		double newX = this.x * cos - this.y * sin;
 		double newY = this.x * sin + this.y * cos;
-
+		/* set */
 		this.x = newX;
 		this.y = newY;
-
 		return this;
 	}
 
@@ -228,19 +237,29 @@ public class Vector2D {
 		return this;
 	}
 
-	public Vector2D subtract(Vector2D v) {
-		this.x -= v.x;
-		this.y -= v.y;
-		return this;
+	/**
+	 * V E C T O R  F U N C T I O N S
+	 */
+	public double crossProduct(Vector2D v) {
+		return this.x * v.y - this.y * v.x;
 	}
 
-	public Vector2D subtract(double x, double y) {
-		this.x -= x;
-		this.y -= y;
-		return this;
+	public double crossProduct(double x, double y) {
+		return this.x * y - this.y * x;
 	}
 
-	public String toString() {
-		return "[" + this.x + ":" + this.y + "]";
+	public double dotProduct(Vector2D v) {
+		return this.x * v.x + this.y * v.y;
+	}
+
+	public double dotProduct(double x, double y) {
+		return this.x * x + this.y * y;
+	}
+
+	public Vector2D linearInterpolate(Vector2D target, double alpha) {
+		double invAlpha = 1 - alpha;
+		this.x = (this.x * invAlpha + target.x * alpha);
+		this.y = (this.y * invAlpha + target.y * alpha);
+		return this;
 	}
 }
