@@ -8,23 +8,35 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 
 /**
- * */
-
+ * Responds to broadcast packets to enable Server Discovery
+ * @author Swayam
+ *
+ */
 public class ServerBroadcaster extends Thread {
 	String address = "";
 	String port = "";
 
+	/**
+	 * Constructor
+	 * @param address The address of the Fruitball server
+	 * @param port The port of the Fruitball server.
+	 */
 	public ServerBroadcaster(String address, String port) {
 		this.address = address;
 		this.port = port;
 	}
 
+	/**
+	 * Listens to requests and responds with port address of the successful ones.
+	 */
 	public void run() {
 		DatagramSocket socket = null;
 		try {
+			//  Open a new broadcast socket.
 			socket =  new DatagramSocket(8888, InetAddress.getByName("0.0.0.0"));
 			socket.setBroadcast(true);
 
+			// Listen for requests
 			while(!this.isInterrupted()) {
 				byte[] rec_buf = new byte[5000];
 				DatagramPacket packet = new DatagramPacket(rec_buf, rec_buf.length);
@@ -32,8 +44,9 @@ public class ServerBroadcaster extends Thread {
 
 				String message = new String(packet.getData()).trim();
 				System.out.println("Received:"+ message);
-				//if packet is ours
+				//check if packet is sent by a Pong client
 				if(message.equals("ARE YOU PONG SERVER"));
+				//reply with the affirmative, and include port.
 				byte[] send_data = ("YES I AM SERVER AT PORT;"+port).getBytes();
 				DatagramPacket sendPacket = new DatagramPacket(send_data, send_data.length,packet.getAddress(), packet.getPort());
 				socket.send(sendPacket);

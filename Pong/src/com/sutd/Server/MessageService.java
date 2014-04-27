@@ -17,11 +17,20 @@ class MessageService implements MessageHandler {
 	Socket[] clients = new Socket[2];
 	PrintWriter[] out = new PrintWriter[2];
 
+	/**
+	 * Constructor
+	 * @param gameServer A handle to the server that calls it.
+	 */
 	public MessageService(GameServer gameServer) {
 		// TODO Auto-generated constructor stub
 		this.server = gameServer;
 	}
 
+	/**
+	 * Add a client socket to the array of sockets
+	 * @param client the socket of the client
+	 * @param index the id of the client. Either 0 or 1.
+	 */
 	public synchronized void addSocket(Socket client, int index) {
 		clients[index] = client;
 		out[index]  = new PrintWriter(client.getOutputStream());
@@ -49,6 +58,10 @@ class MessageService implements MessageHandler {
 			//System.out.println(message);
 		}
 	}
+
+	// The following methods are basically helper methods 
+	// To make it easier to send certain messages to the clients.
+	
 	public synchronized void send(String message) {
 		send(message,-1);
 	}
