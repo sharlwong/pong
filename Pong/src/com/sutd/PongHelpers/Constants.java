@@ -6,16 +6,15 @@ import java.util.Collection;
 
 import com.sutd.GameObjects.GameState;
 
-/***
- * This class contains important arbitrary constants that we use across the entire game. 
+/**
+ * This class contains important arbitrary constants that we use across the entire game.
  * Some of these constants may have dependencies with one another.
- * 
- * Constants that deal with the size of objects are relative to the screen. This 
- * is to allow for a grid scaling system for drawing objects. 
- * 
+ * <p/>
+ * Constants that deal with the size of objects are relative to the screen. This
+ * is to allow for a grid scaling system for drawing objects.
+ * <p/>
  * This is also an effective way to keep the code clean and tidy.
- * ***/
-
+ */
 public class Constants {
 
 	/* this is the square unit-length board on which the point-mass balls move about */
@@ -69,7 +68,8 @@ public class Constants {
 	public final static double BALL_EMISSION_ZONE       = 0.2;
 
 	/**
-	 * Give Constants a screen size and it will do the math.
+	 * give it a screen size
+	 * and it will do math
 	 *
 	 * @param screenRes is the screen resolution
 	 */
@@ -89,45 +89,10 @@ public class Constants {
 		paddlePixelWidth = PADDLE_WIDTH * horizontalPixelUnitLength;
 	}
 
-	public Dimension getDim() {
-		return screen;
-	}
-
-	public double getVerticalFractionalPadding() {
-		return verticalFractionalPadding;
-	}
-
-	public double getHorizontalFractionalPadding() {
-		return horizontalFractionalPadding;
-	}
-
-	public double getVerticalPixelUnitLength() {
-		return verticalPixelUnitLength;
-	}
-
-	public double getHorizontalPixelUnitLength() {
-		return horizontalPixelUnitLength;
-	}
-
-	public double getBallPixelRadius() {
-		return ballPixelRadius;
-	}
-
-	public double getPaddlePixelWidth() {
-		return paddlePixelWidth;
-	}
-
-	public double getPaddlePixelDepth() {
-		return paddlePixelDepth;
-	}
-
-	public double getEdgePixelPadding() {
-		return edgePixelPadding;
-	}
-
 	/**
-	 * Given ball position will be translated from the fractional cartesian plane
-	 * to some point on a square grid of pixels of the phone screen.
+	 * Given a ball position, this will
+	 * translate it from the fractional cartesian plane
+	 * to some point on a square grid of pixels of the phone screen
 	 *
 	 * @param ball position
 	 * @return pixel XY
@@ -189,5 +154,43 @@ public class Constants {
 		if (player == 0) out[1] = screen.height - out[1];
 
 		return out;
+	}
+
+	/* mere getters are not deserving of their own comments */
+
+	public Dimension getDim() {
+		return screen;
+	}
+
+	public double getVerticalFractionalPadding() {
+		return verticalFractionalPadding;
+	}
+
+	public double getHorizontalFractionalPadding() {
+		return horizontalFractionalPadding;
+	}
+
+	public double getVerticalPixelUnitLength() {
+		return verticalPixelUnitLength;
+	}
+
+	public double getHorizontalPixelUnitLength() {
+		return horizontalPixelUnitLength;
+	}
+
+	public double getBallPixelRadius() {
+		return ballPixelRadius;
+	}
+
+	public double getPaddlePixelWidth() {
+		return paddlePixelWidth;
+	}
+
+	public double getPaddlePixelDepth() {
+		return paddlePixelDepth;
+	}
+
+	public double getEdgePixelPadding() {
+		return edgePixelPadding;
 	}
 }

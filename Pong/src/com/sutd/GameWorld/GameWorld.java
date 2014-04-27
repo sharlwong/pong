@@ -199,7 +199,7 @@ public class GameWorld {
 	}
 
 	/**
-	 * updates everything
+	 * this updates everything
 	 *
 	 * @param deltaMillis how long has passed since last update
 	 */
@@ -256,7 +256,8 @@ public class GameWorld {
 					addThese.add(player1.bounce(ball, elapsedTimeMillis));
 					removeThese.add(ball);
 					bounce.play();
-				} if (player0.collisionCheck(ball)) {
+				}
+				if (player0.collisionCheck(ball)) {
 					addThese.add(player0.bounce(ball, elapsedTimeMillis));
 					removeThese.add(ball);
 					bounce.play();

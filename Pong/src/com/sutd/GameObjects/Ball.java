@@ -44,6 +44,7 @@ public class Ball {
 		if (initialVelocity.y > 0)
 			distanceToTravel = (Constants.HEIGHT - startPosition.y) * (initialVelocity.length() / Math.abs(initialVelocity.y));
 		else distanceToTravel = startPosition.y * (initialVelocity.length() / Math.abs(initialVelocity.y));
+		distanceToTravel *= 1.001;
 
 		/* when is it supposed to the paddle line, rounded to the nearest delta */
 		double realTimeTakenMillis = distanceToTravel / (Constants.BALL_SPEED * speedMultiplier);
