@@ -20,22 +20,26 @@ import java.util.HashSet;
  * restart the game after one round ends.
  */
 public class GameWorld {
+	/* working objects */
 	private final HashSet<Ball> balls;
-	public        long          elapsedTimeMillis;
-	private       Paddle        player0;
-	private       Paddle        player1;
-	private       SecureRandom  random;
-	private       long          injectBalls;
-	private       int           init;
-	private       double        sumTicks;
-	private       double        tickCount;
+	private final Paddle        player0;
+	private final Paddle        player1;
+	private final SecureRandom  random;
 
-	public  boolean ready;
-	public  boolean disconnect;
-	public  boolean gameover;
-	public  int     ticktock;
-	public  int     timeLimit; //maximum time for each round
-	private Music   bounce;
+	/* counters */
+	private long   injectBalls;
+	private int    init;
+	private double sumTicks;
+	private double tickCount;
+	private long   elapsedTimeMillis;
+	private int    ticktock;
+	private int    timeLimit; //maximum time for each round
+	private Music  bounce;
+
+	/* public semaphores */
+	public boolean gameover;
+	public boolean ready;
+	public boolean disconnect;
 
 	/* simulation variable */
 	private final static double frameDrop = 0;
