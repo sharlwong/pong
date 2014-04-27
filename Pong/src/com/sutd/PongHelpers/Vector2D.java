@@ -6,7 +6,7 @@ public class Vector2D {
 	public static final Vector2D Y    = new Vector2D(0, 1);
 	public static final Vector2D ZERO = new Vector2D(0, 0);
 
-	/* object vars */
+	/* object vars are doubles for max precision */
 	public double x;
 	public double y;
 
@@ -99,12 +99,14 @@ public class Vector2D {
 		return angle;
 	}
 
+	/* from x-axis clockwise, in radians */
 	public double radians() {
 		double angle = Math.atan2(this.y, this.x);
 		if (angle < 0) angle += 2 * Math.PI;
 		return angle;
 	}
 
+	/* roughly equals */
 	public boolean epsilonEquals(Vector2D obj, double epsilon) {
 		if (obj == null) return false;
 		if (Math.abs(obj.x - this.x) > epsilon) return false;
@@ -112,12 +114,14 @@ public class Vector2D {
 		return true;
 	}
 
+	/* roughly equals */
 	public boolean epsilonEquals(double x, double y, double epsilon) {
 		if (Math.abs(x - this.x) > epsilon) return false;
 		if (Math.abs(y - this.y) > epsilon) return false;
 		return true;
 	}
 
+	/* checks equality then non-equivalence then congruence */
 	public boolean equals(Object obj) {
 		if (this == obj) return true;
 		if (obj == null) return false;
@@ -128,6 +132,7 @@ public class Vector2D {
 		return true;
 	}
 
+	/* random-ish hash */
 	public int hashCode() {
 		long prime = 7919;
 		long result = 1;
@@ -136,6 +141,7 @@ public class Vector2D {
 		return (int) result;
 	}
 
+	/* distance from origin at [0:0] */
 	public double length() {
 		return Math.sqrt(this.x * this.x + this.y * this.y);
 	}
@@ -144,9 +150,17 @@ public class Vector2D {
 		return this.x * this.x + this.y * this.y;
 	}
 
+	/* how far from here to there */
 	public double distance(double x, double y) {
 		double x_d = x - this.x;
 		double y_d = y - this.y;
+		return Math.sqrt(x_d * x_d + y_d * y_d);
+	}
+
+	/* how far from here to there */
+	public double distance(Vector2D v) {
+		double x_d = v.x - this.x;
+		double y_d = v.y - this.y;
 		return Math.sqrt(x_d * x_d + y_d * y_d);
 	}
 
@@ -162,12 +176,7 @@ public class Vector2D {
 		return x_d * x_d + y_d * y_d;
 	}
 
-	public double distance(Vector2D v) {
-		double x_d = v.x - this.x;
-		double y_d = v.y - this.y;
-		return Math.sqrt(x_d * x_d + y_d * y_d);
-	}
-
+	/* gimme a string */
 	public String toString() {
 		return "[" + this.x + ":" + this.y + "]";
 	}
@@ -194,6 +203,7 @@ public class Vector2D {
 		return this;
 	}
 
+	/* make this length == 1 */
 	public Vector2D makeUnitVector() {
 		double len = length();
 		if (len != 0) {
@@ -218,18 +228,21 @@ public class Vector2D {
 		return this;
 	}
 
+	/* make this == that */
 	public Vector2D set(Vector2D v) {
 		this.x = v.x;
 		this.y = v.y;
 		return this;
 	}
 
+	/* make this == that */
 	public Vector2D set(double x, double y) {
 		this.x = x;
 		this.y = y;
 		return this;
 	}
 
+	/* make this angle == that angle */
 	public Vector2D setAngle(double degrees) {
 		set(length(), 0);
 		rotate(degrees);
@@ -240,6 +253,7 @@ public class Vector2D {
 	/**
 	 * V E C T O R  F U N C T I O N S
 	 */
+
 	public double crossProduct(Vector2D v) {
 		return this.x * v.y - this.y * v.x;
 	}
