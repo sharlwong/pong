@@ -271,7 +271,6 @@ public class GameWorld {
 
 			balls.removeAll(removeThese);
 			balls.addAll(addThese);
-			//			if (balls.size() == 0) injectRandomBall();
 		}
 	}
 
