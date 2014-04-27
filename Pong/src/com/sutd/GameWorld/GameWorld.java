@@ -217,7 +217,7 @@ public class GameWorld {
 		}
 
 		/* report system lag */
-		if (Math.abs((double) deltaMillis - (sumTicks / tickCount)) > (double) Constants.UPDATE_DELTA / 5.0)
+		if (Math.abs((double) deltaMillis - (sumTicks / tickCount)) > (double) Constants.UPDATE_DELTA / 20.0)
 			System.out.println("Unusual delta offset: " + (deltaMillis - (sumTicks / tickCount)));
 
 		/* conditions under which a ball should be injected */
