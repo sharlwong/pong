@@ -58,7 +58,7 @@ public class Constants {
 	public final static int    GAME_TIME                = 22;
 	public final static int    BALL_FREQUENCY           = 400;
 	public final static double ANGLE_WIDENER            = 3;
-	public final static double BALL_MAX_SPEED           = 1.4;
+	public final static double BALL_MAX_SPEED           = 1.2;
 	public final static double BALL_MIN_SPEED           = 0.7;
 	public static final int    BALL_MAX_NUMBER_ONSCREEN = 7;
 
