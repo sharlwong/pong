@@ -1,4 +1,4 @@
-package com.sutd.PongHelpers;
+package com.sutd.Client;
 
 import java.util.concurrent.BlockingQueue;
 
@@ -6,11 +6,11 @@ import com.google.gson.Gson;
 import com.sutd.GameObjects.GameState;
 import com.sutd.Network.MessageHandler;
 
-public class GameUpdater implements MessageHandler {
+public class ClientUpdater implements MessageHandler {
 	BlockingQueue<GameState> stateBuffer;
 	private int player;
 
-	public GameUpdater(BlockingQueue<GameState> buffer, int player) {
+	public ClientUpdater(BlockingQueue<GameState> buffer, int player) {
 		this.stateBuffer = buffer;
 		this.player = player;
 	}
