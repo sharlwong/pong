@@ -9,10 +9,9 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 /**
- * AssetLoader is a special libGDX class that is responsible for loading all assets needed in this game. 
- * There are several types of assets that our game uses, which are Music, Texture, TextureRegion
- * and BitmapFont.
- *   
+ * AssetLoader is a special LibGDX class that is responsible for loading all assets needed in this
+ * game. There are several types of assets that our game uses, which are Music, Texture, BitmapFont and 
+ * Animation.  
  * ***/
 public abstract class AssetLoader {
 	public final static double BALL_SPEED             = 0.003; // distance-units per millisecond
@@ -29,6 +28,7 @@ public abstract class AssetLoader {
 
 	public static Texture fruitball_texture, screen_texture, wait_texture, paddle_texture, game_texture, instr_texture, sound_texture, coco_texture;
 	public static TextureRegion watermelon, orange, kiwi, splash_screen, wait_screen, game_screen, story_screen, fruit_pt_screen, paddle_top, paddle_bottom, sound_icon, coco;
+	public static Animation octopusAnimation;
 
 
 	public static Music music, chimp_long, chimp_short, bounce;
@@ -130,7 +130,6 @@ public abstract class AssetLoader {
 		music.dispose();
 		chimp_long.dispose();
 		chimp_short.dispose();
-		bounce.dispose();
 	}
 
 }

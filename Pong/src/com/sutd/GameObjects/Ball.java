@@ -18,6 +18,10 @@ public class Ball {
 	private int      type;
 	private double   speedMultiplier;
 
+	public Ball(Vector2D startPosition, Vector2D startVelocity, long startTimeMillis, int type) {
+		this(startPosition, startVelocity, startTimeMillis, type, 1);
+	}
+
 	/**
 	 * a constructor, to construct a ball
 	 *
@@ -44,14 +48,12 @@ public class Ball {
 		if (initialVelocity.y > 0)
 			distanceToTravel = (Constants.HEIGHT - startPosition.y) * (initialVelocity.length() / Math.abs(initialVelocity.y));
 		else distanceToTravel = startPosition.y * (initialVelocity.length() / Math.abs(initialVelocity.y));
-		distanceToTravel *= 1.001;
 
-		/* when is it supposed to the paddle line, rounded to the nearest delta */
+		/* when is it supposed to the paddle line, factoring in speed */
 		double realTimeTakenMillis = distanceToTravel / (Constants.BALL_SPEED * speedMultiplier);
 		long realEndTimeMillis = initTime + (long) realTimeTakenMillis;
-		realEndTimeMillis += Constants.UPDATE_DELTA - (realEndTimeMillis % Constants.UPDATE_DELTA);
 
-		/* how fast must it move to get there on time, times the speed constant */
+		/* how fast must it move to get there on time */
 		double realSpeed = distanceToTravel / (realEndTimeMillis - initTime);
 		this.velocity = initialVelocity.makeUnitVector().multiply(realSpeed);
 
@@ -66,11 +68,6 @@ public class Ball {
 	 *                          will be calculated.
 	 */
 	public void updateCurrentTime(long currentTimeMillis) {
-
-		/* save a copy */
-		//Vector2D temp = Vector2D.ZERO.cpy();
-		//if (currentPosition != null) temp = currentPosition.cpy();
-
 		/* imaginary position */
 		long timeTravelled = currentTimeMillis - initTime;
 		timeTravelled = timeTravelled < 0 ? 0 : timeTravelled;
@@ -82,11 +79,6 @@ public class Ball {
 			if (youAreHere.x < 0) youAreHere.x = 0 - youAreHere.x;
 			if (youAreHere.x > Constants.WIDTH) youAreHere.x = 2 * Constants.WIDTH - youAreHere.x;
 		}
-
-		/* forcing it to float */
-		//if (currentPosition != null && temp.y > 0 && youAreHere.y < 0) youAreHere.y = 0;
-		//if (currentPosition != null && temp.y < Constants.HEIGHT && youAreHere.y > Constants.HEIGHT)
-		//  youAreHere.y = Constants.HEIGHT;
 
 		/* done now return */
 		currentPosition = youAreHere;

@@ -5,29 +5,21 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.sutd.Client.ClientUpdater;
 import com.sutd.GameObjects.GameState;
 import com.sutd.GameObjects.Paddle;
 import com.sutd.GameWorld.GameRenderer;
 import com.sutd.Pong.PongGame;
 import com.sutd.PongHelpers.Constants;
 import com.sutd.PongHelpers.Dimension;
+import com.sutd.PongHelpers.GameUpdater;
 import com.sutd.PongHelpers.InputHandler;
-
-/**
- * GameScreen concerns itself with activities that happen on the screen when the game is ongoing.
- * Its render method calls upon GameRenderer.
- * When a disconnect happens, it sets a new screen to StartScreen.
- * 
- * It implements a special libGDX class called Screen.
- */
 
 public class GameScreen implements Screen {
 	
 	private Paddle player_paddle;
 	private GameRenderer game_renderer;
 	private PongGame pong_game;
-	private ClientUpdater updater;
+	private GameUpdater updater;
 	private float runTime;
 	Constants calc;
 	BlockingQueue<GameState> buffer = new LinkedBlockingQueue<GameState>(Constants.STATE_BUFFER_SIZE);
@@ -40,7 +32,7 @@ public class GameScreen implements Screen {
 	    this.pong_game = pong_game;
 	    calc = new Constants(dim);
 	    Gdx.input.setInputProcessor(new InputHandler(player_paddle, calc));
-	    updater = new ClientUpdater(buffer, pong_game.player);
+	    updater = new GameUpdater(buffer, pong_game.player);
 	    pong_game.client.startConsuming(updater);
 	}
 

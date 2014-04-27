@@ -7,7 +7,6 @@ package com.sutd.GameObjects;
  * It is the glue between the server and the client, but unlike network class primarily concerns itself
  * with Game Layer Processing. It is an extremely important class!
  */
-
 public class GameState {
 	private double[][] ballsData;
 	private double[]   player0Data;
